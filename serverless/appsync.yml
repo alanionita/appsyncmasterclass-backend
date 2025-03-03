@@ -1,0 +1,17 @@
+name: appsyncmasterclass
+
+schema:
+  - 'schemas/api.graphql'
+
+authentication:
+  type: API_KEY
+
+resolvers:
+  Query.user:
+    dataSource: my-table
+
+dataSources:
+  my-table:
+    type: AMAZON_DYNAMODB
+    config:
+      tableName: ${sls:stage}-data

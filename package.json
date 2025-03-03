@@ -1,0 +1,24 @@
+{
+  "name": "appsyncmasterclass-backend",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "sls": "sls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alanionita/appsyncmasterclass-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alanionita/appsyncmasterclass-backend/issues"
+  },
+  "homepage": "https://github.com/alanionita/appsyncmasterclass-backend#readme",
+  "description": "",
+  "devDependencies": {
+    "serverless": "3.39.0",
+    "serverless-appsync-plugin": "^2.9.1"
+  }
+}
