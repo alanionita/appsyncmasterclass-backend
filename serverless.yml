@@ -13,6 +13,7 @@ provider:
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1"
     STAGE: ${self:custom.stage}
+    REGION: ${self:provider.region}
 
 package:
   exclude: 
@@ -78,13 +79,14 @@ resources:
             Mutable: true
         LambdaConfig:
           PostConfirmation: !GetAtt ConfirmUserSignupLambdaFunction.Arn
-    UserPoolInvokeConfirmUserSignupLambdaPermission:
+    CgSignupPerm:
       Type: AWS::Lambda::Permission
       Properties:
         Action: lambda:invokeFunction
         FunctionName: !Ref ConfirmUserSignupLambdaFunction
         Principal: cognito-idp.amazonaws.com
-        SourceAccount: !GetAtt CognitoUserPool.Arn
+        SourceAccount: !Ref AWS::AccountId
+        SourceArn: !GetAtt CognitoUserPool.Arn
     WebUserPoolClient:
         Type: AWS::Cognito::UserPoolClient
         Properties:
