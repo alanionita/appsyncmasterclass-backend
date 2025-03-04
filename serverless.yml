@@ -38,6 +38,16 @@ resources:
             Name: name  
             Required: false
             Mutable: true
+    WebUserPoolClient:
+        Type: AWS::Cognito::UserPoolClient
+        Properties:
+            UserPoolId: !Ref CognitoUserPool
+            ClientName: web
+            PreventUserExistenceErrors: ENABLED
+            ExplicitAuthFlows:
+              - ALLOW_USER_SRP_AUTH
+              - ALLOW_USER_PASSWORD_AUTH
+              - ALLOW_REFRESH_TOKEN_AUTH
   Outputs:
     CognitoUserPoolId:
       Description: "Cognito User Pool ::"
