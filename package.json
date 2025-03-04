@@ -4,7 +4,8 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "sls": "sls"
+    "sls": "sls",
+    "deploy": "npm run sls -- deploy"
   },
   "repository": {
     "type": "git",

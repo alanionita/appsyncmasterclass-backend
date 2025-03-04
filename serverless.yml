@@ -7,23 +7,38 @@ plugins:
 provider:
   name: aws
   runtime: nodejs20.x
+  region: eu-west-2 
 
 package:
   exclude: 
     - package-lock.json
     - package.json
 
-appSync:
-  - ${file(./serverless/appsync.yml)}
+appSync: ${file(./serverless/appsync.yml)}
 
 # you can add CloudFormation resource templates here
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
+resources:
+  Resources:
+    CognitoUserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        AutoVerifiedAttributes:
+          - email
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 8
+            RequireNumbers: true
+            RequireUppercase: true
+            RequireSymbols: true
+            RequireLowercase: false
+        UsernameAttributes:
+          - email
+        Schema:
+          - AttributeDataType: String
+            Name: name  
+            Required: false
+            Mutable: true
+  Outputs:
+    CognitoUserPoolId:
+      Description: "Cognito User Pool ::"
+      Value: !Ref CognitoUserPool
