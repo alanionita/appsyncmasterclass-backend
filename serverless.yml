@@ -9,9 +9,10 @@ provider:
   name: aws
   runtime: nodejs20.x
   region: eu-west-2 
+  stage: 'dev'
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1"
-    STAGE: ${self:custom.state}
+    STAGE: ${self:custom.stage}
 
 package:
   exclude: 
@@ -75,6 +76,15 @@ resources:
             Name: name  
             Required: false
             Mutable: true
+        LambdaConfig:
+          PostConfirmation: !GetAtt ConfirmUserSignupLambdaFunction.Arn
+    UserPoolInvokeConfirmUserSignupLambdaPermission:
+      Type: AWS::Lambda::Permission
+      Properties:
+        Action: lambda:invokeFunction
+        FunctionName: !Ref ConfirmUserSignupLambdaFunction
+        Principal: cognito-idp.amazonaws.com
+        SourceAccount: !GetAtt CognitoUserPool.Arn
     WebUserPoolClient:
         Type: AWS::Cognito::UserPoolClient
         Properties:
