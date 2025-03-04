@@ -7,11 +7,11 @@ type Query {
 
     getImageUploadUrl(extension: String, contentType: String): AWSURL!
 
-    getMyProfile: Profile!
+    getMyProfile: MyProfile!
 
     getMyTimeline(limit: Int!, nextToken: String): TweetsPage!
 
-    getProfile(screenName: String!): Profile!
+    getProfile(screenName: String!): OtherProfile!
 
     getTweets(userId: ID!, limit: Int!, nextToken: String): TweetsPage!
 
@@ -25,9 +25,7 @@ type Query {
 
 type Mutation {
     editMyProfile(newProfle: ProfileInput): MyProfile!
-
     tweet(text: String!): Tweet!
-
     like(tweetId: ID!): Boolean!
     unlike(tweetId: ID!): Boolean!
     retweet(tweetId: ID!): Boolean!
@@ -98,7 +96,6 @@ interface IProfile {
     birthdate: AWSDate
     createdAt: AWSDateTime!
     followers: Int!
-    tweets: Int!
     liked: Int!
     tweets: TweetsPage
 }
@@ -115,7 +112,6 @@ type MyProfile implements IProfile {
     birthdate: AWSDate
     createdAt: AWSDateTime!
     followers: Int!
-    tweets: Int!
     liked: Int!
     tweets: TweetsPage
 }
@@ -132,7 +128,6 @@ type OtherProfile implements IProfile {
     birthdate: AWSDate
     createdAt: AWSDateTime!
     followers: Int!
-    tweets: Int!
     liked: Int!
     tweets: TweetsPage
     following: Boolean!
