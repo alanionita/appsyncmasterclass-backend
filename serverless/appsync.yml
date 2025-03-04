@@ -1,17 +1,20 @@
 name: appsyncmasterclass
 
-schema:
-  - 'schemas/api.graphql'
+schema: 'schemas/*.graphql'
 
 authentication:
-  type: API_KEY
+  type: 'AMAZON_COGNITO_USER_POOLS'
+  config:
+    awsRegion: eu-west-2 # defaults to stack region 
+    defaultAction: ALLOW
+    userPoolId: !Ref CognitoUserPool
 
-resolvers:
-  Query.user:
-    dataSource: my-table
+# resolvers:
+#   Query.user:
+#     dataSource: my-table
 
-dataSources:
-  my-table:
-    type: AMAZON_DYNAMODB
-    config:
-      tableName: ${sls:stage}-data
+# dataSources:
+#   my-table:
+#     type: AMAZON_DYNAMODB
+#     config:
+#       tableName: ${sls:stage}-data
