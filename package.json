@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "sls": "sls",
-    "deploy": "npm run sls -- deploy"
+    "deploy": "npm run sls -- deploy",
+    "test:integration": "jest --verbose ./__tests__/cases/integration"
   },
   "repository": {
     "type": "git",
@@ -20,8 +21,11 @@
   "description": "",
   "devDependencies": {
     "@aws-sdk/client-dynamodb": "^3.758.0",
-    "i": "^0.3.7",
-    "npm": "^11.1.0",
+    "@aws-sdk/lib-dynamodb": "^3.758.0",
+    "@aws-sdk/util-dynamodb": "^3.758.0",
+    "@types/jest": "^29.5.14",
+    "dotenv": "^16.4.7",
+    "jest": "^29.7.0",
     "serverless": "3.39.0",
     "serverless-appsync-plugin": "^2.9.1",
     "serverless-iam-roles-per-function": "^3.2.0"
