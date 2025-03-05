@@ -6,6 +6,7 @@
   "scripts": {
     "sls": "sls",
     "deploy": "npm run sls -- deploy",
+    "deploy:fn": "npm run sls -- deploy -f",
     "test:integration": "jest --verbose ./__tests__/cases/integration"
   },
   "repository": {
