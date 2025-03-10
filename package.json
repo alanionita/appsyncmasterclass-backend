@@ -7,7 +7,8 @@
     "sls": "sls",
     "deploy": "npm run sls -- deploy",
     "deploy:fn": "npm run sls -- deploy -f",
-    "test:integration": "jest --verbose ./__tests__/cases/integration"
+    "test:integration": "jest --verbose ./__tests__/cases/integration",
+    "test:e2e": "jest --verbose ./__tests__/cases/e2e"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
   "homepage": "https://github.com/alanionita/appsyncmasterclass-backend#readme",
   "description": "",
   "devDependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.760.0",
     "@aws-sdk/client-dynamodb": "^3.758.0",
     "@aws-sdk/lib-dynamodb": "^3.758.0",
     "@aws-sdk/util-dynamodb": "^3.758.0",
