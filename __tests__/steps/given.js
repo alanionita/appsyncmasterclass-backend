@@ -9,17 +9,26 @@ function random_user() {
 
     const name = `${firstName} ${lastName} ${suffix}`
 
-    const password = chance.string({
-        length: 8,
+    const passwordPre = chance.string({
+        length: 10,
         alpha: true,
         numeric: true,
-        symbols: true
+        symbols: true,
+        casing: 'lower'
     })
+    
+    const passwordPost = chance.string({
+        length: 6,
+        alpha: true,
+        casing: "upper"
+    })
+    
+
     const email = `${firstName}-${lastName}-${suffix}@appsyncmasterclass.com`
 
     return {
         name,
-        password,
+        password: passwordPre+passwordPost,
         email
     }
 }
