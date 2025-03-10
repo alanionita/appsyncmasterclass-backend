@@ -101,3 +101,5 @@ resources:
     CognitoUserPoolId:
       Description: "Cognito User Pool ::"
       Value: !Ref CognitoUserPool
+    WebCognitoUserPoolClientId:
+      Value: !Ref WebUserPoolClient
