@@ -2,6 +2,8 @@
 
 A clone of the [AppSync Masterclass repo](https://github.com/theburningmonk/appsyncmasterclass-backend), with some vital changes in module versions. 
 
+Buy the course at - https://www.appsyncmasterclass.com/
+
 ## ✨ Features
 
 - **Serverless Framework v3.39.x**: Newest version of the open-source Serverless Framework
