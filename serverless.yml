@@ -103,3 +103,5 @@ resources:
       Value: !Ref CognitoUserPool
     WebCognitoUserPoolClientId:
       Value: !Ref WebUserPoolClient
+    AppsyncMasterclassHTTPUrl:
+      Value: ${appsync:url}
