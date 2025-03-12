@@ -134,3 +134,10 @@ Diffs:
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/compare/04-08-Implement_getMyProfile_query...04-09-Add_unit_test_for_getMyProfile_query
 
+### 04-10-Add_acceptance_test_for_getMyProfile_query
+
+Diffs:
+- package.json: does not add lodash, choose to use native solution
+- authenticated_user(): implements when.user_signs_up() and then uses aws-sdk v3 to trigger cognito.InitiateAuthCommand; adds extra validation for the auth response like throwing if there are extra challenges or if the tokens are missing
+
+Release: https://github.com/alanionita/appsyncmasterclass-backend/compare/04-09-Add_unit_test_for_getMyProfile_query...04-10-Add_acceptance_test_for_getMyProfile_query
