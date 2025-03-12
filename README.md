@@ -97,7 +97,7 @@ Docs from:
 ## Author
 
 Alan Ionita @2025
-Yan Cui @2023
+Yan Cui @2020
 
 ## 📜 License
 
