@@ -2,6 +2,7 @@ const { AdminConfirmSignUpCommand, CognitoIdentityProviderClient, SignUpCommand 
 const fs = require("fs");
 const vtlMapper = require("@aws-amplify/amplify-appsync-simulator/lib/velocity/value-mapper/mapper")
 const vtlTemplate = require("amplify-velocity-template");
+const graphql = require('../lib/graphql');
 
 require('dotenv').config()
 
@@ -70,24 +71,30 @@ async function user_signs_up(password, name, email) {
 
         const command = new SignUpCommand(input);
         const response = await cognito.send(command);
-        if (response) {
-            const username = response.UserSub;
-            console.info(`User has signed up - [${email}]`)
-            
-            const confirmCommand = new AdminConfirmSignUpCommand({
-                UserPoolId: userPoolId, // required
-                Username: username
-            })
 
-            await cognito.send(confirmCommand)
+        if (!response || !response.UserSub) {
+            throw Error("User could not be signed up")
+        }
 
-            console.info(`Confirmed signup - [${email}]`)
-            
-            return {
-                username,
-                name, 
-                email
-            }
+        console.info(`User has signed up - [${email}]`)
+        
+        const username = response.UserSub;
+        
+        const confirmCommand = new AdminConfirmSignUpCommand({
+            UserPoolId: userPoolId, // required
+            Username: username
+        })
+
+        const { $metadata } = await cognito.send(confirmCommand)
+
+        if ($metadata.httpStatusCode !== 200) {
+            throw Error('Issue with sign-up confirmation')
+        }
+
+        return {
+            username,
+            name,
+            email
         }
 
     } catch (err) {
@@ -98,7 +105,7 @@ async function user_signs_up(password, name, email) {
 }
 
 function invoke_appsync_template(templatePath, context) {
-    const template = fs.readFileSync(templatePath, { encoding: "utf-8"})
+    const template = fs.readFileSync(templatePath, { encoding: "utf-8" })
 
     const ast = vtlTemplate.parse(template)
     const compiler = new vtlTemplate.Compile(ast, {
@@ -109,8 +116,41 @@ function invoke_appsync_template(templatePath, context) {
     return JSON.parse(compiler.render(context))
 }
 
+async function user_calls_getMyProfile(user) {
+    const query = `query getMyProfile {
+        getMyProfile {
+            id
+            name
+            screenName
+            imgUrl
+            bgImgUrl
+            bio
+            location
+            website
+            birthdate
+            createdAt
+            followersCount
+            followingCount
+            tweetsCount
+            likesCount
+        }
+    }`
+
+    const data = await graphql({
+        url: process.env.APPSYNC_HTTP_URL,
+        query,
+        variables: {},
+        auth: user.accessToken
+    })
+
+    const profile = data.getMyProfile;
+
+    return profile;
+}
+
 module.exports = {
     invoke_confirmUserSignup,
     user_signs_up,
-    invoke_appsync_template
+    invoke_appsync_template,
+    user_calls_getMyProfile
 }
