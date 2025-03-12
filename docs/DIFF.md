@@ -141,3 +141,12 @@ Diffs:
 - authenticated_user(): implements when.user_signs_up() and then uses aws-sdk v3 to trigger cognito.InitiateAuthCommand; adds extra validation for the auth response like throwing if there are extra challenges or if the tokens are missing
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/compare/04-09-Add_unit_test_for_getMyProfile_query...04-10-Add_acceptance_test_for_getMyProfile_query
+
+
+### 04-11-Capture_AppSync_GraphQLUrl_in_.env
+
+Diff:
+- serverless.yml: used the `${appsync:url}` from serverless-appsync-plugin v2
+- Skipped installing the suggested serverless-plugins
+
+Release: 
