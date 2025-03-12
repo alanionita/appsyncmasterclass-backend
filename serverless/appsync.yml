@@ -1,6 +1,6 @@
 name: appsyncmasterclass
 
-schema: 'schemas/*.graphql'
+schema: './appsync/schemas/*.graphql'
 
 authentication:
   type: 'AMAZON_COGNITO_USER_POOLS'
@@ -9,12 +9,18 @@ authentication:
     defaultAction: ALLOW
     userPoolId: !Ref CognitoUserPool
 
-# resolvers:
-#   Query.user:
-#     dataSource: my-table
+resolvers:
+  Query.getMyProfile:
+    dataSource: usersTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Query.getMyProfile.request.vtl
+    response: ./appsync/resolvers/Query.getMyProfile.response.vtl
 
-# dataSources:
-#   my-table:
-#     type: AMAZON_DYNAMODB
-#     config:
-#       tableName: ${sls:stage}-data
+dataSources:
+  api:
+    type: 'NONE'
+  usersTable:
+    type: AMAZON_DYNAMODB
+    description: 'UsersTable'
+    config:
+      tableName: !Ref UsersTable

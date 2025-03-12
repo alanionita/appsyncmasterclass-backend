@@ -116,3 +116,12 @@ Diffs:
 - package.json:devDependencies: Adds `@aws-sdk/client-cognito-identity-provider` Cognito SDK module
 
 Commit - https://github.com/alanionita/appsyncmasterclass-backend/commit/68fe5ced5b0f96fe8b1c047af29fa655da36c767#diff-7ae45ad102eab3b6d7e7896acd08c427a9b25b346470d7bc6507b6481575d519
+
+### 04-08-Implement_getMyProfile_query
+
+Diffs:
+- serverless.yml/appsync.yml: serverless-appsync-plugin@v2 uses a different api for resolvers; mappingTemplate -> resolvers; mappingTemplatesLocation: no longer in use; since the api change decided to change the `mapping-template` folder to `appsync/resolvers/*`; 
+- serverless.yml/appsync.yml: resolver definition is different in v2; by default the resolvers are Javascript and Kind is Pipeline; to use VTL we must use `Kind: unit` and have `request` and `response` fields; the fields are relative to the top-level `serverless.yml`
+
+Todo:
+- Move the schemas
