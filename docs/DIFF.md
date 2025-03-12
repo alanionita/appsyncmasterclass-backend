@@ -128,5 +128,9 @@ Commit - https://github.com/alanionita/appsyncmasterclass-backend/commit/7d5fece
 ### 04-09-Add_unit_test_for_getMyProfile_query
 
 Diffs: 
-- packages: @aws-amplify/amplify-appsync-simulator instead of old version; using the newer version because the old one wasn't updated in 3yrs; this is technically from amplify Gen2, but the api used here is largely the same
+- package.json:devDependencies : @aws-amplify/amplify-appsync-simulator instead of old version; using the newer version because the old one wasn't updated in 3yrs; this is technically from amplify Gen2, but the api used here is largely the same
+- package.json: scripts: adds scope unit test script `test:unit`
+- error handlings: implements try/catch in methods
+
+Release: https://github.com/alanionita/appsyncmasterclass-backend/compare/04-08-Implement_getMyProfile_query...04-09-Add_unit_test_for_getMyProfile_query
 
