@@ -95,9 +95,11 @@ interface IProfile {
     website: String
     birthdate: AWSDate
     createdAt: AWSDateTime!
-    followers: Int!
-    liked: Int!
     tweets: TweetsPage!
+    followersCount: Int!,
+    followingCount: Int!,
+    tweetsCount: Int!,
+    likesCount: Int!,
 }
 
 type MyProfile implements IProfile {
@@ -111,9 +113,11 @@ type MyProfile implements IProfile {
     website: String
     birthdate: AWSDate
     createdAt: AWSDateTime!
-    followers: Int!
-    liked: Int!
     tweets: TweetsPage!
+    followersCount: Int!,
+    followingCount: Int!,
+    tweetsCount: Int!,
+    likesCount: Int!,
 }
 
 type OtherProfile implements IProfile {
@@ -127,9 +131,11 @@ type OtherProfile implements IProfile {
     website: String
     birthdate: AWSDate
     createdAt: AWSDateTime!
-    followers: Int!
-    liked: Int!
     tweets: TweetsPage!
+    followersCount: Int!,
+    followingCount: Int!,
+    tweetsCount: Int!,
+    likesCount: Int!,
     following: Boolean!
     followedBy: Boolean!
 }
