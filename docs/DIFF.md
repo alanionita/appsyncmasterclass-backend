@@ -16,7 +16,8 @@ Diffs:
 
 - Used latest version of `serverless` package v3.9, possibly the last open-source version; a reasonably stable version for a while
 - Used latest version of `serverless-appsync-plugin`
-- Notice that the AppSync definition api is different in later versions; chose to store the definition within a `serverless/` - helps to maintain all serverless definitions in one central local; as a refactor should move function definitions to a `serverless/lambda.yml` file.
+- appsync.yml:Notice that the AppSync definition api is different in later versions; chose to store the definition within a `serverless/` - helps to maintain all serverless definitions in one central local; as a refactor should move function definitions to a `serverless/lambda.yml` file.
+- appsync.yml: different authentication definition
 
 ```yml
 # serverless.yml
