@@ -97,7 +97,7 @@ interface IProfile {
     createdAt: AWSDateTime!
     followers: Int!
     liked: Int!
-    tweets: TweetsPage
+    tweets: TweetsPage!
 }
 
 type MyProfile implements IProfile {
@@ -113,7 +113,7 @@ type MyProfile implements IProfile {
     createdAt: AWSDateTime!
     followers: Int!
     liked: Int!
-    tweets: TweetsPage
+    tweets: TweetsPage!
 }
 
 type OtherProfile implements IProfile {
@@ -129,7 +129,7 @@ type OtherProfile implements IProfile {
     createdAt: AWSDateTime!
     followers: Int!
     liked: Int!
-    tweets: TweetsPage
+    tweets: TweetsPage!
     following: Boolean!
     followedBy: Boolean!
 }

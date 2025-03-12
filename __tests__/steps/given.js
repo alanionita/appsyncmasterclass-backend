@@ -1,4 +1,5 @@
 const chance = require('chance').Chance()
+const vtlUtil = require("@aws-amplify/amplify-appsync-simulator/lib/velocity/util")
 
 function random_user() {
     const firstName = chance.first({ nationality: 'en' })
@@ -16,23 +17,48 @@ function random_user() {
         symbols: true,
         casing: 'lower'
     })
-    
+
     const passwordPost = chance.string({
         length: 6,
         alpha: true,
         casing: "upper"
     })
-    
+
 
     const email = `${firstName}-${lastName}-${suffix}@appsyncmasterclass.com`
 
     return {
         name,
-        password: passwordPre+passwordPost,
+        password: passwordPre + passwordPost,
         email
     }
 }
 
+function random_appsync_context(identity, args) {
+    try {
+        const util = vtlUtil.create([], new Date(), Object())
+
+        const context = {
+            identity,
+            args,
+            arguments: args
+        }
+
+        return {
+            context,
+            ctx: context,
+            util,
+            utils: util
+        }
+    } catch (err) {
+        console.error('Err [given.random_appsync_context] ::', err.message)
+        console.info(JSON.stringify(err.stack))
+        return err
+    }
+
+}
+
 module.exports = {
-    random_user
+    random_user,
+    random_appsync_context
 }

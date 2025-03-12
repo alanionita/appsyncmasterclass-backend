@@ -124,3 +124,9 @@ Diffs:
 - serverless.yml/appsync.yml: resolver definition is different in v2; by default the resolvers are Javascript and Kind is Pipeline; to use VTL we must use `Kind: unit` and have `request` and `response` fields; the fields are relative to the top-level `serverless.yml`
 
 Commit - https://github.com/alanionita/appsyncmasterclass-backend/commit/7d5fece02613d1170f0fd8228aa7be7bf4670975
+
+### 04-09-Add_unit_test_for_getMyProfile_query
+
+Diffs: 
+- packages: @aws-amplify/amplify-appsync-simulator instead of old version; using the newer version because the old one wasn't updated in 3yrs; this is technically from amplify Gen2, but the api used here is largely the same
+

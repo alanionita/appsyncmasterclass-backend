@@ -1,4 +1,7 @@
 const { AdminConfirmSignUpCommand, CognitoIdentityProviderClient, SignUpCommand } = require("@aws-sdk/client-cognito-identity-provider"); // ES Modules import
+const fs = require("fs");
+const vtlMapper = require("@aws-amplify/amplify-appsync-simulator/lib/velocity/value-mapper/mapper")
+const vtlTemplate = require("amplify-velocity-template");
 
 require('dotenv').config()
 
@@ -94,7 +97,20 @@ async function user_signs_up(password, name, email) {
 
 }
 
+function invoke_appsync_template(templatePath, context) {
+    const template = fs.readFileSync(templatePath, { encoding: "utf-8"})
+
+    const ast = vtlTemplate.parse(template)
+    const compiler = new vtlTemplate.Compile(ast, {
+        valueMapper: vtlMapper.map,
+        escape: false // TODO: find out purpose
+    })
+
+    return JSON.parse(compiler.render(context))
+}
+
 module.exports = {
     invoke_confirmUserSignup,
-    user_signs_up
+    user_signs_up,
+    invoke_appsync_template
 }
