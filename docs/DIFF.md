@@ -149,4 +149,4 @@ Diff:
 - serverless.yml: used the `${appsync:url}` from serverless-appsync-plugin v2
 - Skipped installing the suggested serverless-plugins
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-11-Capture_AppSync_GraphQLUrl_in_.env
