@@ -174,4 +174,12 @@ Diffs:
 - serverless: moves lambda definitions to separate serverless/functions.yml folder
 - appsync.yml: adds resolver definitions in new serverless-appsync-plugin v2
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-14-Implement_getImageUploadUrl_query
+
+### 04-15-Add_unit_test_for_getImageUploadUrl_query
+
+Diffs: 
+- when/invoke_getImgUploadUrl: handled Content-Type here even though it can no longer be configure like this; left it as is in order to not refactor too much
+- when/invoke_getImgUploadUrl: Adds more error handling
+- tests/unit/getImgUploadUrl: decided to remove the ContentType check from the pattern matching because the URLs are not returning Content-Type; 
+- tests/unit/getImgUploadUrl: adds test for throwing if exception is found, and defaulting to jpeg Content-Type

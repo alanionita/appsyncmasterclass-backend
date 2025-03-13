@@ -119,6 +119,34 @@ function invoke_appsync_template(templatePath, context) {
     return JSON.parse(parsedRender)
 }
 
+
+async function invoke_getImgUploadUrl({username, extension, contentType}){
+    try {
+        const handler = require('../../functions/get-img-upload-url').handler
+        const context = {}
+        const event = {
+            identity: {
+                username
+            },
+            arguments: {
+                extension,
+                contentType
+            }
+        }
+
+        return await handler(event, context)
+    } catch (err) {
+        console.error("Err [tests/steps/when/invoke_getImgUploadUrl] ::", err.message);
+        console.info(JSON.stringify(err))
+        if (err.$metadata) {
+            const { requestId, cfId, extendedRequestId } = err.$metadata;
+            console.info({ requestId, cfId, extendedRequestId })
+        }
+        throw err;
+    }
+
+}
+
 async function user_calls_getMyProfile(user) {
     const query = `query getMyProfile {
         getMyProfile {
@@ -188,9 +216,10 @@ async function user_calls_editMyProfile(user, input) {
 }
 
 module.exports = {
-    invoke_confirmUserSignup,
-    user_signs_up,
     invoke_appsync_template,
+    invoke_confirmUserSignup,
+    invoke_getImgUploadUrl,
+    user_calls_editMyProfile,
     user_calls_getMyProfile,
-    user_calls_editMyProfile
+    user_signs_up,
 }
