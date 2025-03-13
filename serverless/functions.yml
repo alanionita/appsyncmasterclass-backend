@@ -1,0 +1,19 @@
+confirmUserSignup:
+  handler: functions/confirm-user-signup.handler
+  environment:
+    USERS_TABLE: !Ref UsersTable
+  iamRoleStatements:
+    - Effect: Allow
+      Action: dynamodb:PutItem
+      Resource: !GetAtt UsersTable.Arn
+
+getImageUploadUrl: 
+  handler: functions/get-img-upload-url.handler
+  environment:
+    BUCKET_NAME: !Ref AssetsBucket
+  iamRoleStatements:
+    - Effect: Allow
+      Action: 
+        - s3:PutObject
+        - s3:PutObjectAcl
+      Resource: !Sub ${AssetsBucket.Arn}/*

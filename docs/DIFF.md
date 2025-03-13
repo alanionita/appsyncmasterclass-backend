@@ -164,4 +164,14 @@ Diff:
 - when.invoke_appsync_template: required extra logic to clean up trailing commas from the vtl.render output
 - given: abstracted away random_name_email, random_pwd, in order to make them more reusable in test
 
-Release:
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-13-Add_tests_for_editMyProfile_mutation
+
+### 04-14-Implement_getImageUploadUrl_query
+
+Diffs:
+- packages/aws-sdk: installs s3Client and s3-presigner modules
+- handler: implements the same logic using commands; add more validation and errors
+- serverless: moves lambda definitions to separate serverless/functions.yml folder
+- appsync.yml: adds resolver definitions in new serverless-appsync-plugin v2
+
+Release: 

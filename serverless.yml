@@ -20,21 +20,14 @@ package:
     - package-lock.json
     - package.json
 
-appSync: ${file(./serverless/appsync.yml)}
-
 custom:
   stage: ${opt:stage, self:provider.stage}
 
-functions:
-  confirmUserSignup:
-    handler: functions/confirm-user-signup.handler
-    environment:
-      USERS_TABLE: !Ref UsersTable
-    iamRoleStatements:
-      - Effect: Allow
-        Action: dynamodb:PutItem
-        Resource: !GetAtt UsersTable.Arn
+appSync: ${file(./serverless/appsync.yml)}
 
+
+functions: ${file(./serverless/functions.yml)}
+  
 resources:
   Resources:
     UsersTable:
@@ -97,6 +90,20 @@ resources:
               - ALLOW_USER_SRP_AUTH
               - ALLOW_USER_PASSWORD_AUTH
               - ALLOW_REFRESH_TOKEN_AUTH
+    AssetsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccelerateConfiguration:
+          AccelerationStatus: Enabled
+        CorsConfiguration:
+          CorsRules:
+            - AllowedMethods:
+                - GET
+                - PUT
+              AllowedOrigins:
+                - "*"
+              AllowedHeaders:
+                - "*"
   Outputs:
     CognitoUserPoolId:
       Description: "Cognito User Pool ::"

@@ -20,6 +20,10 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Mutation.editMyProfile.request.vtl
     response: ./appsync/resolvers/Mutation.editMyProfile.response.vtl
+  Query.getImageUploadUrl:
+    # Direct Lambda resolver
+    dataSource: getImageUploadUrlFn
+    kind: UNIT # required
 
 dataSources:
   api:
@@ -29,3 +33,7 @@ dataSources:
     description: 'UsersTable'
     config:
       tableName: !Ref UsersTable
+  getImageUploadUrlFn:
+      type: 'AWS_LAMBDA'
+      config:
+        functionName: getImageUploadUrl
