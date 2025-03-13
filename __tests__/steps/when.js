@@ -112,8 +112,11 @@ function invoke_appsync_template(templatePath, context) {
         valueMapper: vtlMapper.map,
         escape: false // TODO: find out purpose
     })
-
-    return JSON.parse(compiler.render(context))
+    const render = compiler.render(context);
+    // FIX: cleans trailing commas from render
+    const lastCommaPattern = /\,(?=\s*?[\}\]])/g;
+    const parsedRender = render.replace(lastCommaPattern, '');
+    return JSON.parse(parsedRender)
 }
 
 async function user_calls_getMyProfile(user) {
@@ -148,9 +151,46 @@ async function user_calls_getMyProfile(user) {
     return profile;
 }
 
+async function user_calls_editMyProfile(user, input) {
+    const query = `mutation editMyProfile($input: ProfileInput!) {
+        editMyProfile(newProfile: $input) {
+            id
+            name
+            screenName
+            imgUrl
+            bgImgUrl
+            bio
+            location
+            website
+            birthdate
+            createdAt
+            followersCount
+            followingCount
+            tweetsCount
+            likesCount
+        }
+    }`
+
+    const variables = {
+        input
+    }
+
+    const data = await graphql({
+        url: process.env.APPSYNC_HTTP_URL,
+        query,
+        variables,
+        auth: user.accessToken
+    })
+
+    const profile = data.editMyProfile;
+
+    return profile;
+}
+
 module.exports = {
     invoke_confirmUserSignup,
     user_signs_up,
     invoke_appsync_template,
-    user_calls_getMyProfile
+    user_calls_getMyProfile,
+    user_calls_editMyProfile
 }

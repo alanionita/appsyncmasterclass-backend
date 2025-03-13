@@ -156,4 +156,12 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 Diff:
 - Mutation.editMyProfile: mutation resolvers defined using serverless-appsync-plugin v2 format
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-12-Implement_editMyProfile_mutation
+
+### 04-13-Add_tests_for_editMyProfile_mutation
+
+Diff: 
+- when.invoke_appsync_template: required extra logic to clean up trailing commas from the vtl.render output
+- given: abstracted away random_name_email, random_pwd, in order to make them more reusable in test
+
+Release:

@@ -5,7 +5,8 @@ const vtlUtil = require("@aws-amplify/amplify-appsync-simulator/lib/velocity/uti
 const when = require("./when");
 
 
-function random_user() {
+function random_name_email() {
+    const EMAIL_HOST = "appsyncmasterclass.com"
     const firstName = chance.first({ nationality: 'en' })
     const lastName = chance.first({ nationality: 'en' })
 
@@ -13,7 +14,12 @@ function random_user() {
     const suffix = chance.string({ length: 4, pool: 'abcdefghijklmnoprstuvwxyz' })
 
     const name = `${firstName} ${lastName} ${suffix}`
+    const email = `${firstName}-${lastName}-${suffix}@${EMAIL_HOST}`
 
+    return { name, email };
+}
+
+function random_pwd() {
     const passwordPre = chance.string({
         length: 10,
         alpha: true,
@@ -29,12 +35,16 @@ function random_user() {
         casing: "upper"
     })
 
+    return passwordPre + passwordPost
+}
 
-    const email = `${firstName}-${lastName}-${suffix}@appsyncmasterclass.com`
+function random_user() {
+    const { name, email } = random_name_email()
+    const pwd = random_pwd()
 
     return {
         name,
-        password: passwordPre + passwordPost,
+        password: pwd,
         email
     }
 }
@@ -65,7 +75,7 @@ function random_appsync_context(identity, args) {
 
 async function authenticated_user() {
     try {
-        
+
         const cognito = new CognitoIdentityProviderClient({});
 
         const userPoolId = process.env.COGNITO_USER_POOL_ID
@@ -127,5 +137,6 @@ async function authenticated_user() {
 module.exports = {
     random_user,
     random_appsync_context,
+    random_name_email,
     authenticated_user,
 }
