@@ -24,7 +24,7 @@ type Query {
 }
 
 type Mutation {
-    editMyProfile(newProfle: ProfileInput): MyProfile!
+    editMyProfile(newProfile: ProfileInput!): MyProfile!
     tweet(text: String!): Tweet!
     like(tweetId: ID!): Boolean!
     unlike(tweetId: ID!): Boolean!
@@ -55,7 +55,7 @@ type Tweet implements ITweet {
     id: ID!
     profile: IProfile!
     createdAt: AWSDateTime!
-    text:String!
+    text: String!
     replies: Int!
     likes: Int!
     retweets: Int!

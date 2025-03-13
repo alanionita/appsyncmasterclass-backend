@@ -150,3 +150,10 @@ Diff:
 - Skipped installing the suggested serverless-plugins
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-11-Capture_AppSync_GraphQLUrl_in_.env
+
+### 04-12-Implement_editMyProfile_mutation
+
+Diff:
+- Mutation.editMyProfile: mutation resolvers defined using serverless-appsync-plugin v2 format
+
+Release: 

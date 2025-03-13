@@ -15,6 +15,11 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Query.getMyProfile.request.vtl
     response: ./appsync/resolvers/Query.getMyProfile.response.vtl
+  Mutation.editMyProfile:
+    dataSource: usersTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Mutation.editMyProfile.request.vtl
+    response: ./appsync/resolvers/Mutation.editMyProfile.response.vtl
 
 dataSources:
   api:

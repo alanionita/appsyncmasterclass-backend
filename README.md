@@ -75,9 +75,12 @@ More docs are available to follow the updates per video.
 
 External docs:
 - serverless-appsync-plugin - https://github.com/sid88in/serverless-appsync-plugin/tree/master
+- AWS-SDK v3 - https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/
 - Cognito::UserPool spec - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpool.html
 - Cognito::UserPoolClient spec - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolclient.html
-
+- AWS DynamoDB resolver mapping template reference - https://docs.aws.amazon.com/appsync/latest/devguide/resolver-mapping-template-reference-dynamodb.html
+- AWS DynamoDB reserved names - https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ReservedWords.html
+- AWS CLI docs - https://docs.aws.amazon.com/cli/latest/reference
 
 ## 🔍 Testing
 
