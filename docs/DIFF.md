@@ -54,7 +54,7 @@ Commit - https://github.com/alanionita/appsyncmasterclass-backend/commit/48b5344
 ### 04-03-Configure_Cognito_User_Pool
 
 Diffs:
-- CognitoUserPoolL: Added stronger password rules, but still no where near production level 
+- CognitoUserPool: Added stronger password rules, but still no where near production level 
 
 Commit - https://github.com/alanionita/appsyncmasterclass-backend/commit/bfb1933b3c836eef7b218115bff3321abed6f218
 
@@ -183,3 +183,17 @@ Diffs:
 - when/invoke_getImgUploadUrl: Adds more error handling
 - tests/unit/getImgUploadUrl: decided to remove the ContentType check from the pattern matching because the URLs are not returning Content-Type; 
 - tests/unit/getImgUploadUrl: adds test for throwing if exception is found, and defaulting to jpeg Content-Type
+
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-15-Add_unit_test_for_getImageUploadUrl_query
+
+### *agi-01-yml-refactors-pre-signup
+
+> Custom changes, not related to the overall course, but adding improvements nonetheless
+
+Diffs:
+- serverless.yml: refactored Resources and moved all the cognito specs to `serverless/cognito.yml`; plan to keep doing this the more services there are
+- serverless.yml: mapped out Outputs to .env requirements, making sure that the stack returns everything I need to populate the .env
+- pre-user-signup: got tired of the confirming for users I need to use in AppSync console so added a PreSignup trigger and autoconfirming all users by default
+- package.json: added a new script to deploy:loud which show the outputs in the console
+
+Release: 

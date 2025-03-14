@@ -1,0 +1,56 @@
+# Cognito Resources 
+
+Resources:
+  CgUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      AutoVerifiedAttributes:
+        - email
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireNumbers: true
+          RequireUppercase: true
+          RequireSymbols: true
+          RequireLowercase: false
+      UsernameAttributes:
+        - email
+      Schema:
+        - AttributeDataType: String
+          Name: name  
+          Required: false
+          Mutable: true
+      LambdaConfig:
+        PostConfirmation: !GetAtt ConfirmUserSignupLambdaFunction.Arn
+        PreSignUp: !GetAtt PreUserSignupLambdaFunction.Arn
+  
+  CgClientWeb:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+          UserPoolId: !Ref CgUserPool
+          ClientName: web
+          PreventUserExistenceErrors: ENABLED
+          ExplicitAuthFlows:
+            - ALLOW_USER_SRP_AUTH
+            - ALLOW_USER_PASSWORD_AUTH
+            - ALLOW_REFRESH_TOKEN_AUTH
+
+  CgSignupPerm:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:invokeFunction
+      FunctionName: !Ref ConfirmUserSignupLambdaFunction
+      Principal: cognito-idp.amazonaws.com
+      SourceAccount: !Ref AWS::AccountId
+      SourceArn: !GetAtt CgUserPool.Arn
+
+  CgPreSignupPerm:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:invokeFunction
+      FunctionName: !Ref PreUserSignupLambdaFunction
+      Principal: cognito-idp.amazonaws.com
+      SourceAccount: !Ref AWS::AccountId
+      SourceArn: !GetAtt CgUserPool.Arn
+  
+ 

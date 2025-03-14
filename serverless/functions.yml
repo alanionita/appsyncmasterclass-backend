@@ -6,6 +6,8 @@ confirmUserSignup:
     - Effect: Allow
       Action: dynamodb:PutItem
       Resource: !GetAtt UsersTable.Arn
+preUserSignup:
+  handler: functions/pre-user-signup.handler
 
 getImageUploadUrl: 
   handler: functions/get-img-upload-url.handler

@@ -7,7 +7,7 @@ authentication:
   config:
     awsRegion: eu-west-2 # defaults to stack region 
     defaultAction: ALLOW
-    userPoolId: !Ref CognitoUserPool
+    userPoolId: !Ref CgUserPool
 
 resolvers:
   Query.getMyProfile:

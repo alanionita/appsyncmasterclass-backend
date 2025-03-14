@@ -29,86 +29,56 @@ appSync: ${file(./serverless/appsync.yml)}
 functions: ${file(./serverless/functions.yml)}
   
 resources:
-  Resources:
-    UsersTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        BillingMode: PAY_PER_REQUEST
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        Tags:
-          - Key: Environment
-            Value: ${self:custom.stage}
-          - Key: Name
-            Value: users-table
-          - Key: CanIDelete
-            Value: 'No'
-          - Key: Author
-            Value: 'Alan Ionita'
-          - Key: CreatedOn
-            Value: 2025-03-04
-    CognitoUserPool:
-      Type: AWS::Cognito::UserPool
-      Properties:
-        AutoVerifiedAttributes:
-          - email
-        Policies:
-          PasswordPolicy:
-            MinimumLength: 8
-            RequireNumbers: true
-            RequireUppercase: true
-            RequireSymbols: true
-            RequireLowercase: false
-        UsernameAttributes:
-          - email
-        Schema:
-          - AttributeDataType: String
-            Name: name  
-            Required: false
-            Mutable: true
-        LambdaConfig:
-          PostConfirmation: !GetAtt ConfirmUserSignupLambdaFunction.Arn
-    CgSignupPerm:
-      Type: AWS::Lambda::Permission
-      Properties:
-        Action: lambda:invokeFunction
-        FunctionName: !Ref ConfirmUserSignupLambdaFunction
-        Principal: cognito-idp.amazonaws.com
-        SourceAccount: !Ref AWS::AccountId
-        SourceArn: !GetAtt CognitoUserPool.Arn
-    WebUserPoolClient:
-        Type: AWS::Cognito::UserPoolClient
+  - ${file(./serverless/cognito.yml)}
+  - Resources:  
+      UsersTable:
+        Type: AWS::DynamoDB::Table
         Properties:
-            UserPoolId: !Ref CognitoUserPool
-            ClientName: web
-            PreventUserExistenceErrors: ENABLED
-            ExplicitAuthFlows:
-              - ALLOW_USER_SRP_AUTH
-              - ALLOW_USER_PASSWORD_AUTH
-              - ALLOW_REFRESH_TOKEN_AUTH
-    AssetsBucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        AccelerateConfiguration:
-          AccelerationStatus: Enabled
-        CorsConfiguration:
-          CorsRules:
-            - AllowedMethods:
-                - GET
-                - PUT
-              AllowedOrigins:
-                - "*"
-              AllowedHeaders:
-                - "*"
-  Outputs:
-    CognitoUserPoolId:
-      Description: "Cognito User Pool ::"
-      Value: !Ref CognitoUserPool
-    WebCognitoUserPoolClientId:
-      Value: !Ref WebUserPoolClient
-    AppsyncMasterclassHTTPUrl:
-      Value: ${appsync:url}
+          BillingMode: PAY_PER_REQUEST
+          KeySchema:
+            - AttributeName: id
+              KeyType: HASH
+          AttributeDefinitions:
+            - AttributeName: id
+              AttributeType: S
+          Tags:
+            - Key: Environment
+              Value: ${self:custom.stage}
+            - Key: Name
+              Value: users-table
+            - Key: CanIDelete
+              Value: 'No'
+            - Key: Author
+              Value: 'Alan Ionita'
+            - Key: CreatedOn
+              Value: 2025-03-04
+      AssetsBucket:
+        Type: AWS::S3::Bucket
+        Properties:
+          AccelerateConfiguration:
+            AccelerationStatus: Enabled
+          CorsConfiguration:
+            CorsRules:
+              - AllowedMethods:
+                  - GET
+                  - PUT
+                AllowedOrigins:
+                  - "*"
+                AllowedHeaders:
+                  - "*"
+  - Outputs:
+      CgUserPoolId:
+        Description: "Cognito User Pool ::"
+        Value: !Ref CgUserPool
+      CgClientWebId:
+        Description: "Cognito Client Id (web) ::"
+        Value: !Ref CgClientWeb
+      UsersTable:
+        Description: "DynamoDB (UsersTable) ::"
+        Value: !Ref UsersTable
+      AppsyncMasterclassHTTPUrl:
+        Description: "AppSync http url ::"
+        Value: ${appsync:url}
+      AssetsBucket:
+        Description: "S3 assets bucket ::"
+        Value: !Ref AssetsBucket
