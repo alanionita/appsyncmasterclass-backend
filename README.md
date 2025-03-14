@@ -67,6 +67,12 @@ npm run deploy:fn -- *
 
 ```
 
+Create a test Cognito user, once deployed. Replace the REGION in the script with your region.
+
+```
+/bin/bash scripts/cg-create-new-user.sh CLIENT_ID EMAIL PWD "NAME"
+```
+
 ## 📚 Documentation
 
 More docs are available to follow the updates per video. 
