@@ -30,28 +30,8 @@ functions: ${file(./serverless/functions.yml)}
   
 resources:
   - ${file(./serverless/cognito.yml)}
-  - Resources:  
-      UsersTable:
-        Type: AWS::DynamoDB::Table
-        Properties:
-          BillingMode: PAY_PER_REQUEST
-          KeySchema:
-            - AttributeName: id
-              KeyType: HASH
-          AttributeDefinitions:
-            - AttributeName: id
-              AttributeType: S
-          Tags:
-            - Key: Environment
-              Value: ${self:custom.stage}
-            - Key: Name
-              Value: users-table
-            - Key: CanIDelete
-              Value: 'No'
-            - Key: Author
-              Value: 'Alan Ionita'
-            - Key: CreatedOn
-              Value: 2025-03-04
+  - ${file(./serverless/dynamodb.yml)}
+  - Resources:
       AssetsBucket:
         Type: AWS::S3::Bucket
         Properties:
