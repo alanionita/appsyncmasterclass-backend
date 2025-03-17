@@ -1,4 +1,4 @@
-const { InitiateAuthCommand, CognitoIdentityProviderClient, SignUpCommand } = require("@aws-sdk/client-cognito-identity-provider"); // ES Modules import
+const { InitiateAuthCommand, CognitoIdentityProviderClient } = require("@aws-sdk/client-cognito-identity-provider"); // ES Modules import
 
 const chance = require('chance').Chance()
 const vtlUtil = require("@aws-amplify/amplify-appsync-simulator/lib/velocity/util")
@@ -32,6 +32,7 @@ function random_pwd() {
         length: 6,
         alpha: true,
         numeric: true,
+        symbols: true,
         casing: "upper"
     })
 

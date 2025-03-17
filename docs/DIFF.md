@@ -186,7 +186,7 @@ Diffs:
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-15-Add_unit_test_for_getImageUploadUrl_query
 
-### *agi-01-yml-refactors-pre-signup
+### agi-01-yml-refactors-pre-signup
 
 > Custom changes, not related to the overall course, but adding improvements nonetheless
 
@@ -196,4 +196,12 @@ Diffs:
 - pre-user-signup: got tired of the confirming for users I need to use in AppSync console so added a PreSignup trigger and autoconfirming all users by default
 - package.json: added a new script to deploy:loud which show the outputs in the console
 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/agi-01-yml-refactors-pre-signup
+
+### 04-16-Add_acceptance_test_for_getImageUploadUrl_query
+
+Diffs:
+- tests/lib: Instead of relying on the existing string, download produces a presigned url to perform a Get request from the bucket
+- s3: Original guidance from course is to use ACLs and to create a public bucket; buckets come private by default and ACLs are disabled and no longer recommended; it's actually harder to unlock a bucket and make it public that it is to interact with a private bucket; here's I'm letting the bucket be default closed, but this means that both upload_file() and download_file(), require a presigned url; in turn this will also propagate to the GraphQL queries that fetch imgUrl, bgImgUrl or any new images, whereby these queries will need to trigger lambdas per each img asset field such that they can generate a presigned get url; potential lifecyle issues on the frontend since the pre-signed url will only be alive for 1m, but can be mitigated with asset caching.
+ 
 Release: 

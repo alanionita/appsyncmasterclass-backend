@@ -3,6 +3,32 @@ function fetchDatePattern() {
     return datePattern
 }
 
+function makeSignedUrlPattern({ bucket, username, fileType }) {
+    const s3Host = 's3-accelerate'
+    const awsHost = 'amazonaws.com'
+    const signedUrlPattern = new RegExp(`https://${bucket}.${s3Host}.${awsHost}/${username}/.*\.${fileType}\?.*`)
+    return signedUrlPattern
+}
+
+function makeExtContentType(fileType) {
+    if (!fileType) return null;
+    const extension = `.${fileType}`;
+    const contentType = `image/${fileType}`;
+    return {
+        extension,
+        contentType
+    }
+}
+
+function throwWithLabel(err, funcName) {
+    console.error(`Err [${funcName}] ::`, err.message)
+    console.info(JSON.stringify(err.stack))
+    return err
+}
+
 module.exports = {
-    fetchDatePattern
+    fetchDatePattern,
+    makeSignedUrlPattern,
+    makeExtContentType,
+    throwWithLabel
 }

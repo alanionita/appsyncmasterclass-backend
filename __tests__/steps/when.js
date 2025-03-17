@@ -1,8 +1,9 @@
-const { AdminConfirmSignUpCommand, CognitoIdentityProviderClient, SignUpCommand } = require("@aws-sdk/client-cognito-identity-provider"); // ES Modules import
+const { CognitoIdentityProviderClient, SignUpCommand } = require("@aws-sdk/client-cognito-identity-provider"); // ES Modules import
 const fs = require("fs");
 const vtlMapper = require("@aws-amplify/amplify-appsync-simulator/lib/velocity/value-mapper/mapper")
 const vtlTemplate = require("amplify-velocity-template");
 const graphql = require('../lib/graphql');
+const { throwWithLabel } = require("../lib/utils");
 
 require('dotenv').config()
 
@@ -77,19 +78,20 @@ async function user_signs_up(password, name, email) {
         }
 
         console.info(`User has signed up - [${email}]`)
-        
+
         const username = response.UserSub;
-        
-        const confirmCommand = new AdminConfirmSignUpCommand({
-            UserPoolId: userPoolId, // required
-            Username: username
-        })
 
-        const { $metadata } = await cognito.send(confirmCommand)
+        // Note: no longer needed since all users are confirmed by a PreSignup Lambda
+        // const confirmCommand = new AdminConfirmSignUpCommand({
+        //     UserPoolId: userPoolId, // required
+        //     Username: username
+        // })
 
-        if ($metadata.httpStatusCode !== 200) {
-            throw Error('Issue with sign-up confirmation')
-        }
+        // const { $metadata } = await cognito.send(confirmCommand)
+
+        // if ($metadata.httpStatusCode !== 200) {
+        //     throw Error('Issue with sign-up confirmation')
+        // }
 
         return {
             username,
@@ -120,7 +122,7 @@ function invoke_appsync_template(templatePath, context) {
 }
 
 
-async function invoke_getImgUploadUrl({username, extension, contentType}){
+async function invoke_getImgUploadUrl({ username, extension, contentType }) {
     try {
         const handler = require('../../functions/get-img-upload-url').handler
         const context = {}
@@ -215,6 +217,33 @@ async function user_calls_editMyProfile(user, input) {
     return profile;
 }
 
+async function user_calls_getImageUploadUrl({
+    user,
+    extension,
+    contentType
+}) {
+    try {
+        const query = `query getImageUploadUrl ($extension: String, $contentType: String) {
+            getImageUploadUrl(extension: $extension, contentType: $contentType)
+        }`
+    
+        const variables = {
+            extension,
+            contentType
+        }
+    
+        const data = await graphql({
+            url: process.env.APPSYNC_HTTP_URL,
+            query,
+            variables,
+            auth: user.accessToken
+        })
+        return data.getImageUploadUrl;
+    } catch (caught) {
+        throwWithLabel(caught, 'when.user_calls_getImageUploadUrl')
+    }
+}
+
 module.exports = {
     invoke_appsync_template,
     invoke_confirmUserSignup,
@@ -222,4 +251,5 @@ module.exports = {
     user_calls_editMyProfile,
     user_calls_getMyProfile,
     user_signs_up,
+    user_calls_getImageUploadUrl,
 }
