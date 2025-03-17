@@ -62,10 +62,12 @@ resources:
               - AllowedMethods:
                   - GET
                   - PUT
+                Id: CORSRuleId1
                 AllowedOrigins:
                   - "*"
                 AllowedHeaders:
                   - "*"
+                MaxAge: 300 # cache preflight response in secs, 5m
   - Outputs:
       CgUserPoolId:
         Description: "Cognito User Pool ::"

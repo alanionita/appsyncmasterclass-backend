@@ -1,25 +1,23 @@
 const { PutObjectCommand, S3Client } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-const { ulid } = require('ulid');
+const ulid = require('ulid');
 
-
-
-function createPresignedUrl({ region, bucket, key, contentType }) {
+function makePresignedUrlPut({ region, bucket, key, contentType }) {
     try {
         if (!region || !bucket || !key || !contentType) {
-            throw Error("Missing argument: region, bucket, key, contentType")
+            throw Error("Missing required argument: region, bucket, key, contentType")
         }
         const client = new S3Client({ region, useAccelerateEndpoint: true });
+        const expiresIn = 60; // seconds, 1m
 
         // Get Signed URL
         const cmdPutObject = new PutObjectCommand({
             Bucket: bucket,
-            Key: key,
-            ACL: "public-read"
+            Key: key
         });
-        return getSignedUrl(client, cmdPutObject, { expiresIn: 3600 });
+        return getSignedUrl(client, cmdPutObject, { expiresIn });
     } catch (err) {
-        console.error("Err [createPresignedUrl] ::", err.message)
+        console.error("Err [makePresignedUrlPut] ::", err.message)
         console.info(JSON.stringify(err.stack))
     }
 };
@@ -37,11 +35,7 @@ module.exports.handler = async (event) => {
             }
             return;
         })
-
-        const { REGION, BUCKET_NAME } = process.env;
-
-        const id = ulid();
-
+        
         if (!event.identity.username) {
             throw Error("Incorrect event type")
         }
@@ -49,7 +43,9 @@ module.exports.handler = async (event) => {
         if (!event.arguments.extension) {
             throw Error("Missing event argument : extension")
         }
-
+        
+        const { REGION, BUCKET_NAME } = process.env;
+        const id = ulid.ulid();
         const extension = event.arguments.extension
 
         const key = `${event.identity.username}/${id}`
@@ -62,7 +58,7 @@ module.exports.handler = async (event) => {
             throw new Error('ContentType should be an image')
         }
 
-        const signedUrl = createPresignedUrl({
+        const signedUrl = makePresignedUrlPut({
             region: REGION,
             bucket: BUCKET_NAME,
             key: keyExt,
