@@ -24,6 +24,10 @@ resolvers:
     # Direct Lambda resolver
     dataSource: getImageUploadUrlFn
     kind: UNIT # required
+  Mutation.tweet:
+    kind: UNIT # required
+    field: tweet
+    dataSource: tweetFn
 
 dataSources:
   api:
@@ -37,3 +41,7 @@ dataSources:
       type: 'AWS_LAMBDA'
       config:
         functionName: getImageUploadUrl
+  tweetFn:
+      type: 'AWS_LAMBDA'
+      config:
+        functionName: tweet

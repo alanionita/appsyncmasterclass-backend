@@ -203,5 +203,12 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/a
 Diffs:
 - tests/lib: Instead of relying on the existing string, download produces a presigned url to perform a Get request from the bucket
 - s3: Original guidance from course is to use ACLs and to create a public bucket; buckets come private by default and ACLs are disabled and no longer recommended; it's actually harder to unlock a bucket and make it public that it is to interact with a private bucket; here's I'm letting the bucket be default closed, but this means that both upload_file() and download_file(), require a presigned url; in turn this will also propagate to the GraphQL queries that fetch imgUrl, bgImgUrl or any new images, whereby these queries will need to trigger lambdas per each img asset field such that they can generate a presigned get url; potential lifecyle issues on the frontend since the pre-signed url will only be alive for 1m, but can be mitigated with asset caching.
- 
+
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-16-Add_acceptance_test_for_getImageUploadUrl_query
+
+### 04-17-Implement_tweet_mutation
+
+Diffs:
+- functions/tweet: implements TransactWrite using aws-sdk v3 command pattern; add more code guards and error handling
+
 Release: 

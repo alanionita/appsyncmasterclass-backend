@@ -6,6 +6,7 @@ confirmUserSignup:
     - Effect: Allow
       Action: dynamodb:PutItem
       Resource: !GetAtt UsersTable.Arn
+
 preUserSignup:
   handler: functions/pre-user-signup.handler
 
@@ -19,3 +20,19 @@ getImageUploadUrl:
         - s3:PutObject
         - s3:PutObjectAcl
       Resource: !Sub ${AssetsBucket.Arn}/*
+
+tweet:
+  handler: functions/tweet.handler
+  environment:
+    USERS_TABLE: !Ref UsersTable
+    TWEETS_TABLE: !Ref TweetsTable
+    TIMELINES_TABLE: !Ref TimelinesTable
+  iamRoleStatements:
+    - Effect: Allow
+      Action: dynamodb:UpdateItem
+      Resource: !GetAtt UsersTable.Arn
+    - Effect: Allow
+      Action: dynamodb:PutItem
+      Resource: 
+        - !GetAtt TweetsTable.Arn
+        - !GetAtt TimelinesTable.Arn

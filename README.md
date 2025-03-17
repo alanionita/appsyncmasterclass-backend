@@ -29,16 +29,9 @@ Buy the course at - https://www.appsyncmasterclass.com/
 
 #### 1. Create .env file 
 
-```
-AWS_NODEJS_CONNECTION_REUSE_ENABLED=1
-STAGE=
-REGION=
-COGNITO_USER_POOL_ID=
-COGNITO_CLIENT_ID=
-USERS_TABLE=
-APPSYNC_HTTP_URL=
-BUCKET_NAME=
-```
+Copy `.env-example` to `.env` or `.env.*`
+
+Follow the structure and fill in the file with your variables.
 
 #### 2. Install packages
 

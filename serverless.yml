@@ -58,6 +58,12 @@ resources:
       UsersTable:
         Description: "DynamoDB (UsersTable) ::"
         Value: !Ref UsersTable
+      TweetsTable:
+        Description: "DynamoDB (TweetsTable) ::"
+        Value: !Ref TweetsTable
+      TimelinesTable:
+        Description: "DynamoDB (TimelinesTable) ::"
+        Value: !Ref TimelinesTable
       AppsyncMasterclassHTTPUrl:
         Description: "AppSync http url ::"
         Value: ${appsync:url}
