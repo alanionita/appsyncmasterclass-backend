@@ -227,9 +227,15 @@ No diffs
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-19-Add_acceptance_test_for_tweet
 
-### 04-20
+### 04-20-Implement_getTweets_query
 
 Diffs:
 - Query.getTweets: adds validation step in VTL for .nextToken, since the field is optional; uses v2 syntax definitions for serverless-plugin-appsync
 - Tweet.profile: adds nested resolver definition using v2 serverless-plugin-appsync
 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-20-Implement_getTweets_query
+
+### 04-21-Add_unit_test_for_getTweets_query
+
+Diffs: 
+- tests/Query.getTweets.request.test.js: adds more tests to handle success path and extra nextToken validation
