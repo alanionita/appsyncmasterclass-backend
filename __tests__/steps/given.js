@@ -50,14 +50,15 @@ function random_user() {
     }
 }
 
-function random_appsync_context(identity, args) {
+function random_appsync_context(identity, args, result) {
     try {
         const util = vtlUtil.create([], new Date(), Object())
 
         const context = {
             identity,
             args,
-            arguments: args
+            arguments: args,
+            result
         }
 
         return {
