@@ -32,18 +32,46 @@ describe("Given an authenticated user, when they send a tweet", () => {
         })
     })
 
-    it("Should see the new tweet when calling getTweets", async () => {
-        const { tweets, nextToken } = await when.user_calls_getTweets({ user, limit: 10 })
-        
-        expect(nextToken).toBeFalsy()
-        expect(tweets.length).toEqual(1)
-        expect(tweets[0]).toEqual(tweet)
-    })
-
-    it("Cannot ask more than 25 tweets", async () => {
-
-        await expect(when.user_calls_getTweets({ user, limit: 26 })).rejects.toMatchObject({
-            message: expect.stringContaining("Error: Max limit cannot be greater 25")
+    describe("When user calls getTweets", () => {
+        let tweets;
+        let nextToken;
+        beforeAll(async () => {
+            const result = await when.user_calls_getTweets({ user, limit: 10 })
+            tweets = result.tweets
+            nextToken = result.nextToken
+        })
+        it("Should see the new tweet when calling getTweets", () => {
+            expect(nextToken).toBeFalsy()
+            expect(tweets.length).toEqual(1)
+            expect(tweets[0]).toEqual(tweet)
+        })
+    
+        it("Cannot ask more than 25 tweets", async () => {
+            await expect(when.user_calls_getTweets({ user, limit: 26 })).rejects.toMatchObject({
+                message: expect.stringContaining("Error: Max limit cannot be greater 25")
+            })
         })
     })
+
+    describe("When user calls getMyTimeline", () => {
+        let tweets;
+        let nextToken;
+        beforeAll(async () => {
+            const result = await when.user_calls_getMyTimeline({ user, limit: 10 })
+            tweets = result.tweets
+            nextToken = result.nextToken
+        })
+        it("Should see new tweet in timeline when calling getMyTimeline", () => {
+            expect(nextToken).toBeFalsy()
+            expect(tweets.length).toEqual(1)
+            expect(tweets[0]).toEqual(tweet)
+        })
+    
+        it("Cannot ask more than 25 tweets per timeline", async () => {
+            await expect(when.user_calls_getMyTimeline({ user, limit: 26 })).rejects.toMatchObject({
+                message: expect.stringContaining("Error: Max limit cannot be greater 25")
+            })
+        })
+    })
+
 })

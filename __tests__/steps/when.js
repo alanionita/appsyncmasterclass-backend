@@ -347,6 +347,53 @@ async function user_calls_getTweets({ user, limit, givenNextToken = null }) {
     };
 }
 
+async function user_calls_getMyTimeline({ user, limit, givenNextToken = null }) {
+    const query = `query getMyTimeline($limit: Int!, $nextToken: String) {
+        getMyTimeline(limit: $limit, nextToken: $nextToken) {
+            nextToken
+            tweets {
+                createdAt
+                id
+                profile {
+                    id
+                    name
+                    screenName
+                }
+
+                ... on Tweet {
+                    id
+                    text
+                    replies
+                    likes
+                    retweets
+                    liked
+                    retweeted
+                }
+            }
+        }
+    }`
+
+    const variables = {
+        limit,
+        nextToken: givenNextToken
+    }
+
+    const { getMyTimeline } = await graphql({
+        url: process.env.APPSYNC_HTTP_URL,
+        query,
+        variables,
+        auth: user.accessToken
+    })
+
+    return { 
+        tweets: getMyTimeline.tweets, 
+        nextToken: getMyTimeline.nextToken 
+    };
+}
+
+
+
+
 module.exports = {
     invoke_appsync_template,
     invoke_confirmUserSignup,
@@ -357,5 +404,6 @@ module.exports = {
     user_calls_getImageUploadUrl,
     invoke_tweet,
     user_calls_tweet,
-    user_calls_getTweets
+    user_calls_getTweets,
+    user_calls_getMyTimeline
 }
