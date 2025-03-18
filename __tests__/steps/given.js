@@ -50,7 +50,7 @@ function random_user() {
     }
 }
 
-function random_appsync_context(identity, args, result) {
+function random_appsync_context(identity, args, result, source) {
     try {
         const util = vtlUtil.create([], new Date(), Object())
 
@@ -58,7 +58,39 @@ function random_appsync_context(identity, args, result) {
             identity,
             args,
             arguments: args,
-            result
+            result,
+            source
+        }
+
+        return {
+            context,
+            ctx: context,
+            util,
+            utils: util
+        }
+    } catch (err) {
+        console.error('Err [given.random_appsync_context] ::', err.message)
+        console.info(JSON.stringify(err.stack))
+        return err
+    }
+
+}
+
+function random_appsync_contextV2({ 
+    identity, 
+    args, 
+    result,
+    source 
+}) {
+    try {
+        const util = vtlUtil.create([], new Date(), Object())
+
+        const context = {
+            identity,
+            args,
+            arguments: args,
+            result,
+            source
         }
 
         return {
@@ -141,4 +173,5 @@ module.exports = {
     random_appsync_context,
     random_name_email,
     authenticated_user,
+    random_appsync_contextV2
 }
