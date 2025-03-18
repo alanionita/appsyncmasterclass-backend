@@ -28,6 +28,11 @@ resolvers:
     kind: UNIT # required
     field: tweet
     dataSource: tweetFn
+  Query.getTweets:
+    dataSource: tweetsTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Query.getTweets.request.vtl
+    response: ./appsync/resolvers/Query.getTweets.response.vtl
 
 dataSources:
   api:
@@ -37,6 +42,11 @@ dataSources:
     description: 'UsersTable'
     config:
       tableName: !Ref UsersTable
+  tweetsTable:
+    type: AMAZON_DYNAMODB
+    description: 'TweetsTable'
+    config:
+      tableName: !Ref TweetsTable
   getImageUploadUrlFn:
       type: 'AWS_LAMBDA'
       config:
