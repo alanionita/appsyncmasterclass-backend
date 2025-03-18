@@ -1,0 +1,20 @@
+#set ($isValidLimit = $context.arguments.limit <= 25)
+$util.validate($isValidLimit, "Error: Max limit cannot be greater 25")
+
+{
+    "version" : "2018-05-29",
+    "operation" : "Query",
+    "query" : {
+        "expression" : "userId = :userId",
+        "expressionValues" : {
+            ":userId" : $util.dynamodb.toDynamoDBJson($context.identity.username)
+        }
+    },
+#if(!$util.isNullOrBlank($context.arguments.nextToken))
+    "nextToken" : $util.toJson($context.arguments.nextToken),
+#end
+    "limit" :  $util.toJson($context.arguments.limit),
+    "scanIndexForward" : false,
+    "consistentRead" : false,
+    "select" : "ALL_ATTRIBUTES",
+}

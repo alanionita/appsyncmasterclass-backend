@@ -41,6 +41,18 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Tweet.profile.request.vtl
     response: ./appsync/resolvers/Tweet.profile.response.vtl
+  Query.getMyTimeline:
+    dataSource: timelinesTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Query.getMyTimeline.request.vtl
+    response: ./appsync/resolvers/Query.getMyTimeline.response.vtl
+  TimelinesPage.tweets:
+    type: TimelinesPage
+    field: tweets
+    dataSource: tweetsTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/TimelinesPage.tweets.request.vtl
+    response: ./appsync/resolvers/TimelinesPage.tweets.response.vtl
 
 dataSources:
   api:
@@ -55,6 +67,11 @@ dataSources:
     description: 'TweetsTable'
     config:
       tableName: !Ref TweetsTable
+  timelinesTable:
+    type: AMAZON_DYNAMODB
+    description: 'TimelinesTable'
+    config:
+      tableName: !Ref TimelinesTable
   getImageUploadUrlFn:
       type: 'AWS_LAMBDA'
       config:
@@ -63,3 +80,6 @@ dataSources:
       type: 'AWS_LAMBDA'
       config:
         functionName: tweet
+
+substitutions:
+  TweetsTable: !Ref TweetsTable

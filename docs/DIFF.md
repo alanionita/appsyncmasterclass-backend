@@ -246,4 +246,10 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No diffs
 
-Release
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-22-Add_acceptance_test_for_getTweets_query
+
+### 04-23-Implement_getMyTimeline_query
+
+No diffs
+
+Release: 

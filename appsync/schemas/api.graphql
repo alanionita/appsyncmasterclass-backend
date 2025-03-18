@@ -9,7 +9,7 @@ type Query {
 
     getMyProfile: MyProfile!
 
-    getMyTimeline(limit: Int!, nextToken: String): TweetsPage!
+    getMyTimeline(limit: Int!, nextToken: String): TimelinesPage!
 
     getProfile(screenName: String!): OtherProfile!
 
@@ -141,6 +141,11 @@ type OtherProfile implements IProfile {
 }
 
 type TweetsPage {
+    tweets: [ITweet!]
+    nextToken: String
+}
+
+type TimelinesPage {
     tweets: [ITweet!]
     nextToken: String
 }
