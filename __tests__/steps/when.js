@@ -270,6 +270,34 @@ async function invoke_tweet(username, text) {
 
 }
 
+async function user_calls_tweet(user, text) {
+    const query = `mutation tweet($text: String!) {
+        tweet(text: $text) {
+            id
+            createdAt
+            text
+            replies
+            likes
+            retweets
+            liked
+            retweeted
+        }
+    }`
+
+    const variables = {
+        text
+    }
+
+    const data = await graphql({
+        url: process.env.APPSYNC_HTTP_URL,
+        query,
+        variables,
+        auth: user.accessToken
+    })
+
+    return data.tweet;
+}
+
 module.exports = {
     invoke_appsync_template,
     invoke_confirmUserSignup,
@@ -278,5 +306,6 @@ module.exports = {
     user_calls_getMyProfile,
     user_signs_up,
     user_calls_getImageUploadUrl,
-    invoke_tweet
+    invoke_tweet,
+    user_calls_tweet
 }
