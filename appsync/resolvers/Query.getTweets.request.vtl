@@ -1,6 +1,6 @@
-#if($context.arguments.limit > 25)
-    $util.error("Error: Max limit cannot be greater 25")
-#end
+#set ($isValidLimit = $context.arguments.limit <= 25)
+$util.validate($isValidLimit, "Error: Max limit cannot be greater 25")
+
 {
     "version" : "2018-05-29",
     "operation" : "Query",
