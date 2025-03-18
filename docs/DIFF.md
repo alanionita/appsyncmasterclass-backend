@@ -239,3 +239,11 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 Diffs: 
 - tests/Query.getTweets.request.test.js: adds more tests to handle success path and extra nextToken validation
+
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-21-Add_unit_test_for_getTweets_query
+
+### 04-22-Add_acceptance_test_for_getTweets_query
+
+No diffs
+
+Release

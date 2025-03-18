@@ -281,6 +281,11 @@ async function user_calls_tweet(user, text) {
             retweets
             liked
             retweeted
+            profile {
+                id
+                name
+                screenName
+            }
         }
     }`
 
@@ -298,6 +303,50 @@ async function user_calls_tweet(user, text) {
     return data.tweet;
 }
 
+async function user_calls_getTweets({ user, limit, givenNextToken = null }) {
+    const query = `query getTweets($userId: ID!, $limit: Int!, $nextToken: String) {
+        getTweets(userId: $userId, limit: $limit, nextToken: $nextToken) {
+            nextToken
+            tweets {
+                createdAt
+                id
+                profile {
+                    id
+                    name
+                    screenName
+                }
+
+                ... on Tweet {
+                    text
+                    replies
+                    likes
+                    retweets
+                    liked
+                    retweeted
+                }
+            }
+        }
+    }`
+
+    const variables = {
+        userId: user.username,
+        limit,
+        nextToken: givenNextToken
+    }
+
+    const { getTweets } = await graphql({
+        url: process.env.APPSYNC_HTTP_URL,
+        query,
+        variables,
+        auth: user.accessToken
+    })
+
+    return { 
+        tweets: getTweets.tweets, 
+        nextToken: getTweets.nextToken 
+    };
+}
+
 module.exports = {
     invoke_appsync_template,
     invoke_confirmUserSignup,
@@ -307,5 +356,6 @@ module.exports = {
     user_signs_up,
     user_calls_getImageUploadUrl,
     invoke_tweet,
-    user_calls_tweet
+    user_calls_tweet,
+    user_calls_getTweets
 }

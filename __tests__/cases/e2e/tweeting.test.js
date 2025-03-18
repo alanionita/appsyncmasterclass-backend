@@ -31,4 +31,19 @@ describe("Given an authenticated user, when they send a tweet", () => {
             liked: false
         })
     })
+
+    it("Should see the new tweet when calling getTweets", async () => {
+        const { tweets, nextToken } = await when.user_calls_getTweets({ user, limit: 10 })
+        
+        expect(nextToken).toBeFalsy()
+        expect(tweets.length).toEqual(1)
+        expect(tweets[0]).toEqual(tweet)
+    })
+
+    it("Cannot ask more than 25 tweets", async () => {
+
+        await expect(when.user_calls_getTweets({ user, limit: 26 })).rejects.toMatchObject({
+            message: expect.stringContaining("Error: Max limit cannot be greater 25")
+        })
+    })
 })
