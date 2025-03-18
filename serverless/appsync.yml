@@ -33,6 +33,14 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Query.getTweets.request.vtl
     response: ./appsync/resolvers/Query.getTweets.response.vtl
+  # Nested fields
+  Tweet.profile:
+    type: Tweet
+    field: profile
+    dataSource: usersTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Tweet.profile.request.vtl
+    response: ./appsync/resolvers/Tweet.profile.response.vtl
 
 dataSources:
   api:
