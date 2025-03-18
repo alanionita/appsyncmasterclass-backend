@@ -226,12 +226,12 @@ async function user_calls_getImageUploadUrl({
         const query = `query getImageUploadUrl ($extension: String, $contentType: String) {
             getImageUploadUrl(extension: $extension, contentType: $contentType)
         }`
-    
+
         const variables = {
             extension,
             contentType
         }
-    
+
         const data = await graphql({
             url: process.env.APPSYNC_HTTP_URL,
             query,
@@ -244,6 +244,32 @@ async function user_calls_getImageUploadUrl({
     }
 }
 
+async function invoke_tweet(username, text) {
+    try {
+        const handler = require('../../functions/tweet').handler
+
+        const context = {}
+        const event = {
+            identity: {
+                username
+            },
+            arguments: {
+                text
+            }
+        }
+
+        return await handler(event, context)
+    } catch (err) {
+        console.error("Err [tests/steps/when/invoke_tweet] ::", err.message);
+        console.info(JSON.stringify(err))
+        if (err.$metadata) {
+            const { requestId, cfId, extendedRequestId } = err.$metadata;
+            console.info({ requestId, cfId, extendedRequestId })
+        }
+    }
+
+}
+
 module.exports = {
     invoke_appsync_template,
     invoke_confirmUserSignup,
@@ -252,4 +278,5 @@ module.exports = {
     user_calls_getMyProfile,
     user_signs_up,
     user_calls_getImageUploadUrl,
+    invoke_tweet
 }

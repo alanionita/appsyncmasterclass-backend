@@ -66,15 +66,15 @@ module.exports.handler = async (event) => {
                         ExpressionAttributeValues: {
                             ":incr": 1
                         },
-                        ConditionExpression: "attribute_not_exists(id)"
+                        ConditionExpression: "attribute_exists(id)"
                     }
                 }
             ]
         };
         const command = new TransactWriteCommand(input);
-        const writeResp = await client.send(command)
-        if(!$metadata.httpStatusCode !== 200) {
-            console.info('TransactiWrite ::', writeResp)
+        const resp = await client.send(command)
+        if(resp.$metadata.httpStatusCode !== 200) {
+            console.info('TransactiWrite ::', resp)
             throw Error('Problems with TransactiWrite')
         }
         return newTweet;

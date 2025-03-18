@@ -26,9 +26,15 @@ function throwWithLabel(err, funcName) {
     return err
 }
 
+async function waitSec(amount = 1) {
+    const sec = 1000;
+    return new Promise(resolve => setTimeout(resolve, sec * amount));
+}
+
 module.exports = {
     fetchDatePattern,
     makeSignedUrlPattern,
     makeExtContentType,
-    throwWithLabel
+    throwWithLabel,
+    waitSec
 }

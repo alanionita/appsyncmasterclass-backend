@@ -211,4 +211,12 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 Diffs:
 - functions/tweet: implements TransactWrite using aws-sdk v3 command pattern; add more code guards and error handling
 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-17-Implement_tweet_mutation
+
+### 04-18-Add_integration_test_for_tweet
+
+Diffs:
+- tests/steps/then: adds more generic implementation of Get command from DynamoDB using aws-sdk v3 patterns; abstracted into helper functions; implemented in table contains functions in order to allow for individual validation depending on table
+- tests/cases/integration: adds waitSec helped function to make sure the user is present in tables; implements the above table_contains functions
+
 Release: 
