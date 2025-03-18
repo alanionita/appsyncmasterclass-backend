@@ -260,4 +260,11 @@ Diffs:
 - given.random_appsync_contextV2: adds new method that takes 1 param instead of 4; uses named keys so easier to see what you passed and didnt; will replace old implmentations of random_appsync_context with this
 - tests/e2e/TimelinePage: when testing for list generation added 2 tweet items instead of 1
 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-24-Add_tests_for_getMyTimeline_query
+
+
+### 04-25-Use_context.info_to_remove_unnecessary_DynamoDB_calls
+
+No diffs 
+
 Release: 
