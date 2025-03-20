@@ -249,17 +249,7 @@ async function invoke_tweet(username, text) {
 async function user_calls_tweet(user, text) {
     const query = `mutation tweet($text: String!) {
         tweet(text: $text) {
-            id
-            createdAt
-            text
-            replies
-            likes
-            retweets
-            liked
-            retweeted
-            profile {
-                ... iProfileFields
-            }
+            ... tweetFields
         }
     }`
 
@@ -282,20 +272,7 @@ async function user_calls_getTweets({ user, limit, givenNextToken = null }) {
         getTweets(userId: $userId, limit: $limit, nextToken: $nextToken) {
             nextToken
             tweets {
-                createdAt
-                id
-                profile {
-                    ... iProfileFields
-                }
-
-                ... on Tweet {
-                    text
-                    replies
-                    likes
-                    retweets
-                    liked
-                    retweeted
-                }
+                ... iTweetFields
             }
         }
     }`
@@ -324,21 +301,7 @@ async function user_calls_getMyTimeline({ user, limit, givenNextToken = null }) 
         getMyTimeline(limit: $limit, nextToken: $nextToken) {
             nextToken
             tweets {
-                createdAt
-                id
-                profile {
-                    ... iProfileFields
-                }
-
-                ... on Tweet {
-                    id
-                    text
-                    replies
-                    likes
-                    retweets
-                    liked
-                    retweeted
-                }
+                ... iTweetFields
             }
         }
     }`
