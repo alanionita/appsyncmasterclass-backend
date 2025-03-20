@@ -275,4 +275,10 @@ Diffs:
 - Mutation.like.response.vtl: instead of returning string errors, opted to use $util.appendError and send more data down to client if TransactWrite fails, all in an effort to improve debugging.
 - LikesTable: name changed to TweetLikesTable
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-26-Implement_like_mutation
+
+### 04-27-Implement_Tweet.liked_nested_resolver
+
+No diffs
+
+Release

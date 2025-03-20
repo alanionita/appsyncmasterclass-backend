@@ -58,6 +58,13 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Mutation.like.request.vtl
     response: ./appsync/resolvers/Mutation.like.response.vtl
+  Tweet.liked:
+    type: Tweet
+    field: liked
+    dataSource: tweetLikesTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Tweet.liked.request.vtl
+    response: ./appsync/resolvers/Tweet.liked.response.vtl
 
 dataSources:
   api:
