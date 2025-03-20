@@ -258,9 +258,7 @@ async function user_calls_tweet(user, text) {
             liked
             retweeted
             profile {
-                id
-                name
-                screenName
+                ... iProfileFields
             }
         }
     }`
@@ -287,9 +285,7 @@ async function user_calls_getTweets({ user, limit, givenNextToken = null }) {
                 createdAt
                 id
                 profile {
-                    id
-                    name
-                    screenName
+                    ... iProfileFields
                 }
 
                 ... on Tweet {
@@ -331,9 +327,7 @@ async function user_calls_getMyTimeline({ user, limit, givenNextToken = null }) 
                 createdAt
                 id
                 profile {
-                    id
-                    name
-                    screenName
+                    ... iProfileFields
                 }
 
                 ... on Tweet {

@@ -22,13 +22,30 @@ describe("Given an authenticated user, when they send a tweet", () => {
 
 
     it("Should return new tweet", async () => {
+        // For random or Date properties, which are harder to test by value
+        expect(tweet).toHaveProperty('id','createdAt', 'profile.screenName', 'profile.createdAt')
+
         expect(tweet).toMatchObject({
             text,
             replies: 0,
             likes: 0,
             retweets: 0,
+            liked: false,
             retweeted: false,
-            liked: false
+            profile: {
+                id: user.username,
+                name: user.name,
+                imgUrl: null,
+                bgImgUrl: null,
+                bio: null,
+                location: null,
+                website: null,
+                birthdate: null,
+                followersCount: 0,
+                followingCount: 0,
+                tweetsCount: 1,
+                likesCount: 0
+              }
         })
     })
 
@@ -43,7 +60,7 @@ describe("Given an authenticated user, when they send a tweet", () => {
         it("Should see the new tweet when calling getTweets", () => {
             expect(nextToken).toBeFalsy()
             expect(tweets.length).toEqual(1)
-            expect(tweets[0]).toEqual(tweet)
+            expect(tweets[0]).toMatchObject(tweet)
         })
     
         it("Cannot ask more than 25 tweets", async () => {
@@ -64,7 +81,7 @@ describe("Given an authenticated user, when they send a tweet", () => {
         it("Should see new tweet in timeline when calling getMyTimeline", () => {
             expect(nextToken).toBeFalsy()
             expect(tweets.length).toEqual(1)
-            expect(tweets[0]).toEqual(tweet)
+            expect(tweets[0]).toMatchObject(tweet)
         })
     
         it("Cannot ask more than 25 tweets per timeline", async () => {
