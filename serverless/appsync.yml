@@ -53,6 +53,11 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/TimelinesPage.tweets.request.vtl
     response: ./appsync/resolvers/TimelinesPage.tweets.response.vtl
+  Mutation.like:
+    dataSource: tweetLikesMutation
+    kind: UNIT # required
+    request: ./appsync/resolvers/Mutation.like.request.vtl
+    response: ./appsync/resolvers/Mutation.like.response.vtl
 
 dataSources:
   api:
@@ -72,6 +77,27 @@ dataSources:
     description: 'TimelinesTable'
     config:
       tableName: !Ref TimelinesTable
+  tweetLikesTable:
+    type: AMAZON_DYNAMODB
+    description: "tweetLikesTable"
+    config:
+      tableName: !Ref TweetLikesTable
+  tweetLikesMutation:
+    type: AMAZON_DYNAMODB
+    description: "tweetLikesMutation"
+    config:
+      tableName: !Ref TweetLikesTable
+      iamRoleStatements:
+      - Effect: Allow
+        Action: 
+          - dynamodb:UpdateItem
+        Resource: 
+          - !GetAtt UsersTable.Arn
+          - !GetAtt TweetsTable.Arn
+      - Effect: Allow
+        Action: 
+          - dynamodb:PutItem
+        Resource: !GetAtt TweetLikesTable.Arn
   getImageUploadUrlFn:
       type: 'AWS_LAMBDA'
       config:
@@ -83,3 +109,5 @@ dataSources:
 
 substitutions:
   TweetsTable: !Ref TweetsTable
+  TweetLikesTable: !Ref TweetLikesTable
+  UsersTable: !Ref UsersTable

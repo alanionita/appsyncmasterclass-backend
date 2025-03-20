@@ -267,4 +267,12 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No diffs 
 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-25-Use_context.info_to_remove_unnecessary_DynamoDB_calls
+
+### 04-26-Implement_like_mutation
+
+Diffs:
+- Mutation.like.response.vtl: instead of returning string errors, opted to use $util.appendError and send more data down to client if TransactWrite fails, all in an effort to improve debugging.
+- LikesTable: name changed to TweetLikesTable
+
 Release: 
