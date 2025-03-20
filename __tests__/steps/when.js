@@ -2,10 +2,12 @@ const { CognitoIdentityProviderClient, SignUpCommand } = require("@aws-sdk/clien
 const fs = require("fs");
 const vtlMapper = require("@aws-amplify/amplify-appsync-simulator/lib/velocity/value-mapper/mapper")
 const vtlTemplate = require("amplify-velocity-template");
-const graphql = require('../lib/graphql');
+const { GraphQL } = require('../lib/graphql');
+const GraphQLFragments = require("../lib/utils/graphqlFragments");
 const { throwWithLabel } = require("../lib/utils");
 
 require('dotenv').config()
+GraphQLFragments.registerAllFragments()
 
 async function invoke_confirmUserSignup(username, name, email) {
     try {
@@ -152,24 +154,11 @@ async function invoke_getImgUploadUrl({ username, extension, contentType }) {
 async function user_calls_getMyProfile(user) {
     const query = `query getMyProfile {
         getMyProfile {
-            id
-            name
-            screenName
-            imgUrl
-            bgImgUrl
-            bio
-            location
-            website
-            birthdate
-            createdAt
-            followersCount
-            followingCount
-            tweetsCount
-            likesCount
+          ... myProfileFields
         }
     }`
 
-    const data = await graphql({
+    const data = await GraphQL({
         url: process.env.APPSYNC_HTTP_URL,
         query,
         variables: {},
@@ -184,20 +173,7 @@ async function user_calls_getMyProfile(user) {
 async function user_calls_editMyProfile(user, input) {
     const query = `mutation editMyProfile($input: ProfileInput!) {
         editMyProfile(newProfile: $input) {
-            id
-            name
-            screenName
-            imgUrl
-            bgImgUrl
-            bio
-            location
-            website
-            birthdate
-            createdAt
-            followersCount
-            followingCount
-            tweetsCount
-            likesCount
+          ... myProfileFields
         }
     }`
 
@@ -205,7 +181,7 @@ async function user_calls_editMyProfile(user, input) {
         input
     }
 
-    const data = await graphql({
+    const data = await GraphQL({
         url: process.env.APPSYNC_HTTP_URL,
         query,
         variables,
@@ -232,7 +208,7 @@ async function user_calls_getImageUploadUrl({
             contentType
         }
 
-        const data = await graphql({
+        const data = await GraphQL({
             url: process.env.APPSYNC_HTTP_URL,
             query,
             variables,
@@ -293,7 +269,7 @@ async function user_calls_tweet(user, text) {
         text
     }
 
-    const data = await graphql({
+    const data = await GraphQL({
         url: process.env.APPSYNC_HTTP_URL,
         query,
         variables,
@@ -334,16 +310,16 @@ async function user_calls_getTweets({ user, limit, givenNextToken = null }) {
         nextToken: givenNextToken
     }
 
-    const { getTweets } = await graphql({
+    const { getTweets } = await GraphQL({
         url: process.env.APPSYNC_HTTP_URL,
         query,
         variables,
         auth: user.accessToken
     })
 
-    return { 
-        tweets: getTweets.tweets, 
-        nextToken: getTweets.nextToken 
+    return {
+        tweets: getTweets.tweets,
+        nextToken: getTweets.nextToken
     };
 }
 
@@ -378,16 +354,16 @@ async function user_calls_getMyTimeline({ user, limit, givenNextToken = null }) 
         nextToken: givenNextToken
     }
 
-    const { getMyTimeline } = await graphql({
+    const { getMyTimeline } = await GraphQL({
         url: process.env.APPSYNC_HTTP_URL,
         query,
         variables,
         auth: user.accessToken
     })
 
-    return { 
-        tweets: getMyTimeline.tweets, 
-        nextToken: getMyTimeline.nextToken 
+    return {
+        tweets: getMyTimeline.tweets,
+        nextToken: getMyTimeline.nextToken
     };
 }
 
