@@ -335,4 +335,10 @@ Diffs:
 - functions/retweet: implemented using aws-sdk v3 commands
 - appsync.yml: Mutation.retweet defined using serverless-appsync-plugin v2 syntax
 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-35-Implement_retweet_mutation
+
+### 04-36-Implement_Retweet_nested_resolvers
+
+No diffs
+
 Release: 

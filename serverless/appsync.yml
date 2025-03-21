@@ -33,38 +33,16 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Query.getTweets.request.vtl
     response: ./appsync/resolvers/Query.getTweets.response.vtl
-  # Nested fields
-  Tweet.profile:
-    type: Tweet
-    field: profile
-    dataSource: usersTable
-    kind: UNIT # required
-    request: ./appsync/resolvers/Tweet.profile.request.vtl
-    response: ./appsync/resolvers/Tweet.profile.response.vtl
   Query.getMyTimeline:
     dataSource: timelinesTable
     kind: UNIT # required
     request: ./appsync/resolvers/Query.getMyTimeline.request.vtl
     response: ./appsync/resolvers/Query.getMyTimeline.response.vtl
-  UnhydratedTweetsPage.tweets:
-    type: UnhydratedTweetsPage
-    field: tweets
-    dataSource: tweetsTable
-    kind: UNIT # required
-    request: ./appsync/resolvers/UnhydratedTweetsPage.tweets.request.vtl
-    response: ./appsync/resolvers/UnhydratedTweetsPage.tweets.response.vtl
   Mutation.like:
     dataSource: tweetLikeMutation
     kind: UNIT # required
     request: ./appsync/resolvers/Mutation.like.request.vtl
     response: ./appsync/resolvers/Mutation.like.response.vtl
-  Tweet.liked:
-    type: Tweet
-    field: liked
-    dataSource: tweetLikesTable
-    kind: UNIT # required
-    request: ./appsync/resolvers/Tweet.liked.request.vtl
-    response: ./appsync/resolvers/Tweet.liked.response.vtl
   Mutation.unlike:
     dataSource: tweetUnlikeMutation
     kind: UNIT # required
@@ -75,6 +53,32 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Query.getLikes.request.vtl
     response: ./appsync/resolvers/Query.getLikes.response.vtl
+  Mutation.retweet:
+    kind: UNIT # required
+    field: retweet
+    dataSource: retweetFn
+  # Nested fields
+  Tweet.profile:
+    type: Tweet
+    field: profile
+    dataSource: usersTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Tweet.profile.request.vtl
+    response: ./appsync/resolvers/Tweet.profile.response.vtl
+  UnhydratedTweetsPage.tweets:
+    type: UnhydratedTweetsPage
+    field: tweets
+    dataSource: tweetsTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/UnhydratedTweetsPage.tweets.request.vtl
+    response: ./appsync/resolvers/UnhydratedTweetsPage.tweets.response.vtl
+  Tweet.liked:
+    type: Tweet
+    field: liked
+    dataSource: tweetLikesTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Tweet.liked.request.vtl
+    response: ./appsync/resolvers/Tweet.liked.response.vtl
   MyProfile.tweets:
     type: MyProfile
     field: tweets
@@ -82,10 +86,20 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/MyProfile.tweets.request.vtl
     response: ./appsync/resolvers/MyProfile.tweets.response.vtl
-  Mutation.retweet:
+  Retweet.profile:
+    type: Retweet
+    field: profile
+    dataSource: usersTable
     kind: UNIT # required
-    field: retweet
-    dataSource: retweetFn
+    request: ./appsync/resolvers/Tweet.profile.request.vtl
+    response: ./appsync/resolvers/Tweet.profile.response.vtl
+  Retweet.retweetOf:
+    type: Retweet
+    field: retweetOf
+    dataSource: tweetsTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Retweet.retweetOf.request.vtl
+    response: ./appsync/resolvers/Retweet.retweetOf.response.vtl
 
 dataSources:
   api:
