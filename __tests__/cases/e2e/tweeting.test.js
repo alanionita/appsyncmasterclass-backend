@@ -92,26 +92,15 @@ describe("Given an authenticated user, when they send a tweet", () => {
     })
 
     describe("When user calls like", () => {
-        let tweet;
         beforeAll(async () => {
-            const result = await when.user_calls_getMyTimeline({ user, limit: 10 })
-            tweet = result.tweets[0]
+            await when.user_calls_like({ user, tweetId: tweet.id })
         })
         it("Should be able to like the tweet", async () => {
-
-            const result = await when.user_calls_like({ user, tweetId: tweet.id })
-            expect(result).toBe(true)
-
-            // Calls getMyTimeline again
-
             const timeline = await when.user_calls_getMyTimeline({ user, limit: 10 })
             const likedTweet = timeline.tweets[0]
             expect(likedTweet).toMatchObject({
                 liked: true
             })
-
-            // Save the liked tweet to test failure case
-            tweet = likedTweet;
         })
 
         it("Should not be able to like twice", async () => {

@@ -54,7 +54,7 @@ resolvers:
     request: ./appsync/resolvers/TimelinesPage.tweets.request.vtl
     response: ./appsync/resolvers/TimelinesPage.tweets.response.vtl
   Mutation.like:
-    dataSource: tweetLikesMutation
+    dataSource: tweetLikeMutation
     kind: UNIT # required
     request: ./appsync/resolvers/Mutation.like.request.vtl
     response: ./appsync/resolvers/Mutation.like.response.vtl
@@ -94,9 +94,9 @@ dataSources:
     description: "tweetLikesTable"
     config:
       tableName: !Ref TweetLikesTable
-  tweetLikesMutation:
+  tweetLikeMutation:
     type: AMAZON_DYNAMODB
-    description: "tweetLikesMutation"
+    description: "tweetLikeMutation"
     config:
       tableName: !Ref TweetLikesTable
       iamRoleStatements:
