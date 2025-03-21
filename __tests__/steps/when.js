@@ -296,6 +296,35 @@ async function user_calls_getTweets({ user, limit, givenNextToken = null }) {
     };
 }
 
+async function user_calls_getLikes({ user, limit, givenNextToken = null }) {
+    const query = `query getLikes($userId: ID!, $limit: Int!, $nextToken: String) {
+        getLikes(userId: $userId, limit: $limit, nextToken: $nextToken) {
+            nextToken
+            tweets {
+                ... iTweetFields
+            }
+        }
+    }`
+
+    const variables = {
+        userId: user.username,
+        limit,
+        nextToken: givenNextToken
+    }
+
+    const {getLikes} = await GraphQL({
+        url: process.env.APPSYNC_HTTP_URL,
+        query,
+        variables,
+        auth: user.accessToken
+    })
+    
+    return {
+        tweets: getLikes.tweets,
+        nextToken: getLikes.nextToken
+    };
+}
+
 async function user_calls_getMyTimeline({ user, limit, givenNextToken = null }) {
     const query = `query getMyTimeline($limit: Int!, $nextToken: String) {
         getMyTimeline(limit: $limit, nextToken: $nextToken) {
@@ -377,5 +406,6 @@ module.exports = {
     user_calls_getTweets,
     user_calls_getMyTimeline,
     user_calls_like,
-    user_calls_unlike
+    user_calls_unlike,
+    user_calls_getLikes
 }

@@ -109,6 +109,33 @@ describe("Given an authenticated user, when they send a tweet", () => {
             })
         })
     })
+
+    describe("When user calls getLikes", () => {
+        let getLikesResponse;
+        beforeAll(async () => {
+            getLikesResponse = await when.user_calls_getLikes({ user, limit: 10 })
+        })
+        it("Should get list of likes", async () => {
+            const {nextToken, tweets} = getLikesResponse
+            expect(nextToken).toBe(null)
+            expect(tweets.length).toBe(1);
+            expect(tweets[0]).toMatchObject({
+                ...tweet,
+                profile: {
+                    likesCount: 1
+                },
+                likes: 1,
+                liked: true
+            })
+        })
+
+        it("Cannot ask more than 25 likes", async () => {
+            await expect(when.user_calls_getLikes({ user, limit: 26 })).rejects.toMatchObject({
+                message: expect.stringContaining("Error: Max limit cannot be greater 25")
+            })
+        })
+    })
+
     describe("When user calls unlike", () => {
         beforeAll(async () => {
             await when.user_calls_unlike({ user, tweetId: tweet.id })
@@ -128,4 +155,15 @@ describe("Given an authenticated user, when they send a tweet", () => {
         })
     })
 
+    describe("When user calls getLikes", () => {
+        let getLikesResponse;
+        beforeAll(async () => {
+            getLikesResponse = await when.user_calls_getLikes({ user, limit: 10 })
+        })
+        it("Should get empty list of likes - no likes available", async () => {
+            const {nextToken, tweets} = getLikesResponse
+            expect(nextToken).toBe(null)
+            expect(tweets.length).toBe(0);
+        })
+    })
 })

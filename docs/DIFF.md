@@ -314,4 +314,10 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No diffs
 
-Release
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-32-Implement_getLikes_query
+
+### 04-33-Add_tests_for_getLikes_query
+
+No diffs
+
+Release: 
