@@ -1,0 +1,9 @@
+#if(!$util.isNull($context.result.cancellationReasons))
+    $util.appendError("Error with DynamoDB transaction", "DynamoDB.TransactWrite", null, $context.result.cancellationReasons)
+#end
+
+#if(!$util.isNull($context.error))
+    $util.appendError($context.error.message, $context.error.type, null, $context.result.cancellationReasons)
+#end
+
+true

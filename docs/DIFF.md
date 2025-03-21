@@ -294,6 +294,12 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 ### 04-29-Add_tests_for_like_mutation
 
-No diffs:
+No diffs 
 
-Release:
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-29-Add_tests_for_like_mutation
+
+### 04-30-Implement_unlike_mutation
+
+No diffs
+
+Release: 

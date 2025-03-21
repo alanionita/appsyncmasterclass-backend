@@ -65,6 +65,11 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Tweet.liked.request.vtl
     response: ./appsync/resolvers/Tweet.liked.response.vtl
+  Mutation.unlike:
+    dataSource: tweetUnlikeMutation
+    kind: UNIT # required
+    request: ./appsync/resolvers/Mutation.unlike.request.vtl
+    response: ./appsync/resolvers/Mutation.unlike.response.vtl
 
 dataSources:
   api:
@@ -104,6 +109,22 @@ dataSources:
       - Effect: Allow
         Action: 
           - dynamodb:PutItem
+        Resource: !GetAtt TweetLikesTable.Arn
+  tweetUnlikeMutation: 
+    type: AMAZON_DYNAMODB
+    description: "tweetUnlikeMutation"
+    config:
+      tableName: !Ref TweetLikesTable
+      iamRoleStatements:
+      - Effect: Allow
+        Action: 
+          - dynamodb:UpdateItem
+        Resource: 
+          - !GetAtt UsersTable.Arn
+          - !GetAtt TweetsTable.Arn
+      - Effect: Allow
+        Action: 
+          - dynamodb:DeleteItem
         Resource: !GetAtt TweetLikesTable.Arn
   getImageUploadUrlFn:
       type: 'AWS_LAMBDA'
