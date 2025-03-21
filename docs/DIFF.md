@@ -341,4 +341,11 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No diffs
 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-36-Implement_Retweet_nested_resolvers
+
+### 04-37-Add_integration_tests_for_retweet_mutation
+
+Diffs:
+- tests/steps/then: mostly implemented aws-sdk v3 patterns for DynamoDB ops; some methods feature different names, but largely follow the intent of the video
+
 Release: 

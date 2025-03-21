@@ -32,12 +32,22 @@ Resources:
           AttributeType: S
         - AttributeName: author
           AttributeType: S
+        - AttributeName: retweetOf
+          AttributeType: S
       GlobalSecondaryIndexes:
         - IndexName: byCreator
           KeySchema:
             - AttributeName: author
               KeyType: HASH
             - AttributeName: id
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: retweets
+          KeySchema:
+            - AttributeName: author
+              KeyType: HASH
+            - AttributeName: retweetOf
               KeyType: RANGE
           Projection:
             ProjectionType: ALL

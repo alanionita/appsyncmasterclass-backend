@@ -264,6 +264,31 @@ async function invoke_tweet(username, text) {
 
 }
 
+async function invoke_retweet(username, tweetId) {
+    try {
+        const handler = require('../../functions/retweet').handler
+
+        const context = {}
+        const event = {
+            identity: {
+                username
+            },
+            arguments: {
+                tweetId
+            }
+        }
+
+        return await handler(event, context)
+    } catch (err) {
+        console.error("Err [tests/steps/when/invoke_retweet] ::", err.message);
+        console.info(JSON.stringify(err))
+        if (err.$metadata) {
+            const { requestId, cfId, extendedRequestId } = err.$metadata;
+            console.info({ requestId, cfId, extendedRequestId })
+        }
+    }
+}
+
 async function user_calls_tweet(user, text) {
     const query = `mutation tweet($text: String!) {
         tweet(text: $text) {
@@ -330,7 +355,7 @@ async function user_calls_getLikes({ user, limit, givenNextToken = null }) {
         nextToken: givenNextToken
     }
 
-    const {getLikes} = await GraphQL({
+    const { getLikes } = await GraphQL({
         url: process.env.APPSYNC_HTTP_URL,
         query,
         variables,
@@ -390,7 +415,7 @@ async function user_calls_like({ user, tweetId }) {
     return like
 }
 
-async function user_calls_unlike({user, tweetId}) {
+async function user_calls_unlike({ user, tweetId }) {
     const query = `mutation unlike($tweetId: ID!) {
         unlike(tweetId: $tweetId)
     }`
@@ -425,5 +450,6 @@ module.exports = {
     user_calls_getMyTimeline,
     user_calls_like,
     user_calls_unlike,
-    user_calls_getLikes
+    user_calls_getLikes,
+    invoke_retweet
 }

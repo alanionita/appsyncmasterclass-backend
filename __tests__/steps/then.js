@@ -1,5 +1,5 @@
 const { DynamoDBClient, GetItemCommand } = require("@aws-sdk/client-dynamodb");
-const { DynamoDBDocumentClient, GetCommand } = require("@aws-sdk/lib-dynamodb");
+const { DynamoDBDocumentClient, GetCommand, QueryCommand } = require("@aws-sdk/lib-dynamodb");
 const { unmarshall } = require("@aws-sdk/util-dynamodb");
 const http = require("axios");
 const fs = require("fs");
@@ -8,7 +8,7 @@ const { makePresignedUrlGet } = require("../lib/s3");
 
 require('dotenv').config()
 
-const { USERS_TABLE, REGION, BUCKET_NAME, TWEETS_TABLE, TIMELINES_TABLE } = process.env;
+const { USERS_TABLE, REGION, BUCKET_NAME, TWEETS_TABLE, TIMELINES_TABLE, RETWEETS_TABLE } = process.env;
 
 async function user_exists(userID) {
     try {
@@ -132,6 +132,93 @@ async function TweetsTable_contains(id) {
     }
 }
 
+async function TweetsTable_retweets_contains({ author, retweetOf }) {
+    try {
+
+        if (!author || !retweetOf) throw Error('Missing fn arguments')
+
+        if (!TWEETS_TABLE) throw Error("Missing env variable");
+
+        const ddb = new DynamoDBClient({ region: REGION });
+        const client = new DynamoDBDocumentClient(ddb)
+
+        const input = {
+            TableName: TWEETS_TABLE,
+            IndexName: 'retweets',
+            KeyConditionExpression: "author = :author AND retweetOf = :retweetOf",
+            ExpressionAttributeValues: {
+                ":author": author,
+                ":retweetOf": retweetOf
+            },
+            Limit: 1
+        };
+        const command = new QueryCommand(input);
+
+        const ddbResp = await client.send(command)
+
+        expect(ddbResp.Items).toBeTruthy()
+        expect(ddbResp.Items.length).toBeGreaterThan(0)
+        expect(ddbResp.$metadata.httpStatusCode).toBe(200)
+
+        return ddbResp.Items[0]
+    } catch (caught) {
+        return throwWithLabel(caught, "then.TweetsTableIndex_contains")
+    }
+}
+
+async function get_user_timeline(userId) {
+    try {
+
+        if (!userId) throw Error('Invalid key for table')
+
+        if (!TIMELINES_TABLE) throw Error("Missing env variable");
+
+        const ddb = new DynamoDBClient({ region: REGION });
+        const client = new DynamoDBDocumentClient(ddb)
+
+        const input = {
+            TableName: TIMELINES_TABLE,
+            KeyConditionExpression: "userId = :userId",
+            ExpressionAttributeValues: {
+                ":userId": userId
+            },
+            ScanIndexForward: false
+        };
+        const command = new QueryCommand(input);
+
+        const ddbResp = await client.send(command)
+
+        expect(ddbResp.Items).toBeTruthy()
+        expect(ddbResp.Items.length).toBeGreaterThan(0)
+        expect(ddbResp.$metadata.httpStatusCode).toBe(200)
+
+        return ddbResp.Items
+    } catch (caught) {
+        return throwWithLabel(caught, "then.get_user_timeline")
+    }
+}
+
+async function RetweetsTable_contains({ userId, tweetId }) {
+    try {
+
+        if (!userId || !tweetId) throw Error('Missing fn arguments')
+
+        if (!RETWEETS_TABLE) throw Error("Missing env variable");
+
+        const ddbResp = await table_get(RETWEETS_TABLE, {
+            userId,
+            tweetId
+        });
+
+        expect(ddbResp.Item).toBeTruthy()
+        expect(ddbResp.$metadata.httpStatusCode).toBe(200)
+
+        return ddbResp.Item
+    } catch (caught) {
+        return throwWithLabel(caught, "then.RetweetsTable_contains")
+    }
+}
+
 async function TimelinesTable_contains(userId, tweetId) {
     try {
 
@@ -158,7 +245,7 @@ async function UsersTable_contains(id) {
         if (!id) throw Error('Invalid key for table')
 
         if (!USERS_TABLE) throw Error("Missing env variable");
-   
+
         const ddbResp = await table_get(USERS_TABLE, {
             id
         });
@@ -177,5 +264,8 @@ module.exports = {
     user_download,
     TweetsTable_contains,
     TimelinesTable_contains,
-    UsersTable_contains
+    UsersTable_contains,
+    RetweetsTable_contains,
+    TweetsTable_retweets_contains,
+    get_user_timeline
 }
