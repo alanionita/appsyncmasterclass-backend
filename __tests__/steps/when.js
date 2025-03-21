@@ -343,6 +343,25 @@ async function user_calls_like({ user, tweetId }) {
     return like
 }
 
+async function user_calls_unlike({user, tweetId}) {
+    const query = `mutation unlike($tweetId: ID!) {
+        unlike(tweetId: $tweetId)
+    }`
+
+    const variables = {
+        tweetId
+    }
+
+    const { unlike } = await GraphQL({
+        url: process.env.APPSYNC_HTTP_URL,
+        query,
+        variables,
+        auth: user.accessToken
+    })
+
+    return unlike
+}
+
 
 
 module.exports = {
@@ -357,5 +376,6 @@ module.exports = {
     user_calls_tweet,
     user_calls_getTweets,
     user_calls_getMyTimeline,
-    user_calls_like
+    user_calls_like,
+    user_calls_unlike
 }
