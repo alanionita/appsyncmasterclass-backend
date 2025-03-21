@@ -157,6 +157,7 @@ async function user_calls_getMyProfile(user) {
           ... myProfileFields
 
           tweets {
+            nextToken
             tweets {
                 ... on Tweet {
                     ... tweetFields
@@ -184,6 +185,7 @@ async function user_calls_editMyProfile(user, input) {
           ... myProfileFields
 
           tweets {
+            nextToken
             tweets {
                 ... on Tweet {
                     ... tweetFields

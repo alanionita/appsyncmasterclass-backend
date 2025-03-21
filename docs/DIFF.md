@@ -320,4 +320,11 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No diffs
 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-33-Add_tests_for_getLikes_query
+
+### 04-34-Implement_Profile.tweets_nested_resolver
+
+Diffs:
+- tests/e2e/user-profile: adds block to send a tweet and validate that the user.tweets array updates correctly
+
 Release: 
