@@ -289,3 +289,11 @@ Diffs:
 - util.js: converted to a folder where all prev methods are in index.js
 - util/: adds a new file to contain all the GraphQL fragments; add different fragment registration process and calls the registerAllFragments() in when()
 - test/e2e/tweeting: updates tests to expand the tweet object and make use of .toMatchObject
+
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-28-Rewrite_tests_with_GraphQL_fragments
+
+### 04-29-Add_tests_for_like_mutation
+
+No diffs:
+
+Release:

@@ -324,6 +324,24 @@ async function user_calls_getMyTimeline({ user, limit, givenNextToken = null }) 
     };
 }
 
+async function user_calls_like({ user, tweetId }) {
+    const query = `mutation like($tweetId: ID!) {
+        like(tweetId: $tweetId)
+    }`
+
+    const variables = {
+        tweetId
+    }
+
+    const { like } = await GraphQL({
+        url: process.env.APPSYNC_HTTP_URL,
+        query,
+        variables,
+        auth: user.accessToken
+    })
+
+    return like
+}
 
 
 
@@ -338,5 +356,6 @@ module.exports = {
     invoke_tweet,
     user_calls_tweet,
     user_calls_getTweets,
-    user_calls_getMyTimeline
+    user_calls_getMyTimeline,
+    user_calls_like
 }

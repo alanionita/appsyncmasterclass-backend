@@ -23,7 +23,7 @@ describe("Given an authenticated user, when they send a tweet", () => {
 
     it("Should return new tweet", async () => {
         // For random or Date properties, which are harder to test by value
-        expect(tweet).toHaveProperty('id','createdAt', 'profile.screenName', 'profile.createdAt')
+        expect(tweet).toHaveProperty('id', 'createdAt', 'profile.screenName', 'profile.createdAt')
 
         expect(tweet).toMatchObject({
             text,
@@ -45,7 +45,7 @@ describe("Given an authenticated user, when they send a tweet", () => {
                 followingCount: 0,
                 tweetsCount: 1,
                 likesCount: 0
-              }
+            }
         })
     })
 
@@ -62,7 +62,7 @@ describe("Given an authenticated user, when they send a tweet", () => {
             expect(tweets.length).toEqual(1)
             expect(tweets[0]).toMatchObject(tweet)
         })
-    
+
         it("Cannot ask more than 25 tweets", async () => {
             await expect(when.user_calls_getTweets({ user, limit: 26 })).rejects.toMatchObject({
                 message: expect.stringContaining("Error: Max limit cannot be greater 25")
@@ -83,10 +83,40 @@ describe("Given an authenticated user, when they send a tweet", () => {
             expect(tweets.length).toEqual(1)
             expect(tweets[0]).toMatchObject(tweet)
         })
-    
+
         it("Cannot ask more than 25 tweets per timeline", async () => {
             await expect(when.user_calls_getMyTimeline({ user, limit: 26 })).rejects.toMatchObject({
                 message: expect.stringContaining("Error: Max limit cannot be greater 25")
+            })
+        })
+    })
+
+    describe("When user calls like", () => {
+        let tweet;
+        beforeAll(async () => {
+            const result = await when.user_calls_getMyTimeline({ user, limit: 10 })
+            tweet = result.tweets[0]
+        })
+        it("Should be able to like the tweet", async () => {
+
+            const result = await when.user_calls_like({ user, tweetId: tweet.id })
+            expect(result).toBe(true)
+
+            // Calls getMyTimeline again
+
+            const timeline = await when.user_calls_getMyTimeline({ user, limit: 10 })
+            const likedTweet = timeline.tweets[0]
+            expect(likedTweet).toMatchObject({
+                liked: true
+            })
+
+            // Save the liked tweet to test failure case
+            tweet = likedTweet;
+        })
+
+        it("Should not be able to like twice", async () => {
+            await expect(when.user_calls_like({ user, tweetId: tweet.id })).rejects.toMatchObject({
+                message: expect.stringContaining("Error with DynamoDB transaction")
             })
         })
     })
