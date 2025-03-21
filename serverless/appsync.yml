@@ -82,6 +82,10 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/MyProfile.tweets.request.vtl
     response: ./appsync/resolvers/MyProfile.tweets.response.vtl
+  Mutation.retweet:
+    kind: UNIT # required
+    field: retweet
+    dataSource: retweetFn
 
 dataSources:
   api:
@@ -146,6 +150,10 @@ dataSources:
       type: 'AWS_LAMBDA'
       config:
         functionName: tweet
+  retweetFn:
+      type: 'AWS_LAMBDA'
+      config:
+        functionName: retweet
 
 substitutions:
   TweetsTable: !Ref TweetsTable

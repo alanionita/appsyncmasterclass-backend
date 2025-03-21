@@ -327,4 +327,12 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 Diffs:
 - tests/e2e/user-profile: adds block to send a tweet and validate that the user.tweets array updates correctly
 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-34-Implement_Profile.tweets_nested_resolver
+
+### 04-35-Implement_retweet_mutation
+
+Diffs:
+- functions/retweet: implemented using aws-sdk v3 commands
+- appsync.yml: Mutation.retweet defined using serverless-appsync-plugin v2 syntax
+
 Release: 
