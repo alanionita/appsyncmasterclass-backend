@@ -46,13 +46,13 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Query.getMyTimeline.request.vtl
     response: ./appsync/resolvers/Query.getMyTimeline.response.vtl
-  TimelinesPage.tweets:
-    type: TimelinesPage
+  UnhydratedTweetsPage.tweets:
+    type: UnhydratedTweetsPage
     field: tweets
     dataSource: tweetsTable
     kind: UNIT # required
-    request: ./appsync/resolvers/TimelinesPage.tweets.request.vtl
-    response: ./appsync/resolvers/TimelinesPage.tweets.response.vtl
+    request: ./appsync/resolvers/UnhydratedTweetsPage.tweets.request.vtl
+    response: ./appsync/resolvers/UnhydratedTweetsPage.tweets.response.vtl
   Mutation.like:
     dataSource: tweetLikeMutation
     kind: UNIT # required
@@ -70,6 +70,11 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Mutation.unlike.request.vtl
     response: ./appsync/resolvers/Mutation.unlike.response.vtl
+  Query.getLikes:
+    dataSource: tweetLikesTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Query.getLikes.request.vtl
+    response: ./appsync/resolvers/Query.getLikes.response.vtl
 
 dataSources:
   api:

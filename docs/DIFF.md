@@ -308,4 +308,10 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No diffs
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-31-Add_tests_for_unlike_mutation
+
+### 04-32-Implement_getLikes_query
+
+No diffs
+
+Release
