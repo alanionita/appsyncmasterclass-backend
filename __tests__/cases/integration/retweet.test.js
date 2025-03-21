@@ -6,6 +6,7 @@ const chance = require('chance').Chance()
 
 let userA;
 let tweetA;
+let userB;
 
 describe("Given authenticated user, ", () => {
     describe("When they retweet own tweet, ", () => {
@@ -44,6 +45,42 @@ describe("Given authenticated user, ", () => {
 
         it("Timeline remains unchanged", async () => {
             const timelineItem = await then.get_user_timeline(userA.username)
+            expect(timelineItem.length).toBe(1)
+        })
+    })
+    describe("When someone else retweets their tweet, ", () => {
+        beforeAll(async () => {
+            userB = await given.authenticated_user()
+            await waitSec(2);
+
+            // User B retweets User A tweet
+            await when.invoke_retweet(userB.username, tweetA.id)
+        })
+        it("Saves the retweet as new tweet", async () => {
+            await then.TweetsTable_retweets_contains({
+                author: userB.username,
+                retweetOf: tweetA.id
+            })
+
+        })
+        it("Saves the retweet", async () => {
+            await then.RetweetsTable_contains({
+                userId: userB.username, tweetId: tweetA.id
+            })
+
+        })
+        it("Increments Tweet.retweets by 1", async () => {
+            const tweetItem = await then.TweetsTable_contains(tweetA.id)
+            expect(tweetItem.retweets).toBe(2)
+        })
+
+        it("Increments user.tweetsCount by 1", async () => {
+            const userBItem = await then.UsersTable_contains(userB.username)
+            expect(userBItem.tweetsCount).toBe(1);
+        })
+
+        it("Timeline includes retweet", async () => {
+            const timelineItem = await then.get_user_timeline(userB.username)
             expect(timelineItem.length).toBe(1)
         })
     })
