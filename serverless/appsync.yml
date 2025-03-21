@@ -75,6 +75,13 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Query.getLikes.request.vtl
     response: ./appsync/resolvers/Query.getLikes.response.vtl
+  MyProfile.tweets:
+    type: MyProfile
+    field: tweets
+    dataSource: tweetsTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/MyProfile.tweets.request.vtl
+    response: ./appsync/resolvers/MyProfile.tweets.response.vtl
 
 dataSources:
   api:

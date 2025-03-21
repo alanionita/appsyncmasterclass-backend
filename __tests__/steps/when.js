@@ -155,6 +155,14 @@ async function user_calls_getMyProfile(user) {
     const query = `query getMyProfile {
         getMyProfile {
           ... myProfileFields
+
+          tweets {
+            tweets {
+                ... on Tweet {
+                    ... tweetFields
+                }
+            }
+          }
         }
     }`
 
@@ -174,6 +182,14 @@ async function user_calls_editMyProfile(user, input) {
     const query = `mutation editMyProfile($input: ProfileInput!) {
         editMyProfile(newProfile: $input) {
           ... myProfileFields
+
+          tweets {
+            tweets {
+                ... on Tweet {
+                    ... tweetFields
+                }
+            }
+          }
         }
     }`
 
@@ -318,7 +334,7 @@ async function user_calls_getLikes({ user, limit, givenNextToken = null }) {
         variables,
         auth: user.accessToken
     })
-    
+
     return {
         tweets: getLikes.tweets,
         nextToken: getLikes.nextToken

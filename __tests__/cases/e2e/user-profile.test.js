@@ -33,7 +33,9 @@ describe("Given and authenticated user", () => {
             followingCount: 0,
             tweetsCount: 0,
             likesCount: 0,
-            // tweets // Not implemented because tweets resolver is missing
+            tweets: {
+                tweets: []
+            }
         })
 
         const [firstName, lastName] = profile.name.split(" ")
@@ -65,8 +67,8 @@ describe("Given and authenticated user", () => {
 
             const filePath = path.join(__dirname, '../../data/appsync.png');
             await then.user_upload({
-                uploadUrl, 
-                filePath, 
+                uploadUrl,
+                filePath,
                 contentType
             })
             const downloadUrl = uploadUrl.split('?')[0];
@@ -93,5 +95,17 @@ describe("Given and authenticated user", () => {
         expect(newProfile.screenName).toContain(firstName);
         expect(newProfile.screenName).toContain(lastName);
 
+    })
+
+    it('Tweets array contains users tweets', async () => {
+        const tweetText = 'Hello World';
+        await when.user_calls_tweet(user, tweetText);
+
+        const myProfile = await when.user_calls_getMyProfile(user)
+
+        expect(myProfile.tweets.tweets.length).toBe(1);
+        expect(myProfile.tweets.tweets[0]).toMatchObject({
+            text: tweetText
+        })
     })
 })
