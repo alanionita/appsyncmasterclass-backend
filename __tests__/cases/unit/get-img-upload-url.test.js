@@ -26,16 +26,7 @@ describe("When getImgUploadUrl runs", () => {
         const signedUrlPattern = new RegExp(`https://${BUCKET_NAME}.${s3Host}.${awsHost}/${username}/.*.${fileType}\?`)
         expect(signedUrl).toMatch(signedUrlPattern)
     })
-    it("Should throw for missing extension", async () => {
-        const username = chance.guid();
-        await expect(async () => {
-            await when.invoke_getImgUploadUrl({
-                username,
-                extension: undefined,
-                contentType: undefined
-            })
-        }).rejects.toThrow()
-    })
+
     it("Should default to ContentType jpeg when none is provided", async () => {
         const username = chance.guid();
         const fileType = 'jpeg'
@@ -55,5 +46,16 @@ describe("When getImgUploadUrl runs", () => {
         const awsHost = 'amazonaws.com'
         const signedUrlPattern = new RegExp(`https://${BUCKET_NAME}.${s3Host}.${awsHost}/${username}/.*.${fileType}\?`)
         expect(signedUrl).toMatch(signedUrlPattern)
+    })
+
+    it("Should throw for missing extension", async () => {
+        const username = chance.guid();
+        await expect(async () => {
+            await when.invoke_getImgUploadUrl({
+                username,
+                extension: undefined,
+                contentType: undefined
+            })
+        }).rejects.toThrow()
     })
 })

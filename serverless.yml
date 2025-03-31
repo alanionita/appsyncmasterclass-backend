@@ -70,3 +70,9 @@ resources:
       AssetsBucket:
         Description: "S3 assets bucket ::"
         Value: !Ref AssetsBucket
+      RetweetsTable:
+        Description: "DynamoDB (RetweetsTable) ::"
+        Value: !Ref RetweetsTable
+      TweetLikesTable:
+        Description: "DynamoDB (TweetLikesTable) ::"
+        Value: !Ref TweetLikesTable 

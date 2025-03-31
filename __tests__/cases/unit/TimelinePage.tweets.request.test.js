@@ -5,7 +5,7 @@ const path = require("path");
 
 describe("TimelinePage.tweets.request template", () => {
     it("Should return empty array if source.tweets is empty", () => {
-        const templatePath = path.resolve(__dirname, "../../../appsync/resolvers/TimelinesPage.tweets.request.vtl")
+        const templatePath = path.resolve(__dirname, "../../../appsync/resolvers/UnhydratedTweetsPage.tweets.request.vtl")
         const username = chance.guid()
 
         const context = given.random_appsync_contextV2({
@@ -20,7 +20,7 @@ describe("TimelinePage.tweets.request template", () => {
     })
 
     it("Should convert timeline tweets on BatchGetItem keys", () => {
-        const templatePath = path.resolve(__dirname, "../../../appsync/resolvers/TimelinesPage.tweets.request.vtl")
+        const templatePath = path.resolve(__dirname, "../../../appsync/resolvers/UnhydratedTweetsPage.tweets.request.vtl")
         const username = chance.guid()
         const tweetId1 = chance.guid()
         const tweetId2 = chance.guid()
