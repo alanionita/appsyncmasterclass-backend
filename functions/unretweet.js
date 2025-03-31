@@ -69,10 +69,9 @@ module.exports.handler = async (event) => {
                         userId: username,
                         tweetId: originalTweet.id,
                     },
-                    ConditionExpression: "attribute_exists(originalTweet.id)"
+                    ConditionExpression: "attribute_exists(tweetId)"
                 }
             },
-
             {
                 Update: {
                     TableName: USERS_TABLE,

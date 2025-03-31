@@ -453,6 +453,31 @@ async function user_calls_retweet({ user, tweetId }) {
     return retweet
 }
 
+async function invoke_unretweet(username, tweetId) {
+    try {
+        const handler = require('../../functions/unretweet').handler
+
+        const context = {}
+        const event = {
+            identity: {
+                username
+            },
+            arguments: {
+                tweetId
+            }
+        }
+
+        return await handler(event, context)
+    } catch (err) {
+        console.error("Err [tests/steps/when/invoke_unretweet] ::", err.message);
+        console.info(JSON.stringify(err))
+        if (err.$metadata) {
+            const { requestId, cfId, extendedRequestId } = err.$metadata;
+            console.info({ requestId, cfId, extendedRequestId })
+        }
+    }
+}
+
 module.exports = {
     invoke_appsync_template,
     invoke_confirmUserSignup,
@@ -469,5 +494,6 @@ module.exports = {
     user_calls_unlike,
     user_calls_getLikes,
     invoke_retweet,
-    user_calls_retweet
+    user_calls_retweet,
+    invoke_unretweet
 }

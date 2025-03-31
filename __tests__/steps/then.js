@@ -166,6 +166,40 @@ async function TweetsTable_retweets_contains({ author, retweetOf }) {
     }
 }
 
+async function TweetsTable_retweets_notcontains({ author, retweetOf }) {
+    try {
+
+        if (!author || !retweetOf) throw Error('Missing fn arguments')
+
+        if (!TWEETS_TABLE) throw Error("Missing env variable");
+
+        const ddb = new DynamoDBClient({ region: REGION });
+        const client = new DynamoDBDocumentClient(ddb)
+
+        const input = {
+            TableName: TWEETS_TABLE,
+            IndexName: 'retweets',
+            KeyConditionExpression: "author = :author AND retweetOf = :retweetOf",
+            ExpressionAttributeValues: {
+                ":author": author,
+                ":retweetOf": retweetOf
+            },
+            Limit: 1
+        };
+        const command = new QueryCommand(input);
+
+        const ddbResp = await client.send(command)
+
+        expect(ddbResp.Items).toBeDefined();
+        expect(ddbResp.Items.length).toBe(0)
+        expect(ddbResp.$metadata.httpStatusCode).toBe(200)
+
+        return ddbResp.Items
+    } catch (caught) {
+        return throwWithLabel(caught, "then.TweetsTable_retweets_notcontains")
+    }
+}
+
 async function get_user_timeline(userId) {
     try {
 
@@ -188,10 +222,7 @@ async function get_user_timeline(userId) {
 
         const ddbResp = await client.send(command)
 
-        expect(ddbResp.Items).toBeTruthy()
-        expect(ddbResp.Items.length).toBeGreaterThan(0)
         expect(ddbResp.$metadata.httpStatusCode).toBe(200)
-
         return ddbResp.Items
     } catch (caught) {
         return throwWithLabel(caught, "then.get_user_timeline")
@@ -211,6 +242,27 @@ async function RetweetsTable_contains({ userId, tweetId }) {
         });
 
         expect(ddbResp.Item).toBeTruthy()
+        expect(ddbResp.$metadata.httpStatusCode).toBe(200)
+
+        return ddbResp.Item
+    } catch (caught) {
+        return throwWithLabel(caught, "then.RetweetsTable_contains")
+    }
+}
+
+async function RetweetsTable_notcontains({ userId, tweetId }) {
+    try {
+
+        if (!userId || !tweetId) throw Error('Missing fn arguments')
+
+        if (!RETWEETS_TABLE) throw Error("Missing env variable");
+
+        const ddbResp = await table_get(RETWEETS_TABLE, {
+            userId,
+            tweetId
+        });
+
+        expect(ddbResp.Item).toBeFalsy()
         expect(ddbResp.$metadata.httpStatusCode).toBe(200)
 
         return ddbResp.Item
@@ -267,5 +319,7 @@ module.exports = {
     UsersTable_contains,
     RetweetsTable_contains,
     TweetsTable_retweets_contains,
-    get_user_timeline
+    get_user_timeline,
+    TweetsTable_retweets_notcontains,
+    RetweetsTable_notcontains
 }

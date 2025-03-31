@@ -348,4 +348,22 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 Diffs:
 - tests/steps/then: mostly implemented aws-sdk v3 patterns for DynamoDB ops; some methods feature different names, but largely follow the intent of the video
 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-37-Add_integration_tests_for_retweet_mutation
+
+### 04-38-Add_acceptance_tests_for_retweet_mutation
+
+No diffs
+
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-38-Add_acceptance_tests_for_retweet_mutation
+
+### 04-39-Implement_unretweet_mutation
+
+No diffs
+
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-39-Implement_unretweet_mutation
+
+### 04-40-Add_integration_tests_for_unretweet_mutation
+
+No diffs
+
 Release: 

@@ -44,8 +44,9 @@ describe("Given authenticated user, ", () => {
         })
 
         it("Timeline remains unchanged", async () => {
-            const timelineItem = await then.get_user_timeline(userA.username)
-            expect(timelineItem.length).toBe(1)
+            const timeline = await then.get_user_timeline(userA.username)
+            expect(timeline).toBeTruthy()
+            expect(timeline.length).toBe(1)
         })
     })
     describe("When someone else retweets their tweet, ", () => {
@@ -80,8 +81,9 @@ describe("Given authenticated user, ", () => {
         })
 
         it("Timeline includes retweet", async () => {
-            const timelineItem = await then.get_user_timeline(userB.username)
-            expect(timelineItem.length).toBe(1)
+            const timeline = await then.get_user_timeline(userB.username)
+            expect(timeline).toBeTruthy()
+            expect(timeline.length).toBe(1)
         })
     })
 })
