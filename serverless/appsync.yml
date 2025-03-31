@@ -57,6 +57,10 @@ resolvers:
     kind: UNIT # required
     field: retweet
     dataSource: retweetFn
+  Mutation.unretweet:
+    kind: UNIT # required
+    field: unretweet
+    dataSource: unretweetFn
   # Nested fields
   Tweet.profile:
     type: Tweet
@@ -180,6 +184,10 @@ dataSources:
       type: 'AWS_LAMBDA'
       config:
         functionName: retweet
+  unretweetFn:
+      type: 'AWS_LAMBDA'
+      config:
+        functionName: unretweet
 
 substitutions:
   TweetsTable: !Ref TweetsTable
