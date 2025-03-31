@@ -116,7 +116,7 @@ describe("Given an authenticated user, when they send a tweet", () => {
             getLikesResponse = await when.user_calls_getLikes({ user, limit: 10 })
         })
         it("Should get list of likes", async () => {
-            const {nextToken, tweets} = getLikesResponse
+            const { nextToken, tweets } = getLikesResponse
             expect(nextToken).toBe(null)
             expect(tweets.length).toBe(1);
             expect(tweets[0]).toMatchObject({
@@ -161,9 +161,52 @@ describe("Given an authenticated user, when they send a tweet", () => {
             getLikesResponse = await when.user_calls_getLikes({ user, limit: 10 })
         })
         it("Should get empty list of likes - no likes available", async () => {
-            const {nextToken, tweets} = getLikesResponse
+            const { nextToken, tweets } = getLikesResponse
             expect(nextToken).toBe(null)
             expect(tweets.length).toBe(0);
+        })
+    })
+
+    describe("When user calls retweet with their own tweet", () => {
+        beforeAll(async () => {
+            await when.user_calls_retweet({ user, tweetId: tweet.id })
+        })
+        it("Should update tweets", async () => {
+            const { tweets } = await when.user_calls_getTweets({ user, limit: 10 })
+
+            expect(tweets.length).toBe(2)
+            expect(tweets[0]).toMatchObject({
+                profile: {
+                    id: user.username,
+                    name: user.name,
+                    tweetsCount: 2
+                },
+                retweetOf: {
+                    ...tweet,
+                    retweets: 1,
+                    retweeted: true,
+                    profile: {
+                        id: user.username,
+                        tweetsCount: 2
+                    }
+                }
+            })
+
+            expect(tweets[1]).toMatchObject({
+                ...tweet,
+                retweets: 1,
+                retweeted: true,
+                profile: {
+                    id: user.username,
+                    tweetsCount: 2
+                }
+            })
+
+        })
+
+        it("Should no see own retweet in timeline", async () => {
+            const timeline = await when.user_calls_getMyTimeline({ user, limit: 10 })
+            expect(timeline.tweets).toHaveLength(1);
         })
     })
 })

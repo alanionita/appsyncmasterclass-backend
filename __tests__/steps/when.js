@@ -434,7 +434,24 @@ async function user_calls_unlike({ user, tweetId }) {
     return unlike
 }
 
+async function user_calls_retweet({ user, tweetId }) {
+    const query = `mutation retweet($tweetId: ID!) {
+        retweet(tweetId: $tweetId)
+    }`
 
+    const variables = {
+        tweetId
+    }
+
+    const { retweet } = await GraphQL({
+        url: process.env.APPSYNC_HTTP_URL,
+        query,
+        variables,
+        auth: user.accessToken
+    })
+
+    return retweet
+}
 
 module.exports = {
     invoke_appsync_template,
@@ -451,5 +468,6 @@ module.exports = {
     user_calls_like,
     user_calls_unlike,
     user_calls_getLikes,
-    invoke_retweet
+    invoke_retweet,
+    user_calls_retweet
 }

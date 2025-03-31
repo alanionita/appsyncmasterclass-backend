@@ -68,10 +68,29 @@ fragment tweetFields on Tweet {
 }
 `
 
+const retweetFrag = `
+fragment retweetFields on Retweet {
+    id
+    profile {
+        ... iProfileFields
+    }
+    createdAt
+    retweetOf {
+        ... on Tweet {
+            ... tweetFields
+        }
+    }
+}
+`
+
 const iTweetFrag = `
 fragment iTweetFields on ITweet {
     ... on Tweet {
         ... tweetFields
+    }
+
+    ... on Retweet {
+        ... retweetFields
     }
 }
 `
@@ -82,6 +101,7 @@ function registerAllFragments () {
     registerFragment('iProfileFields', iProfileFrag);
     registerFragment('tweetFields', tweetFrag);
     registerFragment('iTweetFields', iTweetFrag)
+    registerFragment('retweetFields', retweetFrag)
 }
 
 module.exports = {
