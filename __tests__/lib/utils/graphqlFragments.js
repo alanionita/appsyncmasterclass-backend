@@ -35,8 +35,6 @@ fragment otherProfileFields on OtherProfile {
     followingCount
     tweetsCount
     likesCount
-    following
-    followedBy
 }
 `
 

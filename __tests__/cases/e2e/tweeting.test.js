@@ -8,15 +8,24 @@ require("dotenv").config()
 describe("Given an authenticated user, when they send a tweet", () => {
     let user;
     let tweet;
-    const text = chance.string({ length: 16 })
+    let userB;
+    let tweetB;
+    const text = chance.string({ length: 16 });
+    const textB = chance.string({ length: 16 });
 
     beforeAll(async () => {
         user = await given.authenticated_user()
 
         await waitSec(2);
 
+        userB = await given.authenticated_user()
+
         if (user && user.username) {
             tweet = await when.user_calls_tweet(user, text);
+        }
+
+        if (userB && userB.username) {
+            tweetB = await when.user_calls_tweet(userB, textB);
         }
     })
 
@@ -207,6 +216,54 @@ describe("Given an authenticated user, when they send a tweet", () => {
         it("Should no see own retweet in timeline", async () => {
             const timeline = await when.user_calls_getMyTimeline({ user, limit: 10 })
             expect(timeline.tweets).toHaveLength(1);
+        })
+    })
+
+    describe("When user calls retweet with another tweet", () => {
+        beforeAll(async () => {
+            await when.user_calls_retweet({ user, tweetId: tweetB.id })
+        })
+        it("Should update tweets", async () => {
+            const { tweets } = await when.user_calls_getTweets({ user, limit: 10 })
+
+            expect(tweets.length).toBe(3)
+            expect(tweets[0]).toMatchObject({
+                profile: {
+                    id: user.username,
+                    name: user.name,
+                    tweetsCount: 3
+                },
+                retweetOf: {
+                    ...tweetB,
+                    retweets: 1,
+                    retweeted: true,
+                    profile: {
+                        id: userB.username,
+                        tweetsCount: 1
+                    }
+                }
+            })
+        })
+
+        it("Should see retweet in timeline", async () => {
+            const timeline = await when.user_calls_getMyTimeline({ user, limit: 10 })
+            expect(timeline.tweets).toHaveLength(2);
+
+            expect(timeline.tweets[0]).toMatchObject({
+                profile: {
+                    id: user.username,
+                    tweetsCount: 3
+                },
+                retweetOf: {
+                    ...tweetB,
+                    retweets: 1,
+                    retweeted: true,
+                    profile: {
+                        id: userB.username,
+                        tweetsCount: 1
+                    }
+                }
+            })
         })
     })
 })
