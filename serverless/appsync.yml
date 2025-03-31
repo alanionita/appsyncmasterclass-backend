@@ -79,6 +79,13 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Tweet.liked.request.vtl
     response: ./appsync/resolvers/Tweet.liked.response.vtl
+  Tweet.retweeted:
+    type: Tweet
+    field: retweeted
+    dataSource: retweetsTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Tweet.liked.request.vtl
+    response: ./appsync/resolvers/Tweet.liked.response.vtl
   MyProfile.tweets:
     type: MyProfile
     field: tweets
@@ -124,6 +131,11 @@ dataSources:
     description: "tweetLikesTable"
     config:
       tableName: !Ref TweetLikesTable
+  retweetsTable:
+    type: AMAZON_DYNAMODB
+    description: "retweetsTable"
+    config:
+      tableName: !Ref RetweetsTable
   tweetLikeMutation:
     type: AMAZON_DYNAMODB
     description: "tweetLikeMutation"
