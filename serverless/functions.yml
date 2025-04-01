@@ -88,3 +88,27 @@ unretweet:
         - !GetAtt TweetsTable.Arn
         - !GetAtt TimelinesTable.Arn
         - !GetAtt RetweetsTable.Arn
+
+reply:
+  handler: functions/reply.handler
+  environment:
+    USERS_TABLE: !Ref UsersTable
+    TWEETS_TABLE: !Ref TweetsTable
+    TIMELINES_TABLE: !Ref TimelinesTable
+    RETWEETS_TABLE: !Ref RetweetsTable
+  iamRoleStatements:
+    - Effect: Allow
+      Action: dynamodb:GetItem
+      Resource: 
+        - !GetAtt TweetsTable.Arn
+    - Effect: Allow
+      Action: dynamodb:UpdateItem
+      Resource: 
+        - !GetAtt UsersTable.Arn
+        - !GetAtt TweetsTable.Arn
+    - Effect: Allow
+      Action: dynamodb:PutItem
+      Resource: 
+        - !GetAtt TweetsTable.Arn
+        - !GetAtt TimelinesTable.Arn
+        - !GetAtt RetweetsTable.Arn

@@ -372,4 +372,11 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No diffs
 
-Release
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-41-Add_acceptance_tests_for_unretweet_mutation
+
+### 04-42-Implement_reply_mutation
+
+Diffs
+- lib/dynamodb: instead of a TweetsLib, created a more generic class-based dynamodb util that initialises with region and table and then contains get(id), and transWrite
+
+Release: 
