@@ -478,6 +478,25 @@ async function invoke_unretweet(username, tweetId) {
     }
 }
 
+async function user_calls_unretweet({ user, tweetId }) {
+    const query = `mutation unretweet($tweetId: ID!) {
+        unretweet(tweetId: $tweetId)
+    }`
+
+    const variables = {
+        tweetId
+    }
+
+    const { unretweet } = await GraphQL({
+        url: process.env.APPSYNC_HTTP_URL,
+        query,
+        variables,
+        auth: user.accessToken
+    })
+
+    return unretweet
+}
+
 module.exports = {
     invoke_appsync_template,
     invoke_confirmUserSignup,
@@ -495,5 +514,6 @@ module.exports = {
     user_calls_getLikes,
     invoke_retweet,
     user_calls_retweet,
-    invoke_unretweet
+    invoke_unretweet,
+    user_calls_unretweet
 }

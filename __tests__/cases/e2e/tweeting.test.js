@@ -1,4 +1,3 @@
-const { waitSec } = require("../../lib/utils");
 const given = require("../../steps/given");
 const when = require("../../steps/when");
 const chance = require('chance').Chance()
@@ -15,8 +14,6 @@ describe("Given an authenticated user, when they send a tweet", () => {
 
     beforeAll(async () => {
         user = await given.authenticated_user()
-
-        await waitSec(2);
 
         userB = await given.authenticated_user()
 
@@ -262,6 +259,115 @@ describe("Given an authenticated user, when they send a tweet", () => {
                         id: userB.username,
                         tweetsCount: 1
                     }
+                }
+            })
+        })
+    })
+
+    describe("When user calls unretweet on their own tweet", () => {
+        beforeAll(async () => {
+            await when.user_calls_unretweet({ user, tweetId: tweet.id })
+        })
+        it("Should update tweets", async () => {
+            const { tweets } = await when.user_calls_getTweets({ user, limit: 10 })
+
+            expect(tweets.length).toBe(2)
+
+            // User: last tweet was another retweet from UserB
+            expect(tweets[0]).toMatchObject({
+                profile: {
+                    id: user.username,
+                    name: user.name,
+                    tweetsCount: 2
+                },
+                retweetOf: {
+                    ...tweetB,
+                    retweets: 1,
+                    retweeted: true,
+                    profile: {
+                        id: userB.username,
+                        tweetsCount: 1
+                    }
+                }
+            })
+
+            // User: own tweet is no longer retweeted
+            expect(tweets[1]).toMatchObject({
+                ...tweet,
+                retweets: 0,
+                retweeted: false,
+                profile: {
+                    id: user.username,
+                    tweetsCount: 2
+                }
+            })
+        })
+
+        it("Should not see own retweet in timeline", async () => {
+            const timeline = await when.user_calls_getMyTimeline({ user, limit: 10 })
+
+            // User: their own tweet, the retweet from another user
+            expect(timeline.tweets).toHaveLength(2);
+
+            expect(timeline.tweets[0]).toMatchObject({
+                profile: {
+                    id: user.username,
+                    tweetsCount: 2
+                },
+                retweetOf: {
+                    ...tweetB,
+                    retweets: 1,
+                    retweeted: true,
+                    profile: {
+                        id: userB.username,
+                        tweetsCount: 1
+                    }
+                }
+            })
+
+            expect(timeline.tweets[1]).toMatchObject({
+                ...tweet,
+                retweets: 0,
+                retweeted: false,
+                profile: {
+                    id: user.username,
+                    tweetsCount: 2
+                }
+            })
+        })
+    })
+    describe("When user calls unretweet with another tweet", () => {
+        beforeAll(async () => {
+            await when.user_calls_unretweet({ user, tweetId: tweetB.id })
+        })
+        it("Should update tweets", async () => {
+            const { tweets } = await when.user_calls_getTweets({ user, limit: 10 })
+
+            expect(tweets.length).toBe(1)
+
+            // User: only has their own tweet now
+            expect(tweets[0]).toMatchObject({
+                ...tweet,
+                retweets: 0,
+                retweeted: false,
+                profile: {
+                    id: user.username,
+                    tweetsCount: 1
+                }
+            })
+        })
+
+        it("Should see retweet in timeline", async () => {
+            const timeline = await when.user_calls_getMyTimeline({ user, limit: 10 })
+            expect(timeline.tweets).toHaveLength(1);
+
+            expect(timeline.tweets[0]).toMatchObject({
+                ...tweet,
+                retweets: 0,
+                retweeted: false,
+                profile: {
+                    id: user.username,
+                    tweetsCount: 1
                 }
             })
         })
