@@ -200,6 +200,40 @@ async function TweetsTable_retweets_notcontains({ author, retweetOf }) {
     }
 }
 
+async function TweetsTable_replies_contains({ author, inReplyToTweet, limit = 15 }) {
+    try {
+
+        if (!author || !inReplyToTweet) throw Error('Missing fn arguments')
+
+        if (!TWEETS_TABLE) throw Error("Missing env variable");
+
+        const ddb = new DynamoDBClient({ region: REGION });
+        const client = new DynamoDBDocumentClient(ddb)
+
+        const input = {
+            TableName: TWEETS_TABLE,
+            IndexName: 'replies',
+            KeyConditionExpression: "author = :author AND inReplyToTweet = :inReplyToTweet",
+            ExpressionAttributeValues: {
+                ":author": author,
+                ":inReplyToTweet": inReplyToTweet
+            },
+            Limit: limit
+        };
+        const command = new QueryCommand(input);
+
+        const ddbResp = await client.send(command)
+
+        expect(ddbResp.Items).toBeTruthy()
+        expect(ddbResp.Items.length).toBeGreaterThan(0)
+        expect(ddbResp.$metadata.httpStatusCode).toBe(200)
+
+        return ddbResp.Items
+    } catch (caught) {
+        return throwWithLabel(caught, "then.TweetsTableIndex_contains")
+    }
+}
+
 async function get_user_timeline(userId) {
     try {
 
@@ -321,5 +355,6 @@ module.exports = {
     TweetsTable_retweets_contains,
     get_user_timeline,
     TweetsTable_retweets_notcontains,
-    RetweetsTable_notcontains
+    RetweetsTable_notcontains,
+    TweetsTable_replies_contains
 }

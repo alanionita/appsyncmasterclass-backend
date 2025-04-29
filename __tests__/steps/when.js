@@ -289,6 +289,32 @@ async function invoke_retweet(username, tweetId) {
     }
 }
 
+async function invoke_reply({username, tweetId, text}) {
+    try {
+        const handler = require('../../functions/reply').handler
+
+        const context = {}
+        const event = {
+            identity: {
+                username
+            },
+            arguments: {
+                tweetId,
+                text,
+            }
+        }
+
+        return await handler(event, context)
+    } catch (err) {
+        console.error("Err [tests/steps/when/invoke_reply] ::", err.message);
+        console.info(JSON.stringify(err))
+        if (err.$metadata) {
+            const { requestId, cfId, extendedRequestId } = err.$metadata;
+            console.info({ requestId, cfId, extendedRequestId })
+        }
+    }
+}
+
 async function user_calls_tweet(user, text) {
     const query = `mutation tweet($text: String!) {
         tweet(text: $text) {
@@ -515,5 +541,6 @@ module.exports = {
     invoke_retweet,
     user_calls_retweet,
     invoke_unretweet,
-    user_calls_unretweet
+    user_calls_unretweet,
+    invoke_reply
 }
