@@ -17,7 +17,7 @@ module.exports.handler = async (event) => {
             throw Error("Cannot retweet, missing requirements [tweetId, username]")
         }
 
-        const getTweetResp = tweetsModel.get(tweetId)
+        const getTweetResp = await tweetsModel.get(tweetId)
 
         const originalTweet = getTweetResp.Item
 
@@ -29,7 +29,7 @@ module.exports.handler = async (event) => {
         const timestamp = new Date().toJSON();
 
         const newTweet = {
-            __typename: TweetTypes.RETWEET,
+            __typename: TweetTypes.REPLY,
             id,
             author: username,
             createdAt: timestamp,
@@ -38,14 +38,14 @@ module.exports.handler = async (event) => {
             likes: 0,
             retweets: 0,
             inReplyToTweet: tweetId,
-            inReplyToUsers: buildReplyUsersList(originalTweet, tweetsModel)
+            inReplyToUsers: [...buildReplyUsersList(originalTweet, tweetsModel)]
         }
 
         const newTimeline = {
             userId: username,
             tweetId: id,
             timestamp,
-            retweetOf: originalTweet.id
+            inReplyToTweetId: originalTweet.id
         }
 
         const transactItems = [
@@ -92,7 +92,7 @@ module.exports.handler = async (event) => {
         const input = {
             TransactItems: transactItems
         };
-        await tweetsModel.transactItems(input);
+        await tweetsModel.transactWrite(input);
         return true;
     } catch (err) {
         console.error("Err [reply] ::", err.message)
@@ -108,10 +108,15 @@ function buildReplyUsersList(tweet, tweetModel) {
         const usersSet = new Set()
 
         switch (tweet.__typename) {
+            case TweetTypes.TWEET:
+                usersSet.add(tweet.author);
+                return usersSet
             case TweetTypes.REPLY:
                 tweet.inReplyToUsers.every(u => usersSet.add(u));
+                usersSet.add(tweet.author);
                 return usersSet
             case TweetTypes.RETWEET:
+                usersSet.add(tweet.author);    
                 const retweetOfItem = tweetModel.get(retweetOf);
                 const retweetUsers = buildReplyUsersList(retweetOfItem);
                 retweetUsers.every(u => usersSet.add(u));
