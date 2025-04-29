@@ -60,7 +60,7 @@ resolvers:
   Mutation.unretweet:
     kind: UNIT # required
     field: unretweet
-    dataSource: unretweet
+    dataSource: unretweetFn
   Mutation.reply:
     kind: UNIT # required
     field: reply
