@@ -13,8 +13,12 @@ module.exports.handler = async (event) => {
         const { tweetId, text } = event.arguments;
         const { username } = event.identity;
 
-        if (!tweetId || !username) {
-            throw Error("Cannot retweet, missing requirements [tweetId, username]")
+        if (!tweetId) {
+            throw Error("Cannot reply, missing requirement: tweetId")
+        }
+
+        if (!username) {
+            throw Error("Cannot reply, missing requirement: username")
         }
 
         const getTweetResp = await tweetsModel.get(tweetId)
@@ -28,6 +32,8 @@ module.exports.handler = async (event) => {
         const id = ulid.ulid();
         const timestamp = new Date().toJSON();
 
+        const inReplyToUserIds = await buildReplyUsersList(originalTweet, tweetsModel);
+
         const newTweet = {
             __typename: TweetTypes.REPLY,
             id,
@@ -37,8 +43,8 @@ module.exports.handler = async (event) => {
             replies: 0,
             likes: 0,
             retweets: 0,
-            inReplyToTweet: tweetId,
-            inReplyToUsers: [...buildReplyUsersList(originalTweet, tweetsModel)]
+            inReplyToTweetId: tweetId,
+            inReplyToUserIds: [...inReplyToUserIds]
         }
 
         const newTimeline = {
@@ -103,11 +109,13 @@ module.exports.handler = async (event) => {
     }
 }
 
-function buildReplyUsersList(tweet, tweetModel) {
+async function buildReplyUsersList(tweet, tweetModel) {
     try {
         const usersSet = new Set()
 
-        switch (tweet.__typename) {
+        const tweetType = tweet.Item ? tweet.Item.__typename : tweet.__typename
+
+        switch (tweetType) {
             case TweetTypes.TWEET:
                 usersSet.add(tweet.author);
                 return usersSet
@@ -117,11 +125,18 @@ function buildReplyUsersList(tweet, tweetModel) {
                 return usersSet
             case TweetTypes.RETWEET:
                 usersSet.add(tweet.author);    
-                const retweetOfItem = tweetModel.get(retweetOf);
-                const retweetUsers = buildReplyUsersList(retweetOfItem);
-                retweetUsers.every(u => usersSet.add(u));
-                return usersSet
+                const getRetweetOrigin = await tweetModel.get(tweet.retweetOf);
+                const originalTweet = getRetweetOrigin.Item
+                if (!originalTweet) {
+                    throw Error('Original tweet not found.')
+                }
+                if (originalTweet) {
+                    const retweetUsers = [...await buildReplyUsersList(originalTweet, tweetModel)];
+                    retweetUsers.every(u => usersSet.add(u));
+                    return usersSet
+                }
             default:
+                console.info("[buildReplyUsersList] tweet :", tweet)
                 throw new Error('Unrecognised Tweet type!')
         }
     } catch (caught) {

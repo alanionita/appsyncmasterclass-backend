@@ -200,10 +200,10 @@ async function TweetsTable_retweets_notcontains({ author, retweetOf }) {
     }
 }
 
-async function TweetsTable_replies_contains({ author, inReplyToTweet, limit = 15 }) {
+async function TweetsTable_replies_contains({ author, inReplyToTweetId, limit = 15 }) {
     try {
 
-        if (!author || !inReplyToTweet) throw Error('Missing fn arguments')
+        if (!author || !inReplyToTweetId) throw Error('Missing fn arguments')
 
         if (!TWEETS_TABLE) throw Error("Missing env variable");
 
@@ -213,10 +213,10 @@ async function TweetsTable_replies_contains({ author, inReplyToTweet, limit = 15
         const input = {
             TableName: TWEETS_TABLE,
             IndexName: 'replies',
-            KeyConditionExpression: "author = :author AND inReplyToTweet = :inReplyToTweet",
+            KeyConditionExpression: "author = :author AND inReplyToTweetId = :inReplyToTweetId",
             ExpressionAttributeValues: {
                 ":author": author,
-                ":inReplyToTweet": inReplyToTweet
+                ":inReplyToTweetId": inReplyToTweetId
             },
             Limit: limit
         };
