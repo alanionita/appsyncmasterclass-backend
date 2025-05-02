@@ -34,7 +34,7 @@ Resources:
           AttributeType: S
         - AttributeName: retweetOf
           AttributeType: S
-        - AttributeName: inReplyToTweet
+        - AttributeName: inReplyToTweetId
           AttributeType: S
       GlobalSecondaryIndexes:
         - IndexName: byCreator
@@ -57,7 +57,7 @@ Resources:
           KeySchema:
             - AttributeName: author
               KeyType: HASH
-            - AttributeName: inReplyToTweet
+            - AttributeName: inReplyToTweetId
               KeyType: RANGE
           Projection:
             ProjectionType: ALL
