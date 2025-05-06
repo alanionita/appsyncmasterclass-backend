@@ -24,14 +24,15 @@ describe("Given 2 authenticated users, userA & userB", () => {
         })
 
         describe("When userB replies to userA, tweetA, ", () => {
-            const replyTextA = chance.string({ length: 16 })
+            const userBReplyAText = chance.string({ length: 16 });
+            let userBReplyA;
             beforeAll(async () => {
                 waitSec(1);
                 if (tweetA.id) {
                     await when.invoke_reply({
                         username: userB.username,
                         tweetId: tweetA.id,
-                        text: replyTextA
+                        text: userBReplyAText
                     });
                 }
             })
@@ -42,17 +43,17 @@ describe("Given 2 authenticated users, userA & userB", () => {
                     inReplyToTweetId: tweetA.id
                 })
 
-                const foundReply = replyItems.filter(r => {
-                    if (r.inReplyToTweetId === tweetA.id && r.text === replyTextA) {
+                userBReplyA = replyItems.filter(r => {
+                    if (r.inReplyToTweetId === tweetA.id && r.text === userBReplyAText) {
                         return r;
                     }
                 })[0]
 
-                expect(foundReply).toBeTruthy();
+                expect(userBReplyA).toBeTruthy();
 
-                expect(foundReply).toMatchObject({
+                expect(userBReplyA).toMatchObject({
                     __typename: TweetTypes.REPLY,
-                    text: replyTextA,
+                    text: userBReplyAText,
                     author: userB.username,
                     replies: 0,
                     likes: 0,
@@ -78,6 +79,49 @@ describe("Given 2 authenticated users, userA & userB", () => {
                 expect(timeline.length).toBe(1)
                 expect(timeline[0].inReplyToTweetId).toEqual(tweetA.id)
             })
+
+            describe("When userA replies to userB > reply, ", () => {
+                const userAReplyAText = chance.string({ length: 16 })
+                beforeAll(async () => {
+                    waitSec(1);
+                    if (tweetA.id) {
+                        await when.invoke_reply({
+                            username: userA.username,
+                            tweetId: userBReplyA.id,
+                            text: userAReplyAText
+                        });
+                    }
+                })
+
+                it("Saves the userA reply as new tweet", async () => {
+                    
+                    const replyItems = await then.TweetsTable_replies_contains({
+                        author: userA.username,
+                        inReplyToTweetId: userBReplyA.id
+                    })
+
+                    const reply = replyItems.filter(r => {
+                        if (r.inReplyToTweetId === userBReplyA.id && r.text === userAReplyAText) {
+                            return r;
+                        }
+                    })[0]
+
+                    expect(reply).toBeTruthy();
+
+                    expect(reply).toMatchObject({
+                        __typename: TweetTypes.REPLY,
+                        text: userAReplyAText,
+                        author: userA.username,
+                        replies: 0,
+                        likes: 0,
+                        retweets: 0,
+                        inReplyToTweetId: userBReplyA.id,
+                        inReplyToUserIds: expect.arrayContaining([userA.username, userB.username])
+                    })
+                    
+                    expect(reply.inReplyToUserIds).toHaveLength(2)
+                })
+            })
         })
         describe("When userB retweets userA > tweetA, ", () => {
             let userBRetweet;
@@ -96,7 +140,7 @@ describe("Given 2 authenticated users, userA & userB", () => {
             })
 
             describe('When userA replies to userB retweet', () => {
-                const replyTextB = chance.string({ length: 16 })
+                const userAReplyBText = chance.string({ length: 16 })
                 
                 beforeAll(async () => {
                     waitSec(1);
@@ -104,7 +148,7 @@ describe("Given 2 authenticated users, userA & userB", () => {
                         await when.invoke_reply({
                             username: userA.username,
                             tweetId: userBRetweet.id,
-                            text: replyTextB
+                            text: userAReplyBText
                         });
                     }
                 })
@@ -117,7 +161,7 @@ describe("Given 2 authenticated users, userA & userB", () => {
                     })
 
                     const foundReply = replyItems.filter(r => {
-                        if (r.inReplyToTweetId === userBRetweet.id && r.text === replyTextB) {
+                        if (r.inReplyToTweetId === userBRetweet.id && r.text === userAReplyBText) {
                             return r;
                         }
                     })[0]
@@ -126,7 +170,7 @@ describe("Given 2 authenticated users, userA & userB", () => {
 
                     expect(foundReply).toMatchObject({
                         __typename: TweetTypes.REPLY,
-                        text: replyTextB,
+                        text: userAReplyBText,
                         author: userA.username,
                         replies: 0,
                         likes: 0,
