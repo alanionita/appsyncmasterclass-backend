@@ -385,4 +385,10 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No diffs in principle, some changes to overall code structure that achieve the same result.
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/compare/04-42-Implement_reply_mutation...04-43-Add_integration_tests_for_reply_mutation
+
+### 04-44-Implement_Reply_nested_resolvers
+
+No diffs
+
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-44-Implement_Reply_nested_resolvers
