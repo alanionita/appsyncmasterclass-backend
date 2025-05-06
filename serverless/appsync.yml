@@ -115,7 +115,27 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Retweet.retweetOf.request.vtl
     response: ./appsync/resolvers/Retweet.retweetOf.response.vtl
-
+  Reply.profile:
+    type: Reply
+    field: profile
+    dataSource: usersTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Tweet.profile.request.vtl
+    response: ./appsync/resolvers/Tweet.profile.response.vtl
+  Reply.inReplyToTweet:
+    type: Reply
+    field: inReplyToTweet
+    dataSource: tweetsTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Reply.inReplyToTweet.request.vtl
+    response: ./appsync/resolvers/Reply.inReplyToTweet.response.vtl
+  Reply.inReplyToUsers:
+    type: Reply
+    field: inReplyToUsers
+    dataSource: usersTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Reply.inReplyToUsers.request.vtl
+    response: ./appsync/resolvers/Reply.inReplyToUsers.response.vtl
 dataSources:
   api:
     type: 'NONE'
