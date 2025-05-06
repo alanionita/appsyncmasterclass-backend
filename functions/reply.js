@@ -120,7 +120,7 @@ async function buildReplyUsersList(tweet, tweetModel) {
                 usersSet.add(tweet.author);
                 return usersSet
             case TweetTypes.REPLY:
-                tweet.inReplyToUsers.every(u => usersSet.add(u));
+                tweet.inReplyToUserIds.every(u => usersSet.add(u));
                 usersSet.add(tweet.author);
                 return usersSet
             case TweetTypes.RETWEET:
@@ -130,11 +130,9 @@ async function buildReplyUsersList(tweet, tweetModel) {
                 if (!originalTweet) {
                     throw Error('Original tweet not found.')
                 }
-                if (originalTweet) {
-                    const retweetUsers = [...await buildReplyUsersList(originalTweet, tweetModel)];
-                    retweetUsers.every(u => usersSet.add(u));
-                    return usersSet
-                }
+                const retweetUsers = [...await buildReplyUsersList(originalTweet, tweetModel)];
+                retweetUsers.every(u => usersSet.add(u));
+                return usersSet
             default:
                 console.info("[buildReplyUsersList] tweet :", tweet)
                 throw new Error('Unrecognised Tweet type!')
