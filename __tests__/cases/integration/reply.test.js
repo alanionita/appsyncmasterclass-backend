@@ -79,7 +79,7 @@ describe("Given 2 authenticated users, userA & userB", () => {
                 expect(timeline[0].inReplyToTweetId).toEqual(tweetA.id)
             })
         })
-        describe("When userB retweets to userA, tweetA, ", () => {
+        describe("When userB retweets userA > tweetA, ", () => {
             let userBRetweet;
             beforeAll(async () => {
                 waitSec(1);
@@ -95,7 +95,7 @@ describe("Given 2 authenticated users, userA & userB", () => {
                 }
             })
 
-            describe('When userA replies to userB retweet (userBRetweet)', () => {
+            describe('When userA replies to userB retweet', () => {
                 const replyTextB = chance.string({ length: 16 })
                 
                 beforeAll(async () => {
@@ -109,7 +109,7 @@ describe("Given 2 authenticated users, userA & userB", () => {
                     }
                 })
 
-                it("Saves the reply as new tweet", async () => {
+                it("Saves the userA reply as new tweet", async () => {
                     
                     const replyItems = await then.TweetsTable_replies_contains({
                         author: userA.username,
