@@ -21,9 +21,10 @@ describe("Given an authenticated user, when they send a tweet", () => {
         }
     })
     describe('When userB replies to userA tweet', () => {
+        let userBReply;
         const userBReplyText = chance.string({ length: 16 });
         beforeAll(async () => {
-            await when.user_calls_reply({
+            userBReply = await when.user_calls_reply({
                 user: userB,
                 tweetId: userATweet.id,
                 text: userBReplyText
@@ -93,7 +94,7 @@ describe("Given an authenticated user, when they send a tweet", () => {
                 },
                 inReplyToTweet: {
                     id: userATweet.id,
-                    replies: 1, 
+                    replies: 1,
                     liked: false,
                     retweeted: false
                 },
@@ -102,5 +103,109 @@ describe("Given an authenticated user, when they send a tweet", () => {
                 }]
             })
         })
+        describe('When userC replies to userB reply', () => {
+            let userCReply;
+            const userCReplyText = chance.string({ length: 16 });
+            beforeAll(async () => {
+                await when.user_calls_reply({
+                    user: userC,
+                    tweetId: userBReply.id,
+                    text: userCReplyText
+                });
+            })
+
+            it("UserC should see the new tweet when calling getTweets", async () => {
+                const { tweets, nextToken } = await when.user_calls_getTweets({ user: userC, limit: 10 })
+                expect(nextToken).toBeFalsy()
+                expect(tweets.length).toEqual(1)
+
+                const targetTweet = tweets[0];
+                
+                expect(targetTweet).toMatchObject({
+                    text: userCReplyText,
+                    replies: 0,
+                    likes: 0,
+                    retweets: 0,
+                    liked: false,
+                    retweeted: false,
+                    profile: {
+                        id: userC.username,
+                        name: userC.name,
+                        imgUrl: null,
+                        bgImgUrl: null,
+                        bio: null,
+                        location: null,
+                        website: null,
+                        birthdate: null,
+                        followersCount: 0,
+                        followingCount: 0,
+                        tweetsCount: 1,
+                        likesCount: 0
+                    },
+                    inReplyToTweet: {
+                        id: userBReply.id,
+                        replies: 1,
+                        liked: false,
+                        retweeted: false
+                    },
+                    inReplyToUsers: expect.arrayContaining([
+                        expect.objectContaining({
+                            id: userA.username
+                        })
+                        ,
+                        expect.objectContaining({
+                            id: userB.username
+                        })
+                    ])
+                })
+                expect(targetTweet.inReplyToUsers.length).toBe(2)
+            })
+            it("UserC should see new tweet in timeline when calling getMyTimeline", async () => {
+                const { tweets } = await when.user_calls_getMyTimeline({ user: userC, limit: 10 })
+                expect(tweets.length).toEqual(1)
+
+                const targetTweet = tweets[0];
+
+                expect(targetTweet).toMatchObject({
+                    text: userCReplyText,
+                    replies: 0,
+                    likes: 0,
+                    retweets: 0,
+                    liked: false,
+                    retweeted: false,
+                    profile: {
+                        id: userC.username,
+                        name: userC.name,
+                        imgUrl: null,
+                        bgImgUrl: null,
+                        bio: null,
+                        location: null,
+                        website: null,
+                        birthdate: null,
+                        followersCount: 0,
+                        followingCount: 0,
+                        tweetsCount: 1,
+                        likesCount: 0
+                    },
+                    inReplyToTweet: {
+                        id: userBReply.id,
+                        replies: 1,
+                        liked: false,
+                        retweeted: false
+                    },
+                    inReplyToUsers: expect.arrayContaining([
+                        expect.objectContaining({
+                            id: userA.username
+                        })
+                        ,
+                        expect.objectContaining({
+                            id: userB.username
+                        })
+                    ])
+                })
+                expect(targetTweet.inReplyToUsers.length).toBe(2)
+            })
+        })
     })
+
 })
