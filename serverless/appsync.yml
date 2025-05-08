@@ -136,6 +136,20 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Reply.inReplyToUsers.request.vtl
     response: ./appsync/resolvers/Reply.inReplyToUsers.response.vtl
+  Reply.liked:
+    type: Reply
+    field: liked
+    dataSource: tweetLikesTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Tweet.liked.request.vtl
+    response: ./appsync/resolvers/Tweet.liked.response.vtl
+  Reply.retweeted:
+    type: Reply
+    field: retweeted
+    dataSource: retweetsTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Tweet.liked.request.vtl
+    response: ./appsync/resolvers/Tweet.liked.response.vtl
 dataSources:
   api:
     type: 'NONE'
