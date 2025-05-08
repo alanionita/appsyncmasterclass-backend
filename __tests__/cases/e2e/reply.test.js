@@ -31,7 +31,7 @@ describe("Given an authenticated user, when they send a tweet", () => {
             });
         })
 
-        it("UserB should see the new tweet when calling getTweets", async () => {
+        it("UserB should see new reply when calling getTweets", async () => {
             const { tweets, nextToken } = await when.user_calls_getTweets({ user: userB, limit: 10 })
             expect(nextToken).toBeFalsy()
             expect(tweets.length).toEqual(1)
@@ -68,7 +68,7 @@ describe("Given an authenticated user, when they send a tweet", () => {
                 }]
             })
         })
-        it("UserB should see new tweet in timeline when calling getMyTimeline", async () => {
+        it("UserB should see new reply in timeline when calling getMyTimeline", async () => {
             const { tweets } = await when.user_calls_getMyTimeline({ user: userB, limit: 10 })
             expect(tweets.length).toEqual(1)
             expect(tweets[0]).toMatchObject({
@@ -114,7 +114,7 @@ describe("Given an authenticated user, when they send a tweet", () => {
                 });
             })
 
-            it("UserC should see the new tweet when calling getTweets", async () => {
+            it("UserC should see new reply when calling getTweets", async () => {
                 const { tweets, nextToken } = await when.user_calls_getTweets({ user: userC, limit: 10 })
                 expect(nextToken).toBeFalsy()
                 expect(tweets.length).toEqual(1)
@@ -160,7 +160,7 @@ describe("Given an authenticated user, when they send a tweet", () => {
                 })
                 expect(targetTweet.inReplyToUsers.length).toBe(2)
             })
-            it("UserC should see new tweet in timeline when calling getMyTimeline", async () => {
+            it("UserC should see new reply in timeline when calling getMyTimeline", async () => {
                 const { tweets } = await when.user_calls_getMyTimeline({ user: userC, limit: 10 })
                 expect(tweets.length).toEqual(1)
 
@@ -207,5 +207,86 @@ describe("Given an authenticated user, when they send a tweet", () => {
             })
         })
     })
+    describe('When userC retweets userA tweet', () => {
+        let userCRetweet;
+        const userCRetweetText = chance.string({ length: 16 });
+        beforeAll(async () => {
+            userCRetweet = await when.user_calls_retweet({
+                user: userC,
+                tweetId: userATweet.id,
+                text: userCRetweetText
+            });
+        })
 
+        describe('When userB replies to userC retweet', () => {
+            let userBReply2;
+            console.log({userCRetweet})
+            const userBReply2Text = chance.string({ length: 16 });
+            beforeAll(async () => {
+                userBReply2 = await when.user_calls_reply({
+                    user: userB,
+                    tweetId: userCRetweet.id,
+                    text: userBReply2Text
+                });
+            })
+    
+            it("UserB should see new reply when calling getTweets", async () => {
+                const { tweets, nextToken } = await when.user_calls_getTweets({ user: userB, limit: 10 })
+                expect(nextToken).toBeFalsy()
+                expect(tweets.length).toEqual(2)
+
+                const targetTweet = tweets[0];
+                
+                expect(targetTweet).toMatchObject({
+                    text: userBReply2Text,
+                    profile: {
+                        id: userB.username,
+                        name: userB.name,
+                        tweetsCount: 2
+                    },
+                    inReplyToTweet: {
+                        id: userCRetweet.id,
+                    },
+                    inReplyToUsers: expect.arrayContaining([
+                        expect.objectContaining({
+                            id: userA.username
+                        })
+                        ,
+                        expect.objectContaining({
+                            id: userC.username
+                        })
+                    ])
+                })
+                expect(targetTweet.inReplyToUsers.length).toBe(2)
+            })
+            it("UserB should see new reply in timeline when calling getMyTimeline", async () => {
+                const { tweets } = await when.user_calls_getMyTimeline({ user: userB, limit: 10 })
+                expect(tweets.length).toEqual(2)
+
+                const targetTweet = tweets[0];
+
+                expect(targetTweet).toMatchObject({
+                    text: userBReply2Text,
+                    profile: {
+                        id: userB.username,
+                        name: userB.name,
+                        tweetsCount: 2
+                    },
+                    inReplyToTweet: {
+                        id: userCRetweet.id,
+                    },
+                    inReplyToUsers: expect.arrayContaining([
+                        expect.objectContaining({
+                            id: userA.username
+                        })
+                        ,
+                        expect.objectContaining({
+                            id: userC.username
+                        })
+                    ])
+                })
+                expect(targetTweet.inReplyToUsers.length).toBe(2)
+            })
+        })
+    })
 })

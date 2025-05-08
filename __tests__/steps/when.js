@@ -462,7 +462,9 @@ async function user_calls_unlike({ user, tweetId }) {
 
 async function user_calls_retweet({ user, tweetId }) {
     const query = `mutation retweet($tweetId: ID!) {
-        retweet(tweetId: $tweetId)
+        retweet(tweetId: $tweetId) {
+            ... retweetFields
+        }
     }`
 
     const variables = {
