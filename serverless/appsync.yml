@@ -155,6 +155,20 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Tweet.liked.request.vtl
     response: ./appsync/resolvers/Tweet.liked.response.vtl
+  OtherProfile.following:
+    type: OtherProfile
+    field: following
+    dataSource: relationshipsTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/OtherProfile.following.request.vtl
+    response: ./appsync/resolvers/OtherProfile.following.response.vtl
+  OtherProfile.followedBy:
+    type: OtherProfile
+    field: followedBy
+    dataSource: relationshipsTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/OtherProfile.followedBy.request.vtl
+    response: ./appsync/resolvers/OtherProfile.followedBy.response.vtl
 dataSources:
   api:
     type: 'NONE'
