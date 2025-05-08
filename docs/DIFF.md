@@ -392,3 +392,16 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/compare/04-42-
 No diffs
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-44-Implement_Reply_nested_resolvers
+
+
+### 04-45-Add_unit_tests_for_Reply.inReplyToUsers_VTL
+
+No diffs
+
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-45-Add_unit_tests_for_Reply.inReplyToUsers_VTL
+
+### 04-46-Add_acceptance_tests_for_reply_mutation
+
+No diffs
+
+Release: 
