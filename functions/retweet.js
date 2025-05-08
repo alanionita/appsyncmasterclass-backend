@@ -121,7 +121,7 @@ module.exports.handler = async (event) => {
             console.info('TransactiWrite ::', resp)
             throw Error('Problems with TransactiWrite')
         }
-        return true;
+        return newTweet;
     } catch (err) {
         console.error("Err [retweet] ::", err.message)
         console.info(JSON.stringify(err.stack))
