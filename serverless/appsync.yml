@@ -65,6 +65,11 @@ resolvers:
     kind: UNIT # required
     field: reply
     dataSource: replyFn
+  Mutation.follow:
+    dataSource: followMutation
+    kind: UNIT # required
+    request: ./appsync/resolvers/Mutation.follow.request.vtl
+    response: ./appsync/resolvers/Mutation.follow.response.vtl
   # Nested fields
   Tweet.profile:
     type: Tweet
@@ -230,8 +235,28 @@ dataSources:
       type: 'AWS_LAMBDA'
       config:
         functionName: reply
-
+  relationshipsTable:
+    type: AMAZON_DYNAMODB
+    description: "relationshipsTable"
+    config:
+      tableName: !Ref RelationshipsTable
+  followMutation:
+    type: AMAZON_DYNAMODB
+    description: "followMutation"
+    config:
+      tableName: !Ref RelationshipsTable
+      iamRoleStatements:
+      - Effect: Allow
+        Action: 
+          - dynamodb:UpdateItem
+        Resource: 
+          - !GetAtt UsersTable.Arn
+      - Effect: Allow
+        Action: 
+          - dynamodb:PutItem
+        Resource: !GetAtt RelationshipsTable.Arn
 substitutions:
   TweetsTable: !Ref TweetsTable
   TweetLikesTable: !Ref TweetLikesTable
   UsersTable: !Ref UsersTable
+  RelationshipsTable: !Ref RelationshipsTable
