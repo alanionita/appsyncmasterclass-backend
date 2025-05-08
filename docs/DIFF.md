@@ -430,4 +430,4 @@ Diffs
 - Not a diff but I did need to implement OtherProfile.tweets nested resolver
   - Assuming I'm missed a prior instruction
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-50-Added_tests_for_follow_mutation
