@@ -404,4 +404,10 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No diffs
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-46-Add_acceptance_tests_for_reply_mutation
+
+### 04-47-Implement_follow_mutation
+
+No diffs
+
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-47-Implement_follow_mutation
