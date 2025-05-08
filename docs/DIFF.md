@@ -411,3 +411,9 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 No diffs
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-47-Implement_follow_mutation
+
+### 04-48-Implement_Profile.following_and_Profile.followedBy
+
+No diffs 
+
+Release:https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-48-Implement_Profile.following_and_Profile.followedBy
