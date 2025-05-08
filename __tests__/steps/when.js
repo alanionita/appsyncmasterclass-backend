@@ -479,6 +479,28 @@ async function user_calls_retweet({ user, tweetId }) {
     return retweet
 }
 
+async function user_calls_reply({ user, tweetId, text }) {
+    const query = `mutation reply($tweetId: ID!, $text: String!) {
+        reply(tweetId: $tweetId, text: $text) {
+            ... replyFields
+        }
+    }`
+
+    const variables = {
+        tweetId,
+        text
+    }
+
+    const { reply } = await GraphQL({
+        url: process.env.APPSYNC_HTTP_URL,
+        query,
+        variables,
+        auth: user.accessToken
+    })
+
+    return reply
+}
+
 async function invoke_unretweet(username, tweetId) {
     try {
         const handler = require('../../functions/unretweet').handler
@@ -542,5 +564,6 @@ module.exports = {
     user_calls_retweet,
     invoke_unretweet,
     user_calls_unretweet,
-    invoke_reply
+    invoke_reply,
+    user_calls_reply
 }
