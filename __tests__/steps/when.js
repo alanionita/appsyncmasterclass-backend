@@ -547,6 +547,57 @@ async function user_calls_unretweet({ user, tweetId }) {
     return unretweet
 }
 
+async function user_calls_follow({ user, userId }) {
+    const query = `mutation follow($userId: ID!) {
+        follow(userId: $userId) 
+    }`
+
+    const variables = {
+        userId
+    }
+
+    const { follow } = await GraphQL({
+        url: process.env.APPSYNC_HTTP_URL,
+        query,
+        variables,
+        auth: user.accessToken
+    })
+
+    return follow
+}
+
+async function user_calls_getProfile({user, screenName}) {
+    const query = `query getProfile($screenName: String!) {
+        getProfile(screenName: $screenName) {
+          ... otherProfileFields
+
+          tweets {
+            nextToken
+            tweets {
+                ... on Tweet {
+                    ... tweetFields
+                }
+            }
+          }
+        }
+    }`
+
+    const variables = {
+        screenName
+    }
+
+    const data = await GraphQL({
+        url: process.env.APPSYNC_HTTP_URL,
+        query,
+        variables,
+        auth: user.accessToken
+    })
+
+    const profile = data.getProfile;
+
+    return profile;
+}
+
 module.exports = {
     invoke_appsync_template,
     invoke_confirmUserSignup,
@@ -567,5 +618,7 @@ module.exports = {
     invoke_unretweet,
     user_calls_unretweet,
     invoke_reply,
-    user_calls_reply
+    user_calls_reply,
+    user_calls_follow,
+    user_calls_getProfile
 }
