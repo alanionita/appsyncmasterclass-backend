@@ -11,7 +11,7 @@ type Query {
 
     getMyTimeline(limit: Int!, nextToken: String): UnhydratedTweetsPage!
 
-    getProfile(screenName: String!): OtherProfile!
+    getProfile(screenName: String!): OtherProfile
 
     getTweets(userId: ID!, limit: Int!, nextToken: String): TweetsPage!
 

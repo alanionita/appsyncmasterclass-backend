@@ -70,6 +70,11 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Mutation.follow.request.vtl
     response: ./appsync/resolvers/Mutation.follow.response.vtl
+  Query.getProfile: 
+    dataSource: usersTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Query.getProfile.request.vtl
+    response: ./appsync/resolvers/Query.getProfile.response.vtl
   # Nested fields
   Tweet.profile:
     type: Tweet

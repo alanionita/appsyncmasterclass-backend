@@ -416,4 +416,10 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No diffs 
 
-Release:https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-48-Implement_Profile.following_and_Profile.followedBy
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-48-Implement_Profile.following_and_Profile.followedBy
+
+### 04-49-Implement_getProfile_query
+
+No diffs
+
+Release: 
