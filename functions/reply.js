@@ -99,7 +99,7 @@ module.exports.handler = async (event) => {
             TransactItems: transactItems
         };
         await tweetsModel.transactWrite(input);
-        return true;
+        return newTweet;
     } catch (err) {
         console.error("Err [reply] ::", err.message)
         console.info(JSON.stringify(err.stack))
