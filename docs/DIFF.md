@@ -431,3 +431,12 @@ Diffs
   - Assuming I'm missed a prior instruction
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-50-Added_tests_for_follow_mutation
+
+### 04-51-Distribute_tweets_to_followers
+
+Diffs: 
+- Didn't use lodash so implemented a local libs/utils.chunk + added a unit test
+- Implemented .batchWrite and .query methods to the lib/dynamodb helper class
+- lambda/distributeTweets: helper functions take the table model created using the dynamodb helper class 
+
+Release:
