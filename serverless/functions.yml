@@ -112,3 +112,24 @@ reply:
         - !GetAtt TweetsTable.Arn
         - !GetAtt TimelinesTable.Arn
         - !GetAtt RetweetsTable.Arn
+
+distributeTweets:
+  handler: functions/distributeTweets.handler
+  events:
+    - stream:
+       type: dynamodb
+       arn: !GetAtt TweetsTable.StreamArn
+  environment:
+    RELATIONSHIPS_TABLE: !Ref RelationshipsTable
+    TIMELINES_TABLE: !Ref TimelinesTable
+  iamRoleStatements:
+    - Effect: Allow
+      Action: 
+        - dynamodb:PutItem
+        - dynamodb:DeleteItem
+        - dynamodb:BatchWriteItem
+      Resource: 
+        - !GetAtt TimelinesTables.Arn
+    - Effect: Allow
+      Action: dynamodb:Query
+      Resource: !Sub "${RelationshipsTable.Arn}/index/byOtherUser"
