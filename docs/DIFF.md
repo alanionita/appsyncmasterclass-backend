@@ -439,4 +439,4 @@ Diffs:
 - Implemented .batchWrite and .query methods to the lib/dynamodb helper class
 - lambda/distributeTweets: helper functions take the table model created using the dynamodb helper class 
 
-Release:
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-51-Distribute_tweets_to_followers
