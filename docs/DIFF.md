@@ -440,3 +440,9 @@ Diffs:
 - lambda/distributeTweets: helper functions take the table model created using the dynamodb helper class 
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-51-Distribute_tweets_to_followers
+
+### 04-52-Add_integration_test_for_distribute-tweets_function
+
+No diffs
+
+Release:
