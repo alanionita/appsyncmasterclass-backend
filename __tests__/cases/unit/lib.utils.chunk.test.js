@@ -23,4 +23,12 @@ describe("lib.util.chunk", () => {
         expect(result[0]).toStrictEqual(numbers.slice(0, 25));
         expect(result[1]).toStrictEqual(numbers.slice(-25));
     })
+    it.only("Should chunk when items are less than size", () => {
+        const input = [1]
+        const chunkSize = 25;
+        const result = chunk(input, chunkSize)
+        expect(result.length).toEqual(1); // 1 chunk
+        expect(result[0].length).toStrictEqual(1) // 1 item in chunk 1;
+        expect(result[0]).toStrictEqual([1]) // 1 item in chunk 1;
+    })
 })
