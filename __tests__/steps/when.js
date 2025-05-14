@@ -598,6 +598,23 @@ async function user_calls_getProfile({user, screenName}) {
     return profile;
 }
 
+async function invoke_distributeTweets(event) {
+    try {
+        const handler = require('../../functions/distributeTweets').handler
+
+        const context = {}
+
+        return await handler(event, context)
+    } catch (err) {
+        console.error("Err [tests/steps/when/invoke_distributeTweets] ::", err.message);
+        console.info(JSON.stringify(err))
+        if (err.$metadata) {
+            const { requestId, cfId, extendedRequestId } = err.$metadata;
+            console.info({ requestId, cfId, extendedRequestId })
+        }
+    }
+}
+
 module.exports = {
     invoke_appsync_template,
     invoke_confirmUserSignup,
@@ -620,5 +637,6 @@ module.exports = {
     invoke_reply,
     user_calls_reply,
     user_calls_follow,
-    user_calls_getProfile
+    user_calls_getProfile,
+    invoke_distributeTweets
 }
