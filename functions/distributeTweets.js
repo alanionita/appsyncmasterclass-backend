@@ -1,5 +1,5 @@
 const ddbLib = require("../lib/dynamodb");
-const { chunk } = require("../lib/util");
+const { chunk } = require("../lib/utils");
 const Constants = require("../lib/constants");
 const { unmarshall } = require("@aws-sdk/util-dynamodb");
 const { RELATIONSHIPS_TABLE, REGION, TIMELINES_TABLE } = process.env;
@@ -12,13 +12,16 @@ module.exports.handler = async (event) => {
         const timelineModel = new ddbLib({ region: REGION, tableName: TIMELINES_TABLE })
         const relationshipsModel = new ddbLib({ region: REGION, tableName: RELATIONSHIPS_TABLE })
 
-        for (records of event.Records) {
-            const tweet = unmarshall(record.NewImage);
-            const followers = await getFollowers(relationshipsModel, tweet.author);
-            if (record.eventName == 'INSERT') {
+        for (let record of event.Records) {
+             if (record.eventName == 'INSERT') {
+                const tweet = unmarshall(record.dynamodb.NewImage);
+                const followers = await getFollowers(relationshipsModel, tweet.author);
                 return await distributeTweet({ model: timelineModel, tweet, followers });
             }
             if (record.eventName == 'REMOVE') {
+                const tweet = unmarshall(record.dynamodb.OldImage);
+                const followers = await getFollowers(relationshipsModel, tweet.author);
+               
                 return await undistributeTweet({ model: timelineModel, tweet, followers });
             }
         }
@@ -68,7 +71,7 @@ async function distributeTweet({ model, tweet, followers }) {
             return {
                 PutRequest: {
                     Item: {
-                        userId: follower,
+                        userId: follower.userId,
                         tweetId: tweet.id,
                         timestamp: tweet.createAt,
                         retweetOf: tweet.retweetOf,
@@ -78,16 +81,14 @@ async function distributeTweet({ model, tweet, followers }) {
                 }
             }
         })
-
         const chunks = chunk(items, Constants.DynamoDB.MAX_BATCH_SIZE)
-
         const promises = chunks.map(async chunk => {
             const input = {
                 RequestItems: {
                     [TIMELINES_TABLE]: chunk
                 }
             }
-            await model.query(input)
+            await model.batchWrite(input);
         })
 
         return Promise.all(promises)
@@ -104,7 +105,7 @@ async function undistributeTweet({ model, tweet, followers }) {
             return {
                 DeleteRequest: {
                     Key: {
-                        userId: follower,
+                        userId: follower.userId,
                         tweetId: tweet.id
                     }
                 }
@@ -112,14 +113,13 @@ async function undistributeTweet({ model, tweet, followers }) {
         })
 
         const chunks = chunk(items, Constants.DynamoDB.MAX_BATCH_SIZE)
-
         const promises = chunks.map(async chunk => {
             const input = {
                 RequestItems: {
                     [TIMELINES_TABLE]: chunk
                 }
             }
-            await model.query(input)
+            await model.batchWrite(input);
         })
 
         return Promise.all(promises)
