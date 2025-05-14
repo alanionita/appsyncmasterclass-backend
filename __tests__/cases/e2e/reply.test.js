@@ -220,7 +220,6 @@ describe("Given an authenticated user, when they send a tweet", () => {
 
         describe('When userB replies to userC retweet', () => {
             let userBReply2;
-            console.log({userCRetweet})
             const userBReply2Text = chance.string({ length: 16 });
             beforeAll(async () => {
                 userBReply2 = await when.user_calls_reply({
