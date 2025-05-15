@@ -1,5 +1,7 @@
 const given = require("../../steps/given");
 const when = require("../../steps/when");
+const chance = require('chance').Chance();
+const retry = require('async-retry');
 
 require("dotenv").config()
 
@@ -29,21 +31,41 @@ describe("Given 2 authenticated users", () => {
         })
 
         it("UserA should see following for UserB", async () => {
-            const { following, followedBy } = await when.user_calls_getProfile({ 
-                user: userA, screenName: userBProfile.screenName 
+            const { following, followedBy } = await when.user_calls_getProfile({
+                user: userA, screenName: userBProfile.screenName
             })
             expect(following).toBe(true);
             expect(followedBy).toBe(false);
         })
         it("UserB should see followedBy for UserA", async () => {
-            const { following, followedBy } = await when.user_calls_getProfile({ 
-                user: userB, screenName: userAProfile.screenName 
+            const { following, followedBy } = await when.user_calls_getProfile({
+                user: userB, screenName: userAProfile.screenName
             })
             expect(following).toBe(false);
             expect(followedBy).toBe(true);
         })
-    })
 
+        describe('When UserB tweets, ', () => {
+            const text = chance.string({ length: 16 });
+            let userBtweet;
+
+            beforeEach(async () => {
+                userBtweet = await when.user_calls_tweet(userB, text);
+            })
+
+            it("UserA timeline should contain new tweet", async () => {
+                await retry(async () => {
+                    const { tweets, nextToken } = await when.user_calls_getMyTimeline({ user: userA, limit: 10 })
+                    expect(nextToken).toBeFalsy()
+                    expect(tweets.length).toEqual(1)
+                    expect(tweets[0]).toMatchObject(userBtweet)
+                }, {
+                    retries: 3,
+                    maxTimeout: 1000
+                })
+            })
+        })
+    })
     describe('When userB follows userA', () => {
         beforeAll(async () => {
             await when.user_calls_follow({
@@ -53,18 +75,38 @@ describe("Given 2 authenticated users", () => {
         })
 
         it("UserA should see following and followedBy for UserB", async () => {
-            const { following, followedBy } = await when.user_calls_getProfile({ 
-                user: userB, screenName: userAProfile.screenName 
+            const { following, followedBy } = await when.user_calls_getProfile({
+                user: userB, screenName: userAProfile.screenName
             })
             expect(following).toBe(true);
             expect(followedBy).toBe(true);
         })
         it("UserB should see followedBy and following for UserA", async () => {
-            const { following, followedBy } = await when.user_calls_getProfile({ 
-                user: userA, screenName: userBProfile.screenName 
+            const { following, followedBy } = await when.user_calls_getProfile({
+                user: userA, screenName: userBProfile.screenName
             })
             expect(following).toBe(true);
             expect(followedBy).toBe(true);
+        })
+        describe('When UserA tweets, ', () => {
+            const text = chance.string({ length: 16 });
+            let userAtweet;
+
+            beforeEach(async () => {
+                userAtweet = await when.user_calls_tweet(userA, text);
+            })
+
+            it("UserB timeline should contain new tweet", async () => {
+                await retry(async () => {
+                    const { tweets, nextToken } = await when.user_calls_getMyTimeline({ user: userA, limit: 10 })
+                    expect(nextToken).toBeFalsy()
+                    expect(tweets.length).toEqual(2)
+                    expect(tweets[0]).toMatchObject(userAtweet)
+                }, {
+                    retries: 3,
+                    maxTimeout: 1000
+                })
+            })
         })
     })
 })
