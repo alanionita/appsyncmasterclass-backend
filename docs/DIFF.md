@@ -451,4 +451,4 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No diffs
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-53-Add_acceptance_test_for_distribute-tweets_function
