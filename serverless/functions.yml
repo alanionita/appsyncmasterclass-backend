@@ -128,8 +128,7 @@ distributeTweets:
         - dynamodb:PutItem
         - dynamodb:DeleteItem
         - dynamodb:BatchWriteItem
-      Resource: 
-        - !GetAtt TimelinesTables.Arn
+      Resource: !GetAtt TimelinesTable.Arn
     - Effect: Allow
       Action: dynamodb:Query
       Resource: !Sub "${RelationshipsTable.Arn}/index/byOtherUser"
