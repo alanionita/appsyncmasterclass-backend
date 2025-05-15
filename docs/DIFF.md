@@ -445,4 +445,5 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No diffs
 
-Release:
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-52-Add_integration_test_for_distribute-tweets_function
+
