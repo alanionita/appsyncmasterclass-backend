@@ -76,7 +76,8 @@ async function distributeTweet({ model, tweet, followers }) {
                         timestamp: tweet.createAt,
                         retweetOf: tweet.retweetOf,
                         inReplyToTweetId: tweet.inReplyToTweetId,
-                        inReplyToUserIds: tweet.inReplyToUserIds
+                        inReplyToUserIds: tweet.inReplyToUserIds,
+                        distributedFrom: tweet.author
                     }
                 }
             }
