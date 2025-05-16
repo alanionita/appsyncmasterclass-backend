@@ -132,3 +132,26 @@ distributeTweets:
     - Effect: Allow
       Action: dynamodb:Query
       Resource: !Sub "${RelationshipsTable.Arn}/index/byOtherUser"
+
+distributeTweetsToFollower:
+  handler: functions/distributeTweetsToFollower.handler
+  events:
+    - stream:
+       type: dynamodb
+       arn: !GetAtt RelationshipsTable.StreamArn
+  environment:
+    TWEETS_TABLE: !Ref TweetsTable
+    TIMELINES_TABLE: !Ref TimelinesTable
+    MAX_TWEETS: 100
+  iamRoleStatements:
+    - Effect: Allow
+      Action: 
+        - dynamodb:PutItem
+        - dynamodb:DeleteItem
+        - dynamodb:BatchWriteItem
+      Resource: !GetAtt TimelinesTable.Arn
+    - Effect: Allow
+      Action: dynamodb:Query
+      Resource: 
+        - !Sub "${TweetsTable.Arn}/index/byCreator"
+        - !Sub "${TimelinesTable.Arn}/index/distributedFrom"
