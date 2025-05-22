@@ -10,6 +10,9 @@ describe("Given 2 authenticated users", () => {
     let userB;
     let userAProfile;
     let userBProfile;
+    let userBTweet1;
+    let userBTweet2;
+
 
     beforeAll(async () => {
         userA = await given.authenticated_user()
@@ -20,7 +23,11 @@ describe("Given 2 authenticated users", () => {
         }
         if (userB && userB.username) {
             userBProfile = await when.user_calls_getMyProfile(userB);
+            // send tweets
+            userBTweet1 = await when.user_calls_tweet(userB, chance.string({ length: 16 }));
+            userBTweet2 = await when.user_calls_tweet(userB, chance.string({ length: 16 }));
         }
+
     })
     describe('When userA follows userB', () => {
         beforeAll(async () => {
@@ -36,6 +43,26 @@ describe("Given 2 authenticated users", () => {
             })
             expect(following).toBe(true);
             expect(followedBy).toBe(false);
+        })
+        it("UserA should see tweets for UserB", async () => {
+            await retry(async () => {
+                const { tweets, nextToken } = await when.user_calls_getMyTimeline({ user: userA, limit: 10 })
+                expect(nextToken).toBeFalsy()
+                expect(tweets.length).toEqual(2)
+                expect(tweets).toEqual([
+                    expect.objectContaining({
+                        id: userBTweet2.id
+                    }),
+                    expect.objectContaining({
+                        id: userBTweet1.id
+                    })
+                ])
+            }, {
+                retries: 3,
+                maxTimeout: 1000
+            })
+
+
         })
         it("UserB should see followedBy for UserA", async () => {
             const { following, followedBy } = await when.user_calls_getProfile({
@@ -57,7 +84,7 @@ describe("Given 2 authenticated users", () => {
                 await retry(async () => {
                     const { tweets, nextToken } = await when.user_calls_getMyTimeline({ user: userA, limit: 10 })
                     expect(nextToken).toBeFalsy()
-                    expect(tweets.length).toEqual(1)
+                    expect(tweets.length).toEqual(3)
                     expect(tweets[0]).toMatchObject(userBtweet)
                 }, {
                     retries: 3,
@@ -100,7 +127,7 @@ describe("Given 2 authenticated users", () => {
                 await retry(async () => {
                     const { tweets, nextToken } = await when.user_calls_getMyTimeline({ user: userA, limit: 10 })
                     expect(nextToken).toBeFalsy()
-                    expect(tweets.length).toEqual(2)
+                    expect(tweets.length).toEqual(4)
                     expect(tweets[0]).toMatchObject(userAtweet)
                 }, {
                     retries: 3,

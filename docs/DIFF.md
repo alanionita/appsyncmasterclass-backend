@@ -464,3 +464,9 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 No diffs
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-55-Add_integration_tests_for_distribute-tweets-to-follower_function
+
+### 04-56-Add_acceptance_tests_for_distribute-tweets-to-follower_function 
+
+No diffs
+
+Release:
