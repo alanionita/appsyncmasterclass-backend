@@ -483,3 +483,10 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 No diffs
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-58-Add_acceptence_tests_for_unfollow_mutation
+
+### 04-59-Implement_getFollowers_query
+
+Diffs:
+- serverless/appsync.yml: minor changes to the pipeline resolver definitions, due to api changes withing serverless-appsync-plugin
+
+Release: 

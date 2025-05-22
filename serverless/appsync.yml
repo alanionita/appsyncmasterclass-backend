@@ -9,6 +9,16 @@ authentication:
     defaultAction: ALLOW
     userPoolId: !Ref CgUserPool
 
+pipelineFunctions:
+    getFollowers:
+      dataSource: relationshipsTable
+      request: ./appsync/resolvers/getFollowers.request.vtl
+      response: ./appsync/resolvers/getFollowers.response.vtl
+    hydrateFollowers:
+      dataSource: usersTable
+      request: ./appsync/resolvers/hydrateFollowers.request.vtl
+      response: ./appsync/resolvers/hydrateFollowers.response.vtl
+
 resolvers:
   Query.getMyProfile:
     dataSource: usersTable
@@ -80,6 +90,13 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Query.getProfile.request.vtl
     response: ./appsync/resolvers/Query.getProfile.response.vtl
+  Query.getFollowers: 
+    kind: PIPELINE
+    request: ./appsync/resolvers/simplePipeline.request.vtl
+    response: ./appsync/resolvers/simplePipeline.response.vtl
+    functions:
+      - getFollowers
+      - hydrateFollowers
   # Nested fields
   Tweet.profile:
     type: Tweet
