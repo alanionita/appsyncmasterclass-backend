@@ -143,6 +143,7 @@ distributeTweetsToFollower:
     TWEETS_TABLE: !Ref TweetsTable
     TIMELINES_TABLE: !Ref TimelinesTable
     MAX_TWEETS: 100
+  iamRoleStatementsName: ${self:service}-${self:custom.stage}-distributeTweetsToFollower 
   iamRoleStatements:
     - Effect: Allow
       Action: 
