@@ -25,22 +25,21 @@ module.exports.handler = async (event) => {
                         author: relationship.otherUserId,
                         limit: maxTweets
                     })
-
-                    await distributeTweets({ model: timelineModel, tweets, follower: record.userId })
+                    await distributeTweets({ model: timelineModel, tweets, follower: relationship })
                 }
             }
             if (record.eventName == 'REMOVE') {
-                const relationship = unmarshall(record.dynamodb.NewImage);
+                const relationship = unmarshall(record.dynamodb.OldImage);
                 const followRel = relationship.sk.startsWith('FOLLOWS_')
 
                 if (followRel) {
-                    const tweets = await getTimelineItemsBy({
+                    const timelineEntries = await getTimelineItemsBy({
                         model: timelineModel,
                         distributedFrom: relationship.otherUserId,
                         userId: relationship.userId
                     })
 
-                    await undistributeTweets({ model: timelineModel, tweets, follower: record.userId })
+                    await undistributeTweets({ model: timelineModel, tweets: timelineEntries, follower: relationship })
                 }
             }
         }
@@ -63,7 +62,6 @@ async function getTweets({ model, author, limit }) {
                 ExpressionAttributeValues: {
                     ":author": author,
                 },
-                ProjectionExpression: 'userId',
                 ExclusiveStartKey: exclusiveStartKey,
             };
 
@@ -156,12 +154,13 @@ async function distributeTweets({ model, tweets, follower }) {
 
 async function undistributeTweets({ model, tweets, follower }) {
     try {
+        // NB: Tweets object are Timeline entries eg. { tweetId, userId, distributedFrom } 
         const items = tweets.map(tweet => {
             return {
                 DeleteRequest: {
                     Key: {
                         userId: follower.userId,
-                        tweetId: tweet.id
+                        tweetId: tweet.tweetId
                     }
                 }
             }
