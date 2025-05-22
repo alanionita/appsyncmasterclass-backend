@@ -476,4 +476,4 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 Diffs: 
 - lambda/distributeTweetsToFollower: Didn't change MAX_TWEETS to a string 
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-57-Implement_unfollow_mutation
