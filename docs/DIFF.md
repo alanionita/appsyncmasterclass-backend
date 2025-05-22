@@ -482,4 +482,4 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No diffs
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-58-Add_acceptence_tests_for_unfollow_mutation
