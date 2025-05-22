@@ -489,4 +489,4 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 Diffs:
 - serverless/appsync.yml: minor changes to the pipeline resolver definitions, due to api changes withing serverless-appsync-plugin
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-59-Implement_getFollowers_query
