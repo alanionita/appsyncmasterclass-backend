@@ -289,7 +289,7 @@ async function invoke_retweet(username, tweetId) {
     }
 }
 
-async function invoke_reply({username, tweetId, text}) {
+async function invoke_reply({ username, tweetId, text }) {
     try {
         const handler = require('../../functions/reply').handler
 
@@ -566,7 +566,7 @@ async function user_calls_follow({ user, userId }) {
     return follow
 }
 
-async function user_calls_getProfile({user, screenName}) {
+async function user_calls_getProfile({ user, screenName }) {
     const query = `query getProfile($screenName: String!) {
         getProfile(screenName: $screenName) {
           ... otherProfileFields
@@ -651,6 +651,32 @@ async function user_calls_unfollow({ user, userId }) {
     return unfollow
 }
 
+async function user_calls_getFollowers({ user, userId, limit, givenNextToken = null }) {
+    const query = `query getFollowers($userId: ID!, $limit: Int!, $nextToken: String) {
+            getFollowers(userId: $userId, limit: $limit, nextToken: $nextToken) {
+                nextToken
+                profiles {
+                    ... iProfileFields
+                }
+            }
+        }`
+
+    const variables = {
+        userId,
+        limit,
+        nextToken: givenNextToken
+    }
+
+    const { getFollowers } = await GraphQL({
+        url: process.env.APPSYNC_HTTP_URL,
+        query,
+        variables,
+        auth: user.accessToken
+    })
+
+    return getFollowers;
+}
+
 module.exports = {
     invoke_appsync_template,
     invoke_confirmUserSignup,
@@ -676,5 +702,6 @@ module.exports = {
     user_calls_getProfile,
     invoke_distributeTweets,
     invoke_distributeTweetsToFollower,
-    user_calls_unfollow
+    user_calls_unfollow,
+    user_calls_getFollowers
 }

@@ -44,6 +44,35 @@ describe("Given 2 authenticated users", () => {
             expect(following).toBe(true);
             expect(followedBy).toBe(false);
         })
+
+        it("UserA should be present within UserB followers list", async () => {
+            const { profiles } = await when.user_calls_getFollowers({
+                user: userA, 
+                userId: userB.username,
+                limit: 25
+            })
+            expect(profiles.length).toBe(1);
+            expect(profiles[0].following).toBeUndefined();
+            expect(profiles[0].followedBy).toBeUndefined();
+            expect(profiles[0]).toMatchObject({
+                id: userA.username
+            });
+        })
+
+        it("UserB should be present within UserA followers list", async () => {
+            const { profiles } = await when.user_calls_getFollowers({
+                user: userB,
+                userId: userB.username,
+                limit: 25
+            })
+            expect(profiles.length).toBe(1);
+            expect(profiles[0]).toMatchObject({
+                id: userA.username
+            });
+            expect(profiles[0].following).toBe(false);
+            expect(profiles[0].followedBy).toBe(true);
+        })
+
         it("UserA should see tweets for UserB", async () => {
             await retry(async () => {
                 const { tweets, nextToken } = await when.user_calls_getMyTimeline({ user: userA, limit: 10 })
