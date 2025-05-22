@@ -136,4 +136,41 @@ describe("Given 2 authenticated users", () => {
             })
         })
     })
+    describe('When userA unfollows userB', () => {
+        beforeAll(async () => {
+            await when.user_calls_unfollow({
+                user: userA,
+                userId: userB.username
+            });
+        })
+
+        it("UserA should not see following for UserB", async () => {
+            const { following, followedBy } = await when.user_calls_getProfile({
+                user: userA, screenName: userBProfile.screenName
+            })
+            expect(following).toBe(false);
+            expect(followedBy).toBe(true);
+        })
+        
+        it("UserB should not see followedBy for UserA", async () => {
+            const { following, followedBy } = await when.user_calls_getProfile({
+                user: userB, screenName: userAProfile.screenName
+            })
+            expect(following).toBe(true);
+            expect(followedBy).toBe(false);
+        })
+
+        it("UserA should not see tweets for UserB", async () => {
+            await retry(async () => {
+                const { tweets, nextToken } = await when.user_calls_getMyTimeline({ user: userA, limit: 10 })
+                expect(nextToken).toBeFalsy()
+                expect(tweets.length).toEqual(1)
+                // Only tweet left is one sent by UserA
+                expect(tweets[0].profile.id).toEqual(userA.username)
+            }, {
+                retries: 3,
+                maxTimeout: 1000
+            })
+        })
+    })
 })

@@ -632,6 +632,25 @@ async function invoke_distributeTweetsToFollower(event) {
     }
 }
 
+async function user_calls_unfollow({ user, userId }) {
+    const query = `mutation unfollow($userId: ID!) {
+        unfollow(userId: $userId) 
+    }`
+
+    const variables = {
+        userId
+    }
+
+    const { unfollow } = await GraphQL({
+        url: process.env.APPSYNC_HTTP_URL,
+        query,
+        variables,
+        auth: user.accessToken
+    })
+
+    return unfollow
+}
+
 module.exports = {
     invoke_appsync_template,
     invoke_confirmUserSignup,
@@ -656,5 +675,6 @@ module.exports = {
     user_calls_follow,
     user_calls_getProfile,
     invoke_distributeTweets,
-    invoke_distributeTweetsToFollower
+    invoke_distributeTweetsToFollower,
+    user_calls_unfollow
 }
