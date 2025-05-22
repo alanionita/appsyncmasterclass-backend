@@ -14,7 +14,7 @@ describe("lib.util.chunk", () => {
     it("Should create 25 item chunks from array", () => {
         const input = Array(50).fill(null)
         const numbers = input.map((n) => {
-            const cnat = chance.natural({min: 0, max: 200});
+            const cnat = chance.natural({ min: 0, max: 200 });
             return cnat
         })
         const chunkSize = 25;
@@ -30,5 +30,11 @@ describe("lib.util.chunk", () => {
         expect(result.length).toEqual(1); // 1 chunk
         expect(result[0].length).toStrictEqual(1) // 1 item in chunk 1;
         expect(result[0]).toStrictEqual([1]) // 1 item in chunk 1;
+
+        const input2 = [{ name: 'test1', id: 1 }, { name: 'test2', id: 2 }];
+        const result2 = chunk(input2, chunkSize)
+        expect(result2.length).toEqual(1); // 1 chunk
+        expect(result2[0].length).toStrictEqual(2) // 2 items in chunk 1;
     })
+
 })
