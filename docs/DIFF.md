@@ -458,3 +458,9 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 No diffs
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-54-Add_tweets_to_timeline_when_following_someone
+
+### 04-55-Add_integration_tests_for_distribute-tweets-to-follower_function
+
+No diffs
+
+Release: 
