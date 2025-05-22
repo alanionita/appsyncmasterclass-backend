@@ -70,6 +70,11 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Mutation.follow.request.vtl
     response: ./appsync/resolvers/Mutation.follow.response.vtl
+  Mutation.unfollow:
+    dataSource: unfollowMutation
+    kind: UNIT # required
+    request: ./appsync/resolvers/Mutation.unfollow.request.vtl
+    response: ./appsync/resolvers/Mutation.unfollow.response.vtl
   Query.getProfile: 
     dataSource: usersTable
     kind: UNIT # required
@@ -280,6 +285,21 @@ dataSources:
       - Effect: Allow
         Action: 
           - dynamodb:PutItem
+        Resource: !GetAtt RelationshipsTable.Arn
+  unfollowMutation:
+    type: AMAZON_DYNAMODB
+    description: "unfollowMutation"
+    config:
+      tableName: !Ref RelationshipsTable
+      iamRoleStatements:
+      - Effect: Allow
+        Action: 
+          - dynamodb:UpdateItem
+        Resource: 
+          - !GetAtt UsersTable.Arn
+      - Effect: Allow
+        Action: 
+          - dynamodb:DeleteItem
         Resource: !GetAtt RelationshipsTable.Arn
 substitutions:
   TweetsTable: !Ref TweetsTable
