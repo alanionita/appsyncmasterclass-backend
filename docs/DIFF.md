@@ -490,3 +490,9 @@ Diffs:
 - serverless/appsync.yml: minor changes to the pipeline resolver definitions, due to api changes withing serverless-appsync-plugin
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-59-Implement_getFollowers_query
+
+### 04-61-Add_unit_tests_for_hydrateFollowers.request_template
+
+No diffs
+
+Release

@@ -81,7 +81,8 @@ function random_appsync_contextV2({
     args, 
     result,
     source,
-    info
+    info,
+    prev
 }) {
     try {
         const util = vtlUtil.create([], new Date(), Object())
@@ -92,7 +93,8 @@ function random_appsync_contextV2({
             arguments: args,
             result,
             source,
-            info
+            info,
+            prev
         }
 
         return {
