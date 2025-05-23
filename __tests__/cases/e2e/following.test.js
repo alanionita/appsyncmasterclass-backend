@@ -37,7 +37,7 @@ describe("Given 2 authenticated users", () => {
             });
         })
 
-        it("UserA should see following for UserB", async () => {
+        it("UserA gets UserB's profile, should see following, followedBy", async () => {
             const { following, followedBy } = await when.user_calls_getProfile({
                 user: userA, screenName: userBProfile.screenName
             })
@@ -45,7 +45,7 @@ describe("Given 2 authenticated users", () => {
             expect(followedBy).toBe(false);
         })
 
-        it("UserA should be present within UserB followers list", async () => {
+        it("UserA gets UserB.followers, should see UserA in list", async () => {
             const { profiles } = await when.user_calls_getFollowers({
                 user: userA, 
                 userId: userB.username,
@@ -59,7 +59,16 @@ describe("Given 2 authenticated users", () => {
             });
         })
 
-        it("UserB should be present within UserA followers list", async () => {
+        it("UserA gets UserB.following, should see empty list", async () => {
+            const { profiles } = await when.user_calls_getFollowing({
+                user: userA, 
+                userId: userB.username,
+                limit: 25
+            })
+            expect(profiles.length).toBe(0);
+        })
+
+        it("UserB gets UserB.followers, should see UserA in list", async () => {
             const { profiles } = await when.user_calls_getFollowers({
                 user: userB,
                 userId: userB.username,
@@ -73,7 +82,16 @@ describe("Given 2 authenticated users", () => {
             expect(profiles[0].followedBy).toBe(true);
         })
 
-        it("UserA should see tweets for UserB", async () => {
+        it("UserB gets UserB.following, should see empty list", async () => {
+            const { profiles } = await when.user_calls_getFollowing({
+                user: userB, 
+                userId: userB.username,
+                limit: 25
+            })
+            expect(profiles.length).toBe(0);
+        })
+
+        it("UserA timeline has UserB tweets", async () => {
             await retry(async () => {
                 const { tweets, nextToken } = await when.user_calls_getMyTimeline({ user: userA, limit: 10 })
                 expect(nextToken).toBeFalsy()
@@ -93,7 +111,7 @@ describe("Given 2 authenticated users", () => {
 
 
         })
-        it("UserB should see followedBy for UserA", async () => {
+        it("UserB gets UserA profile, should see followed, followedBy", async () => {
             const { following, followedBy } = await when.user_calls_getProfile({
                 user: userB, screenName: userAProfile.screenName
             })
@@ -109,7 +127,7 @@ describe("Given 2 authenticated users", () => {
                 userBtweet = await when.user_calls_tweet(userB, text);
             })
 
-            it("UserA timeline should contain new tweet", async () => {
+            it("UserA timeline should contain new tweet from UserB", async () => {
                 await retry(async () => {
                     const { tweets, nextToken } = await when.user_calls_getMyTimeline({ user: userA, limit: 10 })
                     expect(nextToken).toBeFalsy()

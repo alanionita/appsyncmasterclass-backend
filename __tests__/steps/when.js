@@ -677,6 +677,32 @@ async function user_calls_getFollowers({ user, userId, limit, givenNextToken = n
     return getFollowers;
 }
 
+async function user_calls_getFollowing({ user, userId, limit, givenNextToken = null }) {
+    const query = `query getFollowing($userId: ID!, $limit: Int!, $nextToken: String) {
+            getFollowing(userId: $userId, limit: $limit, nextToken: $nextToken) {
+                nextToken
+                profiles {
+                    ... iProfileFields
+                }
+            }
+        }`
+
+    const variables = {
+        userId,
+        limit,
+        nextToken: givenNextToken
+    }
+
+    const { getFollowing } = await GraphQL({
+        url: process.env.APPSYNC_HTTP_URL,
+        query,
+        variables,
+        auth: user.accessToken
+    })
+
+    return getFollowing;
+}
+
 module.exports = {
     invoke_appsync_template,
     invoke_confirmUserSignup,
@@ -703,5 +729,6 @@ module.exports = {
     invoke_distributeTweets,
     invoke_distributeTweetsToFollower,
     user_calls_unfollow,
-    user_calls_getFollowers
+    user_calls_getFollowers,
+    user_calls_getFollowing
 }
