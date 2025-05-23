@@ -515,4 +515,4 @@ Diffs:
 - not implemented the actions workflow in `.github/workflows/dev.yml`
 - include the workflow file for future reference as `sample_gh_workflows_dev.yml`
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-65-Set_up_cicd_pipeline_with_Github_Actions
