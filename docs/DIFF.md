@@ -502,3 +502,9 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 No diffs
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-62-Add_acceptance_tests_for_getFollowers_query
+
+### 04-63-Implement_getFollowing_query
+
+No diffs
+
+Release: 
