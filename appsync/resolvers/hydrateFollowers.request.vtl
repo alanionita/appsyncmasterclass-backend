@@ -1,5 +1,7 @@
 #if ($context.prev.result.relationships.size() == 0)
-   #return([]) 
+   #set ($response = {})
+   #set ($response.profiles = [])
+   #return($response)
 #end
 
 #set ($users = [])

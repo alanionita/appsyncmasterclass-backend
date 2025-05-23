@@ -16,7 +16,7 @@ describe("Query.getFollowers / hydrateFollowers.request template", () => {
         })
 
         const result = when.invoke_appsync_template(templatePath, context)
-        expect(result).toEqual([])
+        expect(result).toEqual({profiles: []})
     })
 
     it("Should convert relationships to UsersTable, BatchGetItem keys", () => {
