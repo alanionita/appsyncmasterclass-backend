@@ -21,7 +21,7 @@ describe("When getImgUploadUrl runs", () => {
             console.error("Missing environment variable : BUCKET_NAME")
             return;
         }
-        const s3Host = 's3-accelerate'
+        const s3Host = 's3'
         const awsHost = 'amazonaws.com'
         const signedUrlPattern = new RegExp(`https://${BUCKET_NAME}.${s3Host}.${awsHost}/${username}/.*.${fileType}\?`)
         expect(signedUrl).toMatch(signedUrlPattern)
@@ -42,7 +42,7 @@ describe("When getImgUploadUrl runs", () => {
             console.error("Missing environment variable : BUCKET_NAME")
             return;
         }
-        const s3Host = 's3-accelerate'
+        const s3Host = 's3'
         const awsHost = 'amazonaws.com'
         const signedUrlPattern = new RegExp(`https://${BUCKET_NAME}.${s3Host}.${awsHost}/${username}/.*.${fileType}\?`)
         expect(signedUrl).toMatch(signedUrlPattern)

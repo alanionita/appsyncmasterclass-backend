@@ -35,8 +35,6 @@ resources:
       AssetsBucket:
         Type: AWS::S3::Bucket
         Properties:
-          AccelerateConfiguration:
-            AccelerationStatus: Enabled
           CorsConfiguration:
             CorsRules:
               - AllowedMethods:

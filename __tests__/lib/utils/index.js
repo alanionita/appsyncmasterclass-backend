@@ -4,7 +4,7 @@ function fetchDatePattern() {
 }
 
 function makeSignedUrlPattern({ bucket, username, fileType }) {
-    const s3Host = 's3-accelerate'
+    const s3Host = 's3'
     const awsHost = 'amazonaws.com'
     const signedUrlPattern = new RegExp(`https://${bucket}.${s3Host}.${awsHost}/${username}/.*\.${fileType}\?.*`)
     return signedUrlPattern

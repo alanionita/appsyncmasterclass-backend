@@ -7,7 +7,7 @@ function makePresignedUrlPut({ region, bucket, key, contentType }) {
         if (!region || !bucket || !key || !contentType) {
             throw Error("Missing required argument: region, bucket, key, contentType")
         }
-        const client = new S3Client({ region, useAccelerateEndpoint: true });
+        const client = new S3Client({ region});
         const expiresIn = 60; // seconds, 1m
 
         // Get Signed URL
