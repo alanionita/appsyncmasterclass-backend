@@ -13,7 +13,8 @@ function makePresignedUrlPut({ region, bucket, key, contentType }) {
         // Get Signed URL
         const cmdPutObject = new PutObjectCommand({
             Bucket: bucket,
-            Key: key
+            Key: key,
+            ACL: 'private'
         });
         return getSignedUrl(client, cmdPutObject, { expiresIn });
     } catch (err) {

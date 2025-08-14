@@ -72,20 +72,12 @@ Resources:
             Action:
               - "s3:GetObject"
             Resource:
-              - !Sub 
-                - "arn:aws:s3:::${AssetsBucket}/${CognitoSub}/*"
-                - AssetsBucket: !Ref AssetsBucket
-                  CognitoSub: "{{cognito-idp.amazonaws.com:sub}}"
-          
+              - !Sub "arn:aws:s3:::${AssetsBucket}/*"          
           - Effect: Allow
             Action:
               - "s3:ListBucket"
             Resource:
               - !Sub "arn:aws:s3:::${AssetsBucket}"
-            Condition:
-              StringLike:
-                s3:prefix:
-                  - !Sub "{{cognito-idp.amazonaws.com:sub}}/*"
 
   CgIDPoolAuthRole:
     Type: AWS::IAM::Role
