@@ -7,7 +7,7 @@ async function makePresignedUrlGet({ region, bucket, key }) {
             throw Error("Missing argument: region, bucket, key")
         }
 
-        const client = new S3Client({ region, useAccelerateEndpoint: true });
+        const client = new S3Client({ region });
         const expiresIn = 60; // seconds, 1m
         const cmd = new GetObjectCommand({
             Bucket: bucket,

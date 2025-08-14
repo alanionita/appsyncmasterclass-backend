@@ -35,6 +35,15 @@ Resources:
             - ALLOW_USER_PASSWORD_AUTH
             - ALLOW_REFRESH_TOKEN_AUTH
 
+  CgIdentityPool:
+    Type: AWS::Cognito::IdentityPool
+    Properties:
+      AllowUnauthenticatedIdentities: false
+      CognitoIdentityProviders:
+        - ClientId: !Ref CgClientWeb
+          ProviderName: !GetAtt CgUserPool.ProviderName
+  
+  # Permissions
   CgSignupPerm:
     Type: AWS::Lambda::Permission
     Properties:
@@ -53,4 +62,78 @@ Resources:
       SourceAccount: !Ref AWS::AccountId
       SourceArn: !GetAtt CgUserPool.Arn
   
- 
+  CgAuthS3AccessPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - "s3:GetObject"
+            Resource:
+              - !Sub "arn:aws:s3:::${AssetsBucket}/*"          
+          - Effect: Allow
+            Action:
+              - "s3:ListBucket"
+            Resource:
+              - !Sub "arn:aws:s3:::${AssetsBucket}"
+
+  CgIDPoolAuthRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: 
+              Federated: "cognito-identity.amazonaws.com"
+            Action: 
+              - "sts:AssumeRoleWithWebIdentity"
+            Condition:
+              StringEquals: 
+                "cognito-identity.amazonaws.com:aud": !Ref CgIdentityPool
+              ForAnyValue:StringLike: 
+                "cognito-identity.amazonaws.com:amr": "authenticated"
+      ManagedPolicyArns:
+        # - !Sub "arn:aws:iam::${AWS::AccountId}:policy/CgAuthS3AccessPolicy"
+        - !Ref CgAuthS3AccessPolicy
+  CgUnauthPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - "mobileanalytics:PutEvents"
+              - "cognito-sync:*"
+            Resource: "*"
+
+  CgIDPoolUnauthRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: "cognito-identity.amazonaws.com"
+            Action: 
+              - "sts:AssumeRoleWithWebIdentity"
+            Condition:
+              StringEquals:
+                "cognito-identity.amazonaws.com:aud": !Ref CgIdentityPool
+              ForAnyValue:StringLike:
+                "cognito-identity.amazonaws.com:amr": "unauthenticated"
+      ManagedPolicyArns:
+        # - !Sub "arn:aws:iam::${AWS::AccountId}:policy/CgUnauthPolicy"
+        - !Ref CgUnauthPolicy
+  # Pool roles attachment
+  CgIDPoolRoleAttachment:
+    Type: AWS::Cognito::IdentityPoolRoleAttachment
+    Properties:
+      IdentityPoolId: !Ref CgIdentityPool
+      Roles:
+        authenticated: !GetAtt CgIDPoolAuthRole.Arn
+        unauthenticated: !GetAtt CgIDPoolUnauthRole.Arn
