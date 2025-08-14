@@ -1,24 +1,34 @@
+#set( $exp = "SET #name = :name" )
+#set( $expNames = {"#name":"name"} )
+#set( $expValues = {":name": {"S": $ctx.args.newProfile.name}} )
+
+#set( $optionalParams = {
+    "imgUrl": { "type": "S", "value": $ctx.args.newProfile.imgUrl },
+    "bgImgUrl": { "type": "S", "value": $ctx.args.newProfile.bgImgUrl },
+    "bio": { "type": "S", "value": $ctx.args.newProfile.bio },
+    "location": { "type": "S", "value": $ctx.args.newProfile.location },
+    "website": { "type": "S", "value": $ctx.args.newProfile.website },
+    "birthdate": { "type": "S", "value": $ctx.args.newProfile.birthdate }
+} )
+
+#foreach( $param in $optionalParams.entrySet() )
+    #if( $ctx.args.newProfile.containsKey($param.key) )
+        #set( $exp = "$exp, #${param.key} = :${param.key}" )
+        $!{expNames.put("#${param.key}", "${param.key}")}
+        $!{expValues.put(":${param.key}", {"${param.value.type}": $param.value.value})}
+    #end
+#end
+
 {
-    "version" : "2018-05-29",
-    "operation" : "UpdateItem",
+    "version": "2018-05-29",
+    "operation": "UpdateItem",
     "key": {
-        "id" : $util.dynamodb.toDynamoDBJson($context.identity.username)
+        "id" : $util.dynamodb.toDynamoDBJson($ctx.identity.username)
     },
-    "update" : {
-        "expression" : "set #name = :name, imgUrl = :imgUrl, bgImgUrl = :bgImgUrl, bio = :bio, #location = :location, website = :website, birthdate = :birthdate",
-        "expressionNames" : {
-           "#name" : "name",
-           "#location": "location",
-       },
-       "expressionValues" : {
-            ":name" : $util.dynamodb.toDynamoDBJson($context.arguments.newProfile.name),
-            ":imgUrl" : $util.dynamodb.toDynamoDBJson($context.arguments.newProfile.imgUrl),
-            ":bgImgUrl" : $util.dynamodb.toDynamoDBJson($context.arguments.newProfile.bgImgUrl),
-            ":bio" : $util.dynamodb.toDynamoDBJson($context.arguments.newProfile.bio),
-            ":location" : $util.dynamodb.toDynamoDBJson($context.arguments.newProfile.location),
-            ":website" : $util.dynamodb.toDynamoDBJson($context.arguments.newProfile.website),
-            ":birthdate" : $util.dynamodb.toDynamoDBJson($context.arguments.newProfile.birthdate),
-        }
+    "update": {
+        "expression": "$exp",
+        "expressionNames": $util.toJson($expNames),
+        "expressionValues": $util.toJson($expValues)
     },
     "condition" : {
         "expression" : "attribute_exists(id)"
