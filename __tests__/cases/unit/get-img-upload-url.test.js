@@ -16,14 +16,16 @@ describe("When getImgUploadUrl runs", () => {
             contentType
         })
 
-        const { BUCKET_NAME } = process.env;
-        if (!BUCKET_NAME) {
-            console.error("Missing environment variable : BUCKET_NAME")
+        const { BUCKET_NAME, REGION } = process.env;
+        if (!BUCKET_NAME || !REGION) {
+            console.error("Missing environment variables")
             return;
         }
         const s3Host = 's3'
         const awsHost = 'amazonaws.com'
-        const signedUrlPattern = new RegExp(`https://${BUCKET_NAME}.${s3Host}.${awsHost}/${username}/.*.${fileType}\?`)
+        const urlPathPattern = `https://${BUCKET_NAME}.${s3Host}.${REGION}.${awsHost}/${username}/.*.${fileType}`
+        const urlTokenPattern = `?(?:.*&)`
+        const signedUrlPattern = new RegExp(`${urlPathPattern}${urlTokenPattern}`)
         expect(signedUrl).toMatch(signedUrlPattern)
     })
 
@@ -37,14 +39,16 @@ describe("When getImgUploadUrl runs", () => {
             contentType: undefined
         })
 
-        const { BUCKET_NAME } = process.env;
-        if (!BUCKET_NAME) {
-            console.error("Missing environment variable : BUCKET_NAME")
+        const { BUCKET_NAME, REGION } = process.env;
+        if (!BUCKET_NAME || !REGION) {
+            console.error("Missing environment variables")
             return;
         }
         const s3Host = 's3'
         const awsHost = 'amazonaws.com'
-        const signedUrlPattern = new RegExp(`https://${BUCKET_NAME}.${s3Host}.${awsHost}/${username}/.*.${fileType}\?`)
+        const urlPathPattern = `https://${BUCKET_NAME}.${s3Host}.${REGION}.${awsHost}/${username}/.*.${fileType}`
+        const urlTokenPattern = `?(?:.*&)`
+        const signedUrlPattern = new RegExp(`${urlPathPattern}${urlTokenPattern}`)
         expect(signedUrl).toMatch(signedUrlPattern)
     })
 

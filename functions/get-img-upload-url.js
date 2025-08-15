@@ -69,7 +69,7 @@ module.exports.handler = async (event) => {
         return signedUrl;
     } catch (err) {
         console.error("Err [get-img-upload-url] ::", err.message)
-        console.info(JSON.stringify(err.stack))
+        console.info(JSON.stringify(err))
         if (err.$metadata) {
             console.info({ ...err.$metadata })
         }
