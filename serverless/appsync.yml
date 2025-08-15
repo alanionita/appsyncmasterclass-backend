@@ -218,6 +218,11 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/MyProfile.tweets.request.vtl
     response: ./appsync/resolvers/MyProfile.tweets.response.vtl
+  MyProfile.imgUrl:
+    kind: UNIT # required
+    type: MyProfile
+    field: imgUrl
+    dataSource: getImagePresignedUrlFn
 dataSources:
   api:
     type: 'NONE'
@@ -333,6 +338,10 @@ dataSources:
         Action: 
           - dynamodb:DeleteItem
         Resource: !GetAtt RelationshipsTable.Arn
+  getImagePresignedUrlFn:
+    type: 'AWS_LAMBDA'
+    config:
+      functionName: getImagePresignedUrl
 substitutions:
   TweetsTable: !Ref TweetsTable
   TweetLikesTable: !Ref TweetLikesTable

@@ -703,6 +703,32 @@ async function user_calls_getFollowing({ user, userId, limit, givenNextToken = n
     return getFollowing;
 }
 
+async function invoke_getImgPresignedUrl({ username, url }) {
+    try {
+        const handler = require('../../functions/get-img-presigned-url').handler
+        const context = {}
+        const event = {
+            identity: {
+                username
+            },
+            source: {
+                imgUrl: url
+            },
+        }
+
+        return await handler(event, context)
+    } catch (err) {
+        console.error("Err [tests/steps/when/invoke_getImgPresignedUrl] ::", err.message);
+        console.info(JSON.stringify(err))
+        if (err.$metadata) {
+            const { requestId, cfId, extendedRequestId } = err.$metadata;
+            console.info({ requestId, cfId, extendedRequestId })
+        }
+        throw err;
+    }
+
+}
+
 module.exports = {
     invoke_appsync_template,
     invoke_confirmUserSignup,
@@ -730,5 +756,6 @@ module.exports = {
     invoke_distributeTweetsToFollower,
     user_calls_unfollow,
     user_calls_getFollowers,
-    user_calls_getFollowing
+    user_calls_getFollowing,
+    invoke_getImgPresignedUrl
 }

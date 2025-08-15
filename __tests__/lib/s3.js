@@ -17,7 +17,7 @@ async function makePresignedUrlGet({ region, bucket, key }) {
         // Get Signed URL
         return await getSignedUrl(client, cmd, { expiresIn });
     } catch (err) {
-        console.error("Err [createPresignedUrl] ::", err.message)
+        console.error("Err [makePresignedUrlGet] ::", err.message)
         console.info(JSON.stringify(err.stack))
     }
 };

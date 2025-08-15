@@ -21,6 +21,15 @@ getImageUploadUrl:
         - s3:PutObjectAcl
       Resource: !Sub ${AssetsBucket.Arn}/*
 
+getImagePresignedUrl: 
+  handler: functions/get-img-presigned-url.handler
+  environment:
+    BUCKET_NAME: !Ref AssetsBucket
+  iamRoleStatements:
+    - Effect: Allow
+      Action: 
+        - s3:GetObject
+      Resource: !Sub ${AssetsBucket.Arn}/*
 tweet:
   handler: functions/tweet.handler
   environment:
