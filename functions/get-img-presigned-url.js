@@ -37,6 +37,8 @@ module.exports.handler = async (event) => {
 
         const { imgUrl } = event.source
 
+        if (!imgUrl || imgUrl.length === 0) return null;
+
         const { tokens, filePath } = awsUrlsLib.getTokensAndFilepath(imgUrl)
         const validGetId = 'GetObject';
         const getId = awsUrlsLib.extractTokenValue(tokens, 'x-id')

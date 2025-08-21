@@ -151,4 +151,21 @@ describe("When getImagePresignedUrl runs", () => {
 
         expect(expired).toBeFalsy();
     })
+
+    it("When old url is falsy: should return null", async () => {
+        const { BUCKET_NAME, REGION } = process.env;
+        if (!BUCKET_NAME || !REGION) {
+            console.error("Missing environment variables")
+            return;
+        }
+        
+        const signedUrl = await when.invoke_getImgPresignedUrl({
+            username: chance.guid(),
+            url: null
+        })
+
+
+        expect(signedUrl).toBeNull()
+
+    })
 })
