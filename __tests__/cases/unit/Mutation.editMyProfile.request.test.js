@@ -52,7 +52,9 @@ describe("Mutation.editMyProfile.request template", () => {
                 .toBe('SET #name = :name');
 
             expect(result.update.expressionNames["#name"]).toBe('name')
-            expect(result.update.expressionValues[":name"]).toBe(args.newProfile.name)
+            expect(result.update.expressionValues[":name"]).toMatchObject({
+                "S": args.newProfile.name
+            })
         })
     })
     describe('When newProfile.* keys are given', () => {
@@ -78,12 +80,42 @@ describe("Mutation.editMyProfile.request template", () => {
                 .toBe('SET #name = :name, #bio = :bio, #website = :website');
 
             expect(result.update.expressionNames["#bio"]).toBe('bio')
-            expect(result.update.expressionValues[":bio"]).toBe(args.newProfile.bio)
+            expect(result.update.expressionValues[":bio"]).toMatchObject({
+                "S": args.newProfile.bio
+            })
 
             expect(result.update.expressionNames["#website"]).toBe('website')
-            expect(result.update.expressionValues[":website"]).toBe(args.newProfile.website)
-        })
+            expect(result.update.expressionValues[":website"]).toMatchObject({
+                "S": args.newProfile.website
+            })
+        });
+        it("Should handle imgUrl from 'newProfile' keys", async () => {
+            const templatePath = path.resolve(__dirname, "../../../appsync/resolvers/Mutation.editMyProfile.request.vtl")
 
+            const identity = {
+                username: chance.guid()
+            }
+
+            const args = {
+                newProfile: {
+                    name: 'Test User',
+                    imgUrl: 'https://appsyncmasterclass-backend-dev-assetsbucket-uzasvskxkdto.s3.eu-west-2.amazonaws.com/36921294-e011-700d-727e-c5e3a7827014/01K36GDK5BFP8H5ERNWD6M20ZQ.jpg',
+                }
+            }
+
+            const context = given.random_appsync_context(identity, args)
+
+            const result = await when.invoke_appsync_EvaluateMappingTemplate(templatePath, context.ctx)
+
+            console.log('result ', JSON.stringify(result))
+            expect(result.update.expression)
+                .toBe('SET #name = :name, #imgUrl = :imgUrl');
+
+            expect(result.update.expressionNames["#imgUrl"]).toBe('imgUrl')
+            expect(result.update.expressionValues[":imgUrl"]).toMatchObject({
+                "S": args.newProfile.imgUrl
+            })
+        })
 
     })
     describe('When newProfile.* keys are null', () => {
@@ -113,7 +145,9 @@ describe("Mutation.editMyProfile.request template", () => {
             expect(result.update.expressionValues[":bio"]).toBeUndefined()
 
             expect(result.update.expressionNames["#website"]).toBe('website')
-            expect(result.update.expressionValues[":website"]).toBe(args.newProfile.website)
+            expect(result.update.expressionValues[":website"]).toMatchObject({
+                "S": args.newProfile.website
+            })
         })
     })
 })

@@ -15,13 +15,17 @@
 
             $!{expSet.put("#${entry.key}", ":${entry.key}")}
             $!{expNames.put("#${entry.key}", "$entry.key")}
-            $!{expValues.put(":${entry.key}", ${entry.value})}
+            $!{expValues.put(":${entry.key}", { 
+                "S": "${entry.value}"
+            })}
             
         #end
     #else
         $!{expSet.put("#${entry.key}", ":${entry.key}")}
         $!{expNames.put("#${entry.key}", "$entry.key")}
-        $!{expValues.put(":${entry.key}", ${entry.value})}
+        $!{expValues.put(":${entry.key}", { 
+            "S": "${entry.value}"
+        })}
     #end
 #end
 
