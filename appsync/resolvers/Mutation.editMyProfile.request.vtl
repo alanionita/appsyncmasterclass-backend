@@ -1,21 +1,52 @@
-#set( $exp = "SET #name = :name" )
-#set( $expNames = {"#name":"name"} )
-#set( $expValues = {":name": {"S": $ctx.args.newProfile.name}} )
+#set( $expNames  = {} )
+#set( $expValues = {} )
+#set( $expSet = {} )
+#set( $expRemove = [] )
 
-#set( $optionalParams = {
-    "imgUrl": { "type": "S", "value": $ctx.args.newProfile.imgUrl },
-    "bgImgUrl": { "type": "S", "value": $ctx.args.newProfile.bgImgUrl },
-    "bio": { "type": "S", "value": $ctx.args.newProfile.bio },
-    "location": { "type": "S", "value": $ctx.args.newProfile.location },
-    "website": { "type": "S", "value": $ctx.args.newProfile.website },
-    "birthdate": { "type": "S", "value": $ctx.args.newProfile.birthdate }
-} )
+#foreach( $entry in $context.arguments.newProfile.entrySet() )
+    #if( $entry.key != "name" )
+        #if( (!$entry.value) && ("$!{entry.value}" == "") )
+            ## If the argument is set to null, then remove that attribute from the item in DynamoDB **
 
-#foreach( $param in $optionalParams.entrySet() )
-    #if( $ctx.args.newProfile.containsKey($param.key) )
-        #set( $exp = "$exp, #${param.key} = :${param.key}" )
-        $!{expNames.put("#${param.key}", "${param.key}")}
-        $!{expValues.put(":${param.key}", {"${param.value.type}": $param.value.value})}
+            #set( $discard = ${expRemove.add("#${entry.key}")} )
+            $!{expNames.put("#${entry.key}", "$entry.key")}
+        #else
+            ## Otherwise set (or update) the attribute on the item in DynamoDB **
+
+            $!{expSet.put("#${entry.key}", ":${entry.key}")}
+            $!{expNames.put("#${entry.key}", "$entry.key")}
+            $!{expValues.put(":${entry.key}", ${entry.value})}
+            
+        #end
+    #else
+        $!{expSet.put("#${entry.key}", ":${entry.key}")}
+        $!{expNames.put("#${entry.key}", "$entry.key")}
+        $!{expValues.put(":${entry.key}", ${entry.value})}
+    #end
+#end
+
+## Start building the update expression, starting with attributes we are going to SET **
+
+#set( $expression = "" )
+#if( !${expSet.isEmpty()} )
+    #set( $expression = "SET" )
+    #foreach( $entry in $expSet.entrySet() )
+        #set( $expression = "${expression} ${entry.key} = ${entry.value}" )
+        #if ( $foreach.hasNext )
+            #set( $expression = "${expression}," )
+        #end
+    #end
+#end
+
+## Continue building the update expression, adding attributes we are going to REMOVE **
+#if( !${expRemove.isEmpty()} )
+    #set( $expression = "${expression} REMOVE" )
+
+    #foreach( $entry in $expRemove )
+        #set( $expression = "${expression} ${entry}" )
+        #if ( $foreach.hasNext )
+            #set( $expression = "${expression}," )
+        #end
     #end
 #end
 
@@ -23,14 +54,18 @@
     "version": "2018-05-29",
     "operation": "UpdateItem",
     "key": {
-        "id" : $util.dynamodb.toDynamoDBJson($ctx.identity.username)
+        "id" : $util.dynamodb.toDynamoDBJson($context.identity.username)
     },
     "update": {
-        "expression": "$exp",
-        "expressionNames": $util.toJson($expNames),
-        "expressionValues": $util.toJson($expValues)
+        "expression" : "${expression}"
+        #if( !${expNames.isEmpty()} )
+            ,"expressionNames" : $utils.toJson($expNames)
+        #end
+        #if( !${expValues.isEmpty()} )
+            ,"expressionValues" : $utils.toJson($expValues)
+        #end
     },
     "condition" : {
         "expression" : "attribute_exists(id)"
-    },
+    }
 }

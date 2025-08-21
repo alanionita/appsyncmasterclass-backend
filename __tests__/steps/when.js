@@ -2,6 +2,10 @@ const { CognitoIdentityProviderClient, SignUpCommand } = require("@aws-sdk/clien
 const fs = require("fs");
 const vtlMapper = require("@aws-amplify/amplify-appsync-simulator/lib/velocity/value-mapper/mapper")
 const vtlTemplate = require("amplify-velocity-template");
+const {
+    AppSyncClient,
+    EvaluateMappingTemplateCommand
+} = require("@aws-sdk/client-appsync");
 const { GraphQL } = require('../lib/graphql');
 const GraphQLFragments = require("../lib/utils/graphqlFragments");
 const { throwWithLabel } = require("../lib/utils");
@@ -121,6 +125,36 @@ function invoke_appsync_template(templatePath, context) {
     const lastCommaPattern = /\,(?=\s*?[\}\]])/g;
     const parsedRender = render.replace(lastCommaPattern, '');
     return JSON.parse(parsedRender)
+}
+
+async function invoke_appsync_EvaluateMappingTemplate(templatePath, context) {
+    try {
+
+        const { REGION } = process.env;
+    
+        if (!REGION) throw Error("Missing required env variables")
+    
+        const client = new AppSyncClient({ region: REGION });
+    
+        if (!client) throw Error('Problem with AppSync client initialisation')
+
+        const template = fs.readFileSync(templatePath, { encoding: "utf-8" })
+    
+        if (!template) throw Error('Template not found')
+
+        const command = new EvaluateMappingTemplateCommand({
+            template,
+            context: JSON.stringify(context)
+        });
+
+        const response = await client.send(command);
+        const result = JSON.parse(response.evaluationResult);
+        return result
+    } catch (err) {
+        console.error('Err [steps.when.invoke_appsync_EvaluateMappingTemplate] :', err.message);
+        console.info(JSON.stringify(err))
+        return err
+    }
 }
 
 
@@ -757,5 +791,6 @@ module.exports = {
     user_calls_unfollow,
     user_calls_getFollowers,
     user_calls_getFollowing,
-    invoke_getImgPresignedUrl
+    invoke_getImgPresignedUrl,
+    invoke_appsync_EvaluateMappingTemplate
 }
