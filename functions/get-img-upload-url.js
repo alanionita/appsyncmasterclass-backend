@@ -2,7 +2,7 @@ const { PutObjectCommand, S3Client } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const ulid = require('ulid');
 
-function makePresignedUrlPut({ region, bucket, key, contentType }) {
+async function makePresignedUrlPut({ region, bucket, key, contentType }) {
     try {
         if (!region || !bucket || !key || !contentType) {
             throw Error("Missing required argument: region, bucket, key, contentType")
@@ -16,7 +16,7 @@ function makePresignedUrlPut({ region, bucket, key, contentType }) {
             Key: key,
             ACL: 'private'
         });
-        return getSignedUrl(client, cmdPutObject, { expiresIn });
+        return await getSignedUrl(client, cmdPutObject, { expiresIn });
     } catch (err) {
         console.error("Err [makePresignedUrlPut] ::", err.message)
         console.info(JSON.stringify(err.stack))
@@ -59,14 +59,17 @@ module.exports.handler = async (event) => {
             throw new Error('ContentType should be an image')
         }
 
-        const signedUrl = makePresignedUrlPut({
+        const signedUrl = await makePresignedUrlPut({
             region: REGION,
             bucket: BUCKET_NAME,
             key: keyExt,
             contentType
         })
 
-        return signedUrl;
+        return {
+            url: signedUrl,
+            fileKey: keyExt
+        };
     } catch (err) {
         console.error("Err [get-img-upload-url] ::", err.message)
         console.info(JSON.stringify(err))
