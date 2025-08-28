@@ -1,4 +1,5 @@
 const chance = require('chance').Chance();
+const { makeSignedUrlPattern } = require('../../lib/utils');
 const when = require("../../steps/when")
 
 require("dotenv").config()
@@ -12,16 +13,16 @@ describe("When getImgUploadUrl runs", () => {
             console.error("Missing environment variables")
             return;
         }
-        
+
         const username = chance.guid();
         const extension = `.${fileType}`
         const contentType = `image/${fileType}`
-        const s3Host = 's3'
-        const awsHost = 'amazonaws.com'
-        const urlPathPattern = `https://${BUCKET_NAME}.${s3Host}.${REGION}.${awsHost}/${username}/.*.${fileType}`
-        const urlTokenPattern = `?(?:.*&)`
-        const signedUrlPattern = new RegExp(`${urlPathPattern}${urlTokenPattern}`)
-
+        const signedUrlPattern = makeSignedUrlPattern({
+            bucket: BUCKET_NAME,
+            region: REGION,
+            username,
+            fileType,
+        })
         const res = await when.invoke_getImgUploadUrl({
             username,
             extension,
@@ -50,11 +51,12 @@ describe("When getImgUploadUrl runs", () => {
             console.error("Missing environment variables")
             return;
         }
-        const s3Host = 's3'
-        const awsHost = 'amazonaws.com'
-        const urlPathPattern = `https://${BUCKET_NAME}.${s3Host}.${REGION}.${awsHost}/${username}/.*.${fileType}`
-        const urlTokenPattern = `?(?:.*&)`
-        const signedUrlPattern = new RegExp(`${urlPathPattern}${urlTokenPattern}`)
+        const signedUrlPattern = makeSignedUrlPattern({
+            bucket: BUCKET_NAME,
+            region: REGION,
+            username,
+            fileType,
+        })
         expect(res.url).toBeDefined();
         expect(res.fileKey).toBeDefined();
         expect(res.url).toMatch(signedUrlPattern)

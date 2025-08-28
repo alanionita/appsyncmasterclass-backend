@@ -3,11 +3,13 @@ function fetchDatePattern() {
     return datePattern
 }
 
-function makeSignedUrlPattern({ bucket, username, fileType }) {
+function makeSignedUrlPattern({ bucket, username, fileType, region }) {
     const s3Host = 's3'
     const awsHost = 'amazonaws.com'
-    const signedUrlPattern = new RegExp(`https://${bucket}.${s3Host}.${awsHost}/${username}/.*\.${fileType}\?.*`)
-    return signedUrlPattern
+    const urlPathPattern = `https://${bucket}.${s3Host}.${region}.${awsHost}/${username}/.*.${fileType}`
+    const urlTokenPattern = `?(?:.*&)`
+    const pattern = new RegExp(`${urlPathPattern}${urlTokenPattern}`)
+    return pattern
 }
 
 function makeExtContentType(fileType) {
