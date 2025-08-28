@@ -252,7 +252,10 @@ async function user_calls_getImageUploadUrl({
 }) {
     try {
         const query = `query getImageUploadUrl ($extension: String, $contentType: String) {
-            getImageUploadUrl(extension: $extension, contentType: $contentType)
+            getImageUploadUrl(extension: $extension, contentType: $contentType) {
+                url
+                fileKey
+            }
         }`
 
         const variables = {

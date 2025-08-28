@@ -48,33 +48,36 @@ describe("Given and authenticated user", () => {
     it("The user can get a URL to upload new profile image", async () => {
         const fileType = 'png';
         const { extension, contentType } = makeExtContentType(fileType)
-        const uploadUrl = await when.user_calls_getImageUploadUrl({
+        const { url, fileKey } = await when.user_calls_getImageUploadUrl({
             user,
             extension,
             contentType
         })
 
-        const { BUCKET_NAME } = process.env;
-
-        if (BUCKET_NAME) {
-            const signedUrlPattern = makeSignedUrlPattern({
-                bucket: BUCKET_NAME,
-                username: user.username,
-                fileType
-            })
-
-            expect(uploadUrl).toMatch(signedUrlPattern)
-
-            const filePath = path.join(__dirname, '../../data/appsync.png');
-            await then.user_upload({
-                uploadUrl,
-                filePath,
-                contentType
-            })
-            const downloadUrl = uploadUrl.split('?')[0];
-            const [protocol, _, host, folder, file] = downloadUrl.split("/");
-            await then.user_download(`${folder}/${file}`)
+        const { BUCKET_NAME, REGION } = process.env;
+        if (!BUCKET_NAME || !REGION) {
+            console.error("Missing environment variables")
+            return;
         }
+
+        const signedUrlPattern = makeSignedUrlPattern({
+            bucket: BUCKET_NAME,
+            region: REGION,
+            username: user.username,
+            fileType
+        })
+
+        expect(url).toMatch(signedUrlPattern)
+        expect(fileKey.includes(fileType)).toBeTruthy()
+        expect(fileKey.includes(user.username)).toBeTruthy()
+
+        const filePath = path.join(__dirname, '../../data/appsync.png');
+        await then.user_upload({
+            uploadUrl: url,
+            filePath,
+            contentType
+        })
+        await then.user_download(fileKey)
     })
 
     it("User can edit their profile with editMyProfile", async () => {

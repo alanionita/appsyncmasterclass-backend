@@ -5,7 +5,7 @@ schema {
 
 type Query {
 
-    getImageUploadUrl(extension: String, contentType: String): AWSURL!
+    getImageUploadUrl(extension: String, contentType: String): ImageUploadUrlRes
 
     getMyProfile: MyProfile!
 
@@ -153,4 +153,9 @@ type UnhydratedTweetsPage {
 type ProfilesPage {
     profiles: [IProfile!]
     nextToken: String
+}
+
+type ImageUploadUrlRes {
+    url: AWSURL!
+    fileKey: String!
 }
