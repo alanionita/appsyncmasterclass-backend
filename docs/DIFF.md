@@ -516,3 +516,18 @@ Diffs:
 - include the workflow file for future reference as `sample_gh_workflows_dev.yml`
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/04-65-Set_up_cicd_pipeline_with_Github_Actions
+
+### 05-23-Profile_page_edit_profile_details 
+
+Diffs: 
+- Original: implements uploading via a public bucket, but this is not recommended; a lot harder in 2025 to turn the buckets public than implementing private bucket access
+- Implements Cognito Identity Pool; with authenticated and unauthenticated roles; grants S3 access via the IdP; forces private ACLs on PutObject() commands ; allows authenticated users to make PutObject request directly via Amplify client framework
+- Removes the use of S3 transfer acceleration for cost saving
+- Mutation.editMyProfile: handles optional newProfile parameters; avoids a scenario where params not present would be set to null in DynamoDB
+- Lambda: adds new getImagePresignedUrl lambda as a nested resolver to MyProfile type, which receives source signed url, checks expiry, returns new signed url if source url is expired
+- Mutation.editMyProfile: adds improved VTL using AWS example, allowing the SET and REMOVE of attributes depending on incoming parameters; adds new unit test; adds new template testing util that hits the Appsync API directly to verify the mapping template; installs the appsync-client for this new util; the new template testing util is less flaky that installed package template compiler and seems more reliable for testing 
+- Lambda/get-img-upload-url: refactored to return fileKey as well as the url; gaining certainty over what the fileKey is and removing the need to parse fileKey from the url in the clients
+
+Release: 
+
+Relates to the following frontend release: https://github.com/alanionita/appsyncmasterclass-frontend/releases/tag/05-23-Profile_page_edit_profile_details
