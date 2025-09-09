@@ -79,6 +79,17 @@ Resources:
               - "s3:ListBucket"
             Resource:
               - !Sub "arn:aws:s3:::${AssetsBucket}"
+          # TODO: requires more testing because it didn't seem to work correctly
+          - Effect: Allow
+            Action:
+              - "s3:PutObject"
+            Resource:
+              - Fn::Join: ['', [ !Sub "arn:aws:s3:::${AssetsBucket}/", '$', '{cognito-idp.amazonaws.com:sub}', '/*']]
+            Condition: {
+              StringEquals: {
+                "cognito-identity.amazonaws.com:aud": !Ref CgIdentityPool
+              }
+            }
 
   CgIDPoolAuthRole:
     Type: AWS::IAM::Role
