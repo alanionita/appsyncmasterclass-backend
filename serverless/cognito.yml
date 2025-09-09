@@ -71,6 +71,7 @@ Resources:
           - Effect: Allow
             Action:
               - "s3:GetObject"
+              - "s3:PutObject"
             Resource:
               - !Sub "arn:aws:s3:::${AssetsBucket}/*"          
           - Effect: Allow
@@ -96,7 +97,6 @@ Resources:
               ForAnyValue:StringLike: 
                 "cognito-identity.amazonaws.com:amr": "authenticated"
       ManagedPolicyArns:
-        # - !Sub "arn:aws:iam::${AWS::AccountId}:policy/CgAuthS3AccessPolicy"
         - !Ref CgAuthS3AccessPolicy
   CgUnauthPolicy:
     Type: AWS::IAM::ManagedPolicy
@@ -127,7 +127,6 @@ Resources:
               ForAnyValue:StringLike:
                 "cognito-identity.amazonaws.com:amr": "unauthenticated"
       ManagedPolicyArns:
-        # - !Sub "arn:aws:iam::${AWS::AccountId}:policy/CgUnauthPolicy"
         - !Ref CgUnauthPolicy
   # Pool roles attachment
   CgIDPoolRoleAttachment:
