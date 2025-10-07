@@ -547,4 +547,4 @@ Diffs:
 - @middy/*: new version of the library is ESM exclusive so the `lambda/sync-*-to-algolia` were converted to .mjs; util/algolia was also converted
 - @middy/ssm: minor changes to the configuration; `throwOnFailedCall` is no longer support and is default when using `etToContext: true`; `cacheExpiryInMillis` is now `cacheExpiry`, calls to SSM for params are made within `fetchData` object; opted to keep the original handler outside of the middy config, to maintain legibility and separation of concerns
 
-Release:
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-05-Securely_handle_Algolia_admin_keys
