@@ -107,7 +107,6 @@ describe("Mutation.editMyProfile.request template", () => {
 
             const result = await when.invoke_appsync_EvaluateMappingTemplate(templatePath, context.ctx)
 
-            console.log('result ', JSON.stringify(result))
             expect(result.update.expression)
                 .toBe('SET #name = :name, #imgUrl = :imgUrl');
 

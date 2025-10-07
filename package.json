@@ -2,7 +2,10 @@
   "name": "appsyncmasterclass-backend",
   "version": "1.0.0",
   "private": true,
-  "main": "index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=20.x"
+  },
   "scripts": {
     "sls": "sls",
     "deploy": "npm run sls -- deploy",
@@ -43,6 +46,8 @@
     "serverless-iam-roles-per-function": "^3.2.0"
   },
   "dependencies": {
+    "@middy/core": "^6.4.5",
+    "@middy/ssm": "^6.4.5",
     "algoliasearch": "^5.39.0",
     "chance": "^1.1.12",
     "date-fns": "^4.1.0",

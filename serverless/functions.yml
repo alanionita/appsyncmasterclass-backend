@@ -172,9 +172,12 @@ syncUsersToAlgolia:
     - stream:
        type: dynamodb
        arn: !GetAtt UsersTable.StreamArn
-  environment:
-    ALGOLIA_APP_ID: xxx
-    ALGOLIA_WRT_KEY: xxx
+  iamRoleStatements:
+    - Effect: Allow
+      Action: ssm:GetParameters
+      Resource:
+        - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-app-id
+        - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-admin-key
 
 syncTweetsToAlgolia:
   handler: functions/sync-tweets-to-algolia.handler
@@ -182,6 +185,9 @@ syncTweetsToAlgolia:
     - stream:
        type: dynamodb
        arn: !GetAtt TweetsTable.StreamArn
-  environment:
-    ALGOLIA_APP_ID: xxx
-    ALGOLIA_WRT_KEY: xxx
+  iamRoleStatements:
+    - Effect: Allow
+      Action: ssm:GetParameters
+      Resource:
+        - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-app-id
+        - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-admin-key
