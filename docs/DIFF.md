@@ -528,6 +528,15 @@ Diffs:
 - Mutation.editMyProfile: adds improved VTL using AWS example, allowing the SET and REMOVE of attributes depending on incoming parameters; adds new unit test; adds new template testing util that hits the Appsync API directly to verify the mapping template; installs the appsync-client for this new util; the new template testing util is less flaky that installed package template compiler and seems more reliable for testing 
 - Lambda/get-img-upload-url: refactored to return fileKey as well as the url; gaining certainty over what the fileKey is and removing the need to parse fileKey from the url in the clients
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/05-23-Profile_page_edit_profile_details
 
 Relates to the following frontend release: https://github.com/alanionita/appsyncmasterclass-frontend/releases/tag/05-23-Profile_page_edit_profile_details
+
+### 06-04-Sync_users_and_tweets_to_Algolia
+
+Diffs:
+- util/algolia.js: v4 requires that `indexName` is passed to each method and `initIndex` has now been removed; solution here uses curried functions in order to maintain the same api at Lambda level, but introduces some changes to the util; output of init methods also include the original client;
+- util/algolia.js: because of the removal of the `initIndex` the design changes slightly to focus on the `client` and not on the `index` thus meaning that we store multiple Algolia clients per logical concern; 
+- error handling: introduces further error handling to original
+
+Release:
