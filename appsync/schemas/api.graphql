@@ -21,6 +21,7 @@ type Query {
 
     getFollowing(userId: ID!, limit: Int!, nextToken: String): ProfilesPage!
 
+    search(query: String!, mode: SearchMode!, limite: Int!, nextToken: String): SearchResultsPage!
 }
 
 type Mutation {
@@ -34,6 +35,14 @@ type Mutation {
     follow(userId: ID!): Boolean!
     unfollow(userId: ID!): Boolean!
 }   
+
+enum SearchMode {
+    Top
+    Latest
+    People
+    Photos
+    Videos
+}
 
 input ProfileInput {
     name: String!
@@ -158,4 +167,11 @@ type ProfilesPage {
 type ImageUploadUrlRes {
     url: AWSURL!
     fileKey: String!
+}
+
+union SearchResult = MyProfile | OtherProfile | Tweet | Reply
+
+type SearchResultsPage {
+    results: [SearchResult!]
+    nextToken: String
 }
