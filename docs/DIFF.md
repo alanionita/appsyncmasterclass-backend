@@ -553,4 +553,4 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No diffs
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-06-Add_search_to_GraphQL_schema
