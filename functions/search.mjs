@@ -1,7 +1,7 @@
 import Chance from 'chance'
 import ssm from '@middy/ssm'
 import middy from '@middy/core'
-import { initUsersIndex } from "../lib/algolia.mjs"
+import { initTweetsIndex, initUsersIndex } from "../lib/algolia.mjs"
 
 const { STAGE } = process.env;
 const chance = new Chance();
@@ -89,6 +89,48 @@ async function searchUsers({ context, userId, query, limit = 10, nextToken }) {
     }
 }
 
+async function searchTweets({ context, query, limit = 10, nextToken }) {
+    try {
+        const { ALGOLIA_APP_ID, ALGOLIA_WRITE_KEY } = context;
+
+        if (!ALGOLIA_APP_ID || !ALGOLIA_WRITE_KEY) {
+            throw Error("Missing context variables")
+        }
+
+        const searchParams = parseNextToken(nextToken) || {
+            query,
+            hitsPerPage: limit,
+            page: 0
+        }
+
+        const tweetsIndex = await initTweetsIndex({
+            appID: ALGOLIA_APP_ID,
+            apiKey: ALGOLIA_WRITE_KEY,
+            stage: STAGE
+        })
+
+        const results = await tweetsIndex.search(searchParams)
+
+        const { hits, page, nbPages } = results
+
+        let nextSearchParams
+        if (page + 1 >= nbPages) {
+            nextSearchParams = null
+        } else {
+            nextSearchParams = Object.assign({}, searchParams, { page: page + 1 })
+        }
+
+        return {
+            results: hits,
+            nextToken: genNextToken(nextSearchParams)
+        }
+    } catch (err) {
+        console.error('Err (searchLambda/searchTweets) :', err.message)
+        console.info('Err details) :', JSON.stringify(err))
+        return err
+    }
+}
+
 async function lambdaHandler(event, context) {
     try {
         if (!STAGE) {
@@ -107,8 +149,7 @@ async function lambdaHandler(event, context) {
             case SearchMode.people:
                 return await searchUsers({ context, userId, query, limit, nextToken })
             case SearchMode.latest:
-                // TODO: add searchTweets
-                // return await searchTweets({ query, limit, nextToken })
+                return await searchTweets({ context, query, limit, nextToken })
             default:
                 throw Error("Unsupported search mode")
         }
