@@ -345,11 +345,11 @@ dataSources:
   getImagePresignedUrlFn:
     type: 'AWS_LAMBDA'
     config:
-      functionName: 
+      functionName: getImagePresignedUrl
   searchFn:
-      type: 'AWS_LAMBDA'
-      config:
-        functionName: search
+    type: 'AWS_LAMBDA'
+    config:
+      functionName: search
 substitutions:
   TweetsTable: !Ref TweetsTable
   TweetLikesTable: !Ref TweetLikesTable
