@@ -112,6 +112,10 @@ resolvers:
     functions:
       - getFollowing
       - hydrateFollowing
+  Query.search:
+    kind: UNIT # required
+    field: search
+    dataSource: searchFn
   # Nested fields
   Tweet.profile:
     type: Tweet
@@ -341,7 +345,11 @@ dataSources:
   getImagePresignedUrlFn:
     type: 'AWS_LAMBDA'
     config:
-      functionName: getImagePresignedUrl
+      functionName: 
+  searchFn:
+      type: 'AWS_LAMBDA'
+      config:
+        functionName: search
 substitutions:
   TweetsTable: !Ref TweetsTable
   TweetLikesTable: !Ref TweetLikesTable
