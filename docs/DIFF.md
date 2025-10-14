@@ -549,8 +549,15 @@ Diffs:
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-05-Securely_handle_Algolia_admin_keys
 
-###  06-06-Add_search_to_GraphQL_schema 
+### 06-06-Add_search_to_GraphQL_schema 
 
 No diffs
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-06-Add_search_to_GraphQL_schema
+
+### 06-07-Implement_search_query
+
+Diffs:
+- lib/algolia: due to changes to the api created a shadow .search() method for each index in order to maintain the same call signature inside the handlers; lib util now uses the `.searchSingleIndex()` method
+
+Release: 
