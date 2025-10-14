@@ -559,5 +559,8 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 Diffs:
 - lib/algolia: due to changes to the api created a shadow .search() method for each index in order to maintain the same call signature inside the handlers; lib util now uses the `.searchSingleIndex()` method
+- scripts/*: updates to use aws-sdk v3 and ESM
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-07-Implement_search_query
+
+### 
