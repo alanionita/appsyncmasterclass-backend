@@ -21,7 +21,7 @@ type Query {
 
     getFollowing(userId: ID!, limit: Int!, nextToken: String): ProfilesPage!
 
-    search(query: String!, mode: SearchMode!, limite: Int!, nextToken: String): SearchResultsPage!
+    search(query: String!, mode: SearchMode!, limit: Int!, nextToken: String): SearchResultsPage!
 }
 
 type Mutation {
