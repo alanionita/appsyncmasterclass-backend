@@ -7,7 +7,7 @@ const throwOnErrors = ({ query, variables, errors }) => {
     if (errors) {
         const errorMessage = `
             query: ${query.substr(0, 100)}
-            variales: ${JSON.stringify(variables, null, 2)}
+            variables: ${JSON.stringify(variables, null, 2)}
             error: ${JSON.stringify(errors, null, 2)}
         `
         throw new Error(errorMessage)

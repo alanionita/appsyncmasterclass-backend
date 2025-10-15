@@ -563,4 +563,8 @@ Diffs:
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-07-Implement_search_query
 
-### 
+### 06-08-Add_tests_for_search_query
+
+No diffs
+
+Release:

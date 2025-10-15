@@ -766,6 +766,45 @@ async function invoke_getImgPresignedUrl({ username, url }) {
 
 }
 
+async function user_calls_search({ user, query, mode, limit, givenNextToken = null }) {
+    const gqlQuery = `query search($query: String!, $limit: Int!, $nextToken: String) {
+            search(limit: $limit, mode: ${mode}, query: $query, nextToken: $nextToken) {
+                nextToken
+                results {
+                      __typename
+                        ... on MyProfile {
+                            ... myProfileFields
+                        }
+                        ... on OtherProfile {
+                            ... otherProfileFields
+                        }
+                        ... on Tweet {
+                            ... tweetFields
+                        }
+                        ... on Reply {
+                            ... replyFields
+                        }
+                }
+            }
+        }`
+
+    const variables = {
+        query,
+        // mode,
+        limit,
+        nextToken: givenNextToken
+    }
+
+    const { search } = await GraphQL({
+        url: process.env.APPSYNC_HTTP_URL,
+        query: gqlQuery,
+        variables,
+        auth: user.accessToken
+    })
+
+    return search;
+}
+
 module.exports = {
     invoke_appsync_template,
     invoke_confirmUserSignup,
@@ -795,5 +834,6 @@ module.exports = {
     user_calls_getFollowers,
     user_calls_getFollowing,
     invoke_getImgPresignedUrl,
-    invoke_appsync_EvaluateMappingTemplate
+    invoke_appsync_EvaluateMappingTemplate,
+    user_calls_search
 }
