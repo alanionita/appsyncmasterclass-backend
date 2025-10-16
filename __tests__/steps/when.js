@@ -805,6 +805,46 @@ async function user_calls_search({ user, query, mode, limit, givenNextToken = nu
     return search;
 }
 
+async function user_calls_searchHashtags({ user, hashtags, mode, limit, givenNextToken = null }) {
+    const gqlQuery = `query searchHashtags($hashtags: String!, $limit: Int!, $nextToken: String) {
+            searchHashtags(limit: $limit, mode: ${mode}, hashtags: $hashtags, nextToken: $nextToken) {
+                nextToken
+                results {
+                      __typename
+                        ... on MyProfile {
+                            ... myProfileFields
+                        }
+                        ... on OtherProfile {
+                            ... otherProfileFields
+                        }
+                        ... on Tweet {
+                            ... tweetFields
+                        }
+                        ... on Reply {
+                            ... replyFields
+                        }
+                }
+            }
+        }`
+
+    const variables = {
+        hashtags,
+        // mode,
+        limit,
+        nextToken: givenNextToken
+    }
+
+    const { searchHashtags } = await GraphQL({
+        url: process.env.APPSYNC_HTTP_URL,
+        query: gqlQuery,
+        variables,
+        auth: user.accessToken
+    })
+
+    return searchHashtags;
+}
+
+
 module.exports = {
     invoke_appsync_template,
     invoke_confirmUserSignup,
@@ -835,5 +875,6 @@ module.exports = {
     user_calls_getFollowing,
     invoke_getImgPresignedUrl,
     invoke_appsync_EvaluateMappingTemplate,
-    user_calls_search
+    user_calls_search,
+    user_calls_searchHashtags
 }
