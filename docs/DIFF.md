@@ -573,4 +573,13 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No diffs
 
-Release:
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-09-Add_getHashTag_to_GraphQL_schema
+
+### 06-10-Implement_getHashTag_query
+
+Diffs:
+- lib/extractHashTags: implemented with iterators and new String.matchAll() method; adds unit test for the util
+- lambda/reply, */tweet: conditionally adds hashtag property when 
+- lambda/search-hashtags: searchTweets implements support for more than one facet and could be reused in future for other facets than hashtags
+
+Release: 
