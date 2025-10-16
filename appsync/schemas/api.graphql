@@ -23,7 +23,7 @@ type Query {
 
     search(query: String!, mode: SearchMode!, limit: Int!, nextToken: String): SearchResultsPage!
 
-    searchHash(query: String!, mode: HashtagsMode!, limit: Int!, nextToken: String): HashtagsResultsPage!
+    searchHashtags(query: String!, mode: HashtagsMode!, limit: Int!, nextToken: String): HashtagsResultsPage!
 }
 
 type Mutation {
