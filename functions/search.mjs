@@ -1,11 +1,9 @@
-import Chance from 'chance'
 import ssm from '@middy/ssm'
 import middy from '@middy/core'
 import { initTweetsIndex, initUsersIndex } from "../lib/algolia.mjs"
 import { parseNextToken, genNextToken } from '../lib/nextToken.mjs';
 
 const { STAGE } = process.env;
-const chance = new Chance();
 
 const SearchMode = {
     top: "Top",
