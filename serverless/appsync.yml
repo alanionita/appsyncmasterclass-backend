@@ -116,6 +116,10 @@ resolvers:
     kind: UNIT # required
     field: search
     dataSource: searchFn
+  Query.searchHashtags:
+    kind: UNIT # required
+    field: searchHastags
+    dataSource: searchHashtagsFn
   # Nested fields
   Tweet.profile:
     type: Tweet
@@ -350,6 +354,10 @@ dataSources:
     type: 'AWS_LAMBDA'
     config:
       functionName: search
+  searchHashtagsFn:
+    type: 'AWS_LAMBDA'
+    config:
+      functionName: searchHastags
 substitutions:
   TweetsTable: !Ref TweetsTable
   TweetLikesTable: !Ref TweetLikesTable
