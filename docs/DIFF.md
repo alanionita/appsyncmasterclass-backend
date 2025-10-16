@@ -567,4 +567,10 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No diffs
 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-08-Add_tests_for_search_query
+
+### 06-09-Add_getHashTag_to_GraphQL_schema
+
+No diffs
+
 Release:

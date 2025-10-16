@@ -22,6 +22,8 @@ type Query {
     getFollowing(userId: ID!, limit: Int!, nextToken: String): ProfilesPage!
 
     search(query: String!, mode: SearchMode!, limit: Int!, nextToken: String): SearchResultsPage!
+
+    searchHash(query: String!, mode: HashtagsMode!, limit: Int!, nextToken: String): HashtagsResultsPage!
 }
 
 type Mutation {
@@ -34,7 +36,7 @@ type Mutation {
     reply(tweetId: ID!, text: String!): Reply!
     follow(userId: ID!): Boolean!
     unfollow(userId: ID!): Boolean!
-}   
+}
 
 enum SearchMode {
     Top
@@ -43,6 +45,14 @@ enum SearchMode {
     Photos
     Videos
 }
+
+enum HashtagsMode {
+    Top
+    Latest
+    People
+    Photos
+    Videos
+
 
 input ProfileInput {
     name: String!
@@ -173,5 +183,12 @@ union SearchResult = MyProfile | OtherProfile | Tweet | Reply
 
 type SearchResultsPage {
     results: [SearchResult!]
+    nextToken: String
+}
+
+union HashtagResult = MyProfile | OtherProfile | Tweet | Reply
+
+type HashtagsResultsPage {
+    results: [HashtagResult!]
     nextToken: String
 }
