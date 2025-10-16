@@ -2,6 +2,7 @@ import Chance from 'chance'
 import ssm from '@middy/ssm'
 import middy from '@middy/core'
 import { initTweetsIndex, initUsersIndex } from "../lib/algolia.mjs"
+import { parseNextToken, genNextToken } from '../lib/nextToken.mjs';
 
 const { STAGE } = process.env;
 const chance = new Chance();
@@ -12,29 +13,6 @@ const SearchMode = {
     people: "People",
     photos: "Photos",
     video: "Videos"
-}
-
-function genNextToken(searchParams) {
-    if (!searchParams) {
-        return null
-    }
-
-    const payload = Object.assign(
-        {}, searchParams, { random: chance.string({ length: 16 }) })
-    const token = JSON.stringify(payload)
-    return Buffer.from(token).toString('base64')
-}
-
-function parseNextToken(nextToken) {
-    if (!nextToken) {
-        return undefined
-    }
-
-    const token = Buffer.from(nextToken, 'base64').toString()
-    const searchParams = JSON.parse(token)
-    delete searchParams.random
-
-    return searchParams
 }
 
 async function searchUsers({ context, userId, query, limit = 10, nextToken }) {
