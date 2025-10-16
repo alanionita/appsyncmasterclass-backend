@@ -1,6 +1,7 @@
 const ulid = require("ulid");
 const { TweetTypes } = require("../lib/constants");
 const ddbLib = require("../lib/dynamodb");
+const { extractHashtags } = require("../lib/utils");
 const { USERS_TABLE, REGION, TWEETS_TABLE, TIMELINES_TABLE, RETWEETS_TABLE } = process.env;
 
 module.exports.handler = async (event) => {
@@ -31,10 +32,11 @@ module.exports.handler = async (event) => {
 
         const id = ulid.ulid();
         const timestamp = new Date().toJSON();
+        const hashtags = extractHashtags(text);
 
         const inReplyToUserIds = await buildReplyUsersList(originalTweet, tweetsModel);
 
-        const newTweet = {
+        let newTweet = {
             __typename: TweetTypes.REPLY,
             id,
             author: username,
@@ -45,6 +47,10 @@ module.exports.handler = async (event) => {
             retweets: 0,
             inReplyToTweetId: tweetId,
             inReplyToUserIds: [...inReplyToUserIds]
+        }
+
+        if (hashtags) {
+            newTweet = Object.assign({}, newTweet, { hashtags })
         }
 
         const newTimeline = {
@@ -124,7 +130,7 @@ async function buildReplyUsersList(tweet, tweetModel) {
                 usersSet.add(tweet.author);
                 return usersSet
             case TweetTypes.RETWEET:
-                usersSet.add(tweet.author);    
+                usersSet.add(tweet.author);
                 const getRetweetOrigin = await tweetModel.get(tweet.retweetOf);
                 const originalTweet = getRetweetOrigin.Item
                 if (!originalTweet) {

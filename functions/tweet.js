@@ -2,6 +2,7 @@ const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const { DynamoDBDocumentClient, TransactWriteCommand } = require("@aws-sdk/lib-dynamodb");
 const ulid = require("ulid");
 const { TweetTypes } = require("../lib/constants");
+const { extractHashtags } = require("../lib/utils");
 const { USERS_TABLE, REGION, TWEETS_TABLE, TIMELINES_TABLE } = process.env;
 
 const ddb = new DynamoDBClient({ region: REGION });
@@ -24,7 +25,9 @@ module.exports.handler = async (event) => {
         const id = ulid.ulid();
         const timestamp = new Date().toJSON();
 
-        const newTweet = {
+        const hashtags = extractHashtags(text);
+
+        let newTweet = {
             __typename: TweetTypes.TWEET,
             id,
             author: username,
@@ -35,6 +38,10 @@ module.exports.handler = async (event) => {
             retweets: 0,
             liked: false,
             retweeted: false,
+        }
+
+        if (hashtags) {
+            newTweet = Object.assign({}, newTweet, { hashtags })
         }
 
         const newTimeline = {
@@ -73,7 +80,7 @@ module.exports.handler = async (event) => {
         };
         const command = new TransactWriteCommand(input);
         const resp = await client.send(command)
-        if(resp.$metadata.httpStatusCode !== 200) {
+        if (resp.$metadata.httpStatusCode !== 200) {
             console.info('TransactiWrite ::', resp)
             throw Error('Problems with TransactiWrite')
         }
