@@ -52,7 +52,7 @@ enum HashtagsMode {
     People
     Photos
     Videos
-
+}
 
 input ProfileInput {
     name: String!
