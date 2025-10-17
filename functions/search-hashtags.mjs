@@ -1,11 +1,9 @@
-import Chance from 'chance'
 import ssm from '@middy/ssm'
 import middy from '@middy/core'
 import { initTweetsIndex, initUsersIndex } from "../lib/algolia.mjs"
 import { parseNextToken, genNextToken } from '../lib/nextToken.mjs';
 
 const { STAGE } = process.env;
-const chance = new Chance();
 
 const SearchMode = {
     top: "Top",
@@ -68,39 +66,33 @@ async function searchUsers({ context, userId, query, limit = 10, nextToken }) {
     }
 }
 
-async function searchTweets({ context, query, limit = 10, nextToken, facets }) {
+async function searchTweetsByHashtags({ context, hashtagQuery, limit = 10, nextToken }) {
     try {
+        const FACET_NAME = 'hashtags';
         const { ALGOLIA_APP_ID, ALGOLIA_WRITE_KEY } = context;
 
         if (!ALGOLIA_APP_ID || !ALGOLIA_WRITE_KEY) {
             throw Error("Missing context variables")
         }
 
-        let baseSearchParams = {
-            query,
-            hitsPerPage: limit,
-            page: 0
+        if (!context || !hashtagQuery) {
+            throw Error("Missing required inputs")
         }
-
-        if (facets) {
-            baseSearchParams = Object.assign({}, baseSearchParams, {
-                facetFiltering: facets.map(facet => {
-                    const [key, value] = facet;
-                    return `${key}:${value}`
-                })
-            })
-            delete baseSearchParams.query
-        }
-
-        const searchParams = parseNextToken(nextToken) || baseSearchParams
 
         const tweetsIndex = await initTweetsIndex({
             appID: ALGOLIA_APP_ID,
             apiKey: ALGOLIA_WRITE_KEY,
             stage: STAGE
         })
-
-        const results = await tweetsIndex.search(searchParams)
+        
+        const searchParams = parseNextToken(nextToken) || {
+            query: hashtagQuery,
+            hitsPerPage: limit,
+            page: 0,
+            facetName: FACET_NAME,
+        }
+        
+        const results = await tweetsIndex.searchByFacet(searchParams)
 
         const { hits, page, nbPages } = results
 
@@ -110,13 +102,12 @@ async function searchTweets({ context, query, limit = 10, nextToken, facets }) {
         } else {
             nextSearchParams = Object.assign({}, searchParams, { page: page + 1 })
         }
-
         return {
             results: hits,
             nextToken: genNextToken(nextSearchParams)
         }
     } catch (err) {
-        console.error('Err (searchLambda/searchTweets) :', err.message)
+        console.error('Err (searchHashtags/searchTweetsByHashtags) :', err.message)
         console.info('Err details) :', JSON.stringify(err))
         return err
     }
@@ -139,10 +130,11 @@ async function lambdaHandler(event, context) {
         switch (mode) {
             case SearchMode.people:
                 return await searchUsers({ context, userId, query: hashtags, limit, nextToken })
+
             case SearchMode.latest:
-                return await searchTweets({
+                return await searchTweetsByHashtags({
                     context,
-                    facets: [['hashtags', hashtags]],
+                    hashtagQuery: hashtags,
                     limit,
                     nextToken
                 })
