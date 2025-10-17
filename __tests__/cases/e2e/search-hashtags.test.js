@@ -2,7 +2,8 @@ const given = require("../../steps/given");
 const when = require("../../steps/when");
 const retry = require('async-retry');
 const chance = require('chance').Chance()
-const { HashtagsMode } = require('../../../lib/constants')
+const { HashtagsMode } = require('../../../lib/constants');
+const { waitSec } = require("../../lib/utils");
 
 require("dotenv").config()
 
@@ -11,7 +12,7 @@ describe("Given an authenticated user, when they send a tweet", () => {
     let userATweet;
     let userAProfile;
 
-    let userAHashtag = chance.string({ length: 8, alpha: true });
+    let userAHashtag = `#${chance.string({ length: 8, alpha: true })}`;
     let userABio = "Test suit bio, " + chance.string({ length: 8 }) + ` ${userAHashtag}`;
 
     beforeAll(async () => {
@@ -114,13 +115,14 @@ describe("Given an authenticated user, when they send a tweet", () => {
 
     describe('When userA replies to their tweet, ', () => {
         let userAReply;
-        const userAReplyText = chance.string({ length: 16 }) + ` ${userAHashtag}`;
+        const userAReplyText = chance.string({ length: 16 }) + `, ${userAHashtag}`;
         beforeAll(async () => {
             userAReply = await when.user_calls_reply({
                 user: userA,
                 tweetId: userATweet.id,
                 text: userAReplyText
             });
+            await waitSec(1);
         })
         describe("When userA searches for hashtag, ", () => {
 
@@ -136,28 +138,31 @@ describe("Given an authenticated user, when they send a tweet", () => {
                     expect(results).toBeTruthy();
                     expect(nextToken).toBeFalsy();
                     expect(results.length).toBe(2)
-                    expect(results).toEqual(
-                        expect.arrayContaining(
-                            expect.objectContaining({
-                                __typename: 'Reply',
-                                id: userAReply.id,
-                                createdAt: userAReply.createdAt,
-                                text: userAReplyText,
-                            }),
-                            expect.objectContaining({
-                                __typename: 'Tweet',
-                                id: userATweet.id,
-                                createdAt: userATweet.createdAt,
-                                text: userATweet,
-                            }),
-                        )
+
+                    const tweetFound = results.filter(({ id }) => id === userATweet.id)[0];
+                    const replyFound = results.filter(({ id }) => id === userAReply.id)[0];
+
+                    expect(tweetFound).toEqual(
+                        expect.objectContaining({
+                            __typename: 'Tweet',
+                            id: userATweet.id,
+                            createdAt: userATweet.createdAt,
+                            text: userATweet.text,
+                        })
+                    )
+                    expect(replyFound).toEqual(
+                        expect.objectContaining({
+                            __typename: 'Reply',
+                            id: userAReply.id,
+                            createdAt: userAReply.createdAt,
+                            text: userAReplyText,
+                        })
                     )
                 }, {
                     retries: 3,
-                    maxTimeout: 1000
-
+                    maxTimeout: 3 * 1000
                 })
-            })
+            }, 15 * 1000)
         })
     })
 })
