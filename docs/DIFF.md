@@ -582,4 +582,13 @@ Diffs:
 - lambda/reply, */tweet: conditionally adds hashtag property when 
 - lambda/search-hashtags: searchTweets implements support for more than one facet and could be reused in future for other facets than hashtags
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-10-Implement_getHashTag_query
+
+### 06-11-Add_tests_for_getHashTag_query
+
+Diffs:
+- lib/algolia: due to minor api changes and exiting patter, created a local generic fn lib/searchFacet(), and a new shadow method for searchByFacet() on the TweetsIndex; in the lambda the shadow method is wrapped again to only search by hashtags
+- fixes: variety of bugs from the previous release
+- testing: adds delays to make sure the search by reply hashtag does not timeout because of index eventual consistency. 
+
+Release:
