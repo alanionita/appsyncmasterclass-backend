@@ -591,4 +591,10 @@ Diffs:
 - fixes: variety of bugs from the previous release
 - testing: adds delays to make sure the search by reply hashtag does not timeout because of index eventual consistency. 
 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-11-Add_tests_for_getHashTag_query
+
+### 06-13-Add_subscriptions_to_GraphQL_schema
+
+No diffs
+
 Release:

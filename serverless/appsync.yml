@@ -9,6 +9,9 @@ authentication:
     defaultAction: ALLOW
     userPoolId: !Ref CgUserPool
 
+additionalAuthenticationProviders:
+  - authenticationType: AWS_IAM
+
 pipelineFunctions:
     getFollowers:
       dataSource: relationshipsTable
