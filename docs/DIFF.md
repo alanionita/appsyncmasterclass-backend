@@ -597,4 +597,12 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No diffs
 
-Release:
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-13-Add_subscriptions_to_GraphQL_schema
+
+### 06-13.1-Restricting_access_to_onNotified_subscription 
+
+Diffs:
+- schema: new deployment validation required the removal of `@aws*` annotations from the iNotification interface 
+- appsync: new `serverless-appsync-pluging` API rules followed for additional authorisation and Subscription.onNotified resolvers / dataSource definitions
+
+Release: 

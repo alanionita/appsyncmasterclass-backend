@@ -9,8 +9,8 @@ authentication:
     defaultAction: ALLOW
     userPoolId: !Ref CgUserPool
 
-additionalAuthenticationProviders:
-  - authenticationType: AWS_IAM
+additionalAuthentications:
+  - type: AWS_IAM
 
 pipelineFunctions:
     getFollowers:
@@ -235,6 +235,11 @@ resolvers:
     type: MyProfile
     field: imgUrl
     dataSource: getImagePresignedUrlFn
+  Subscription.onNotified:
+    kind: UNIT # required
+    dataSource: onNotified
+    request: ./appsync/resolvers/Subscription.onNotified.request.vtl
+    response: ./appsync/resolvers/Subscription.onNotified.response.vtl
 dataSources:
   api:
     type: 'NONE'
@@ -363,6 +368,8 @@ dataSources:
     type: 'AWS_LAMBDA'
     config:
       functionName: searchHashtags
+  onNotified:
+    type: 'NONE'
 
 substitutions:
   TweetsTable: !Ref TweetsTable

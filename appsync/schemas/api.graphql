@@ -258,7 +258,7 @@ type Replied implements iNotification @aws_iam @aws_cognito_user_pools {
 
 union Notification = Retweeted | Liked | Mentioned | Replied
 
-interface iNotification @aws_iam @aws_cognito_user_pools {
+interface iNotification {
     id: ID!
     type: NotificationType!
     userId: ID!
