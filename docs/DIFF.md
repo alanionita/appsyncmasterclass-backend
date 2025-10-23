@@ -599,10 +599,30 @@ No diffs
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-13-Add_subscriptions_to_GraphQL_schema
 
-### 06-13.1-Restricting_access_to_onNotified_subscription 
+### 06-13.1-Restricting_access_to_onNotified_subscription
 
 Diffs:
 - schema: new deployment validation required the removal of `@aws*` annotations from the iNotification interface 
 - appsync: new `serverless-appsync-pluging` API rules followed for additional authorisation and Subscription.onNotified resolvers / dataSource definitions
+
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-13.1-Restricting_access_to_onNotified_subscription
+
+#  06-14-Add_subscription_for_retweets 
+
+Diffs:
+- General change is direction: 
+  - `aws-appsync` is in maintenance mode, suggesting that new implementations make use of `aws-amplify/api`
+  - Current frontend implementation uses `aws-amplify/api` and covers a lot of queries and mutations in this fashion, however it does not support IAM auth
+  - `aws-amplify/api` does support API key, but it would be a suprising auth for the machine-to-machine nature of this service e.g. DynamoDB.stream -> Lambda -> Appsync ; it would also require key rotation, as mentioned in the video but not covered
+  - To preserve the IAM auth consistency for the service I decided to stay within `aws-appsync` recommendations; of this they also mention `@apollo/client` and suggest a duet of packages to help with this: `aws-appsync-auth-link`, `aws-appsync-subscription-link`
+  - Packages allows us to define an Apollo client, and use it's more common API for queries and mutation, whilst connected to AppSync; which in some cases is not 1-2-1 compatible with the GraphQL spec
+  - The solution here shows the Apollo Client implementation for v3; v4 is currently not supported due to inconsistencies in the 2 packages from aws-appsync-*
+- packages: adds @apollo/client, aws-appsync-auth-link, aws-appsync-
+subscription-link, graphql, react, uuid ; where graphql, uuid, and react are dependencies; notably @apollo/client at v3 depends on the react package; 
+- lib/dynamodb: functions/notify makes use of the dynamodb lib to query from TweetsTables; styled as and ORM, in MVC style; add new method to .getItem()
+- lib/graphql: follows the same ORM style and implements the client config, and .notifyRetweet(); notifyRetweet() api is notably simpler, only requiring query variables; client configures using @apollo/client and the mentioned aws-appsync-* packages described above;
+- lib/graphql: credentials are taken from the Lambda `process.env` Execution Context diretly; 
+- functions/notify: simplified logic due to more context embedded in the graphql lib style; defined as an ESM file
+- serverless: narrowed the lambda/notify resource permissions to the Mutation.notifyRetweet
 
 Release: 
