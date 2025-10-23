@@ -209,3 +209,37 @@ Resources:
           Value: 'Alan Ionita'
         - Key: CreatedOn
           Value: 2025-05-08
+  NotificationsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+        - AttributeName: userId
+          KeyType: RANGE
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+        - AttributeName: userId
+          AttributeType: S
+      GlobalSecondaryIndexes:
+        - IndexName: byUserId
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+            - AttributeName: id
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      Tags:
+        - Key: Environment
+          Value: ${self:custom.stage}
+        - Key: Name
+          Value: notifications-table
+        - Key: CanIDelete
+          Value: 'No'
+        - Key: Author
+          Value: 'Alan Ionita'
+        - Key: CreatedOn
+          Value: 2025-10-23
