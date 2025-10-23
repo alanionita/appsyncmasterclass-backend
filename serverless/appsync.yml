@@ -240,6 +240,11 @@ resolvers:
     dataSource: onNotified
     request: ./appsync/resolvers/Subscription.onNotified.request.vtl
     response: ./appsync/resolvers/Subscription.onNotified.response.vtl
+  Mutation.notifyRetweeted:
+    dataSource: notificationsTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Mutation.notifyRetweeted.request.vtl
+    response: ./appsync/resolvers/Mutation.notifyRetweeted.response.vtl
 dataSources:
   api:
     type: 'NONE'
@@ -370,6 +375,11 @@ dataSources:
       functionName: searchHashtags
   onNotified:
     type: 'NONE'
+  notificationsTable:
+    type: AMAZON_DYNAMODB
+    description: 'NotificationsTable'
+    config:
+      tableName: !Ref NotificationsTable
 
 substitutions:
   TweetsTable: !Ref TweetsTable
