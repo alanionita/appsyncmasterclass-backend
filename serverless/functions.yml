@@ -209,3 +209,22 @@ searchHashtags:
       Resource:
         - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-app-id
         - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-admin-key
+
+notify:
+  handler: functions/notify.handler
+  events:
+    - stream:
+       type: dynamodb
+       arn: !GetAtt TweetsTable.StreamArn
+  environment:
+    APPSYNC_URL: ${appsync:url}
+    TWEETS_TABLE: !Ref TweetsTable
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+      Resource: !GetAtt TweetsTable.Arn
+    - Effect: Allow
+      Action: 
+        - appsync:GraphQL
+      Resource: !Sub ${GraphQlApi.Arn}/types/Mutation/fields/notifyRetweeted
