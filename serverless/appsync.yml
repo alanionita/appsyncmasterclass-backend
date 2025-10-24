@@ -245,6 +245,11 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Mutation.notifyRetweeted.request.vtl
     response: ./appsync/resolvers/Mutation.notifyRetweeted.response.vtl
+  Mutation.notifyLiked:
+    dataSource: notificationsTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Mutation.notifyLiked.request.vtl
+    response: ./appsync/resolvers/Mutation.notifyLiked.response.vtl
 dataSources:
   api:
     type: 'NONE'

@@ -625,4 +625,12 @@ subscription-link, graphql, react, uuid ; where graphql, uuid, and react are dep
 - functions/notify: simplified logic due to more context embedded in the graphql lib style; defined as an ESM file
 - serverless: narrowed the lambda/notify resource permissions to the Mutation.notifyRetweet
 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-14-Add_subscription_for_retweets
+
+# 06-15-Add_subscription_for_likes
+
+Diffs:
+- lib/graphql: adds new method for notifyLiked, similar to last release
+- lib/graphql: adds JSDOCS to the methods to make it nice to grok the shape of parameters
+
 Release: 

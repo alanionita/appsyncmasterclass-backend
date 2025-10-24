@@ -228,3 +228,22 @@ notify:
       Action: 
         - appsync:GraphQL
       Resource: !Sub ${GraphQlApi.Arn}/types/Mutation/fields/notifyRetweeted
+
+notifyLiked:
+  handler: functions/notifyLiked.handler
+  events:
+    - stream:
+       type: dynamodb
+       arn: !GetAtt TweetLikesTable.StreamArn
+  environment:
+    APPSYNC_URL: ${appsync:url}
+    TWEETS_TABLE: !Ref TweetsTable
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+      Resource: !GetAtt TweetsTable.Arn
+    - Effect: Allow
+      Action: 
+        - appsync:GraphQL
+      Resource: !Sub ${GraphQlApi.Arn}/types/Mutation/fields/notifyLiked
