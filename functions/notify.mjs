@@ -48,6 +48,7 @@ export async function handler(event) {
                         break;
                     case TweetTypes.REPLY:
                         await notifyMentioned(appsyncClient, tweet);
+                        await notifyReplied(appsyncClient, tweet);
                         break;
                 }
 
@@ -141,6 +142,46 @@ async function notifyMentioned(appsync, { text, author, id }) {
         return;
     } catch (err) {
         console.error("Err [notify/notifyMentioned] ::", err.message)
+        console.info(JSON.stringify(err.stack))
+        return err
+    }
+}
+
+/**
+ * Triggers notifications for Replies
+ * @param {GraplQLClient} appsync - appsync client, used by notification calls
+ * @param {Reply} reply - the reply tweet text
+ * @returns {Void} side-effect notifications call via Appsync api
+ * @throws {Error} Either with custom payloads or GraphQL errors
+ */
+
+async function notifyReplied(appsync, reply) {
+    try {
+        const { text, author, id, inReplyToTweetId, inReplyToUserIds} = reply
+        if (!text && !author && !id && !inReplyToTweetId && !inReplyToUserIds) {
+            throw Error("Malformed reply tweet")
+        }
+        if(!appsync) {
+            throw Error("Missing required Appsync client")
+        }
+        if (inReplyToUserIds && inReplyToUserIds.length > 0) {
+            const requests = inReplyToUserIds.map(async inReplyToUserId => {
+                const variables = {
+                    id: ulid(),
+                    userId: inReplyToUserId,
+                    tweetId: inReplyToTweetId,
+                    replyTweetId: id,
+                    repliedBy: author,
+                }
+                return await appsync.notifyReplied(variables)
+            })
+
+            await Promise.all(requests);
+            return;
+        }
+        return;
+    } catch (err) {
+        console.error("Err [notify/notifyReplied] ::", err.message)
         console.info(JSON.stringify(err.stack))
         return err
     }

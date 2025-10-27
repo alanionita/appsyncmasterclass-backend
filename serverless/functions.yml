@@ -231,6 +231,7 @@ notify:
       Resource: 
         - !Sub ${GraphQlApi.Arn}/types/Mutation/fields/notifyRetweeted
         - !Sub ${GraphQlApi.Arn}/types/Mutation/fields/notifyMentioned
+        - !Sub ${GraphQlApi.Arn}/types/Mutation/fields/notifyReplied
     - Effect: Allow
       Action: dynamodb:Query
       Resource: !Sub "${UsersTable.Arn}/index/byScreenName"

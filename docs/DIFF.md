@@ -642,4 +642,13 @@ Diffs:
 - lib/graphql: contains notifyMentioned() logic
 - functions/notify: handles the mention logic within the Reply and Tweet __typename; contains local function to get user ids from mentions; calls notifyMentioned with the mentionedUserIds; call to Users follows model pattern and uses aws-sdk v3 command style; 
 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-16-Add_subscription_for_mentions
+
+# 06-17-Add_subscription_for_replies
+
+Diff:
+- lib/graphql: adds logicfor notifyReplied()
+- functions/notify: wrapped up the mention notifications into a handlers; created a new handlers for reply notifications
+- serverless/lambda: adds new permissions to allow notify to call the Mutation/notifyReplied field 
+
 Release: 
