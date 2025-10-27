@@ -22,9 +22,9 @@ export async function handler(event) {
         for (let record of event.Records) {
             if (record.eventName == 'INSERT') {
                 const tweet = unmarshall(record.dynamodb.NewImage);
-                const { __typename, text } = tweet;
+                const { __typename } = tweet;
 
-                if (!__typename && !text) {
+                if (!__typename) {
                     throw Error("Malformed tweet")
                 }
 
@@ -46,24 +46,25 @@ export async function handler(event) {
                     case TweetTypes.REPLY:
                     case TweetTypes.TWEET:
                         // Handle mentions 
-                        if (text) {
-                            const mentionedUsers = await fetchUserIds(text)
-                            if (mentionedUsers && mentionedUsers.length > 0) {
-                                const mentionedRequests = mentionedUsers.map(async mentionedUserId => {
-                                    const variables = {
-                                        id: ulid(),
-                                        userId: mentionedUserId,
-                                        mentionedBy: tweet.author,
-                                        mentionedByTweetId: tweet.id,
-                                    }
-                                    await appsyncClient.notifyMentioned(variables)
-                                })
+                        if (!tweet.text) {
+                            throw Error("Malformed tweet")
+                        }
+                        const mentionedUsers = await fetchUserIds(text)
+                        if (mentionedUsers && mentionedUsers.length > 0) {
+                            const mentionedRequests = mentionedUsers.map(async mentionedUserId => {
+                                const variables = {
+                                    id: ulid(),
+                                    userId: mentionedUserId,
+                                    mentionedBy: tweet.author,
+                                    mentionedByTweetId: tweet.id,
+                                }
+                                await appsyncClient.notifyMentioned(variables)
+                            })
 
-                                await Promise.all(mentionedRequests)
-                                break;
-                            }
+                            await Promise.all(mentionedRequests)
                             break;
                         }
+                        break;
 
                 }
 
@@ -81,11 +82,12 @@ export async function handler(event) {
 async function fetchUserIds(text) {
     try {
         const mentions = extractMentions(text);
-        const screenNames = mentions.map(mention => mention.replace('@', ''));
-
-        if (!screenNames && screenNames.length < 1) {
+        
+        if (!mentions && mentions.length < 1) {
             return null
         }
+        
+        const screenNames = mentions.map(mention => mention.replace('@', ''));
 
         const usersModel = new ddb({ region: REGION, tableName: USERS_TABLE })
 
@@ -114,7 +116,7 @@ async function fetchUserIds(text) {
             })
             return usersIds;
         }
-        
+
     } catch (err) {
         console.error("Err [notify/fetchUserIds] ::", err.message)
         console.info(JSON.stringify(err.stack))
