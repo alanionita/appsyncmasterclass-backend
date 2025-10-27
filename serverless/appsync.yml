@@ -255,6 +255,11 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Mutation.notifyMentioned.request.vtl
     response: ./appsync/resolvers/Mutation.notifyMentioned.response.vtl
+  Mutation.notifyReplied:
+    dataSource: notificationsTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Mutation.notifyReplied.request.vtl
+    response: ./appsync/resolvers/Mutation.notifyReplied.response.vtl
 dataSources:
   api:
     type: 'NONE'
