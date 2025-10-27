@@ -219,6 +219,7 @@ notify:
   environment:
     APPSYNC_URL: ${appsync:url}
     TWEETS_TABLE: !Ref TweetsTable
+    USERS_TABLE: !Ref UsersTable
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -227,7 +228,12 @@ notify:
     - Effect: Allow
       Action: 
         - appsync:GraphQL
-      Resource: !Sub ${GraphQlApi.Arn}/types/Mutation/fields/notifyRetweeted
+      Resource: 
+        - !Sub ${GraphQlApi.Arn}/types/Mutation/fields/notifyRetweeted
+        - !Sub ${GraphQlApi.Arn}/types/Mutation/fields/notifyMentioned
+    - Effect: Allow
+      Action: dynamodb:Query
+      Resource: !Sub "${UsersTable.Arn}/index/byScreenName"
 
 notifyLiked:
   handler: functions/notifyLiked.handler
