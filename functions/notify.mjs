@@ -43,29 +43,12 @@ export async function handler(event) {
                         }
                         await appsyncClient.notifyRetweeted(variables)
                         break;
-                    case TweetTypes.REPLY:
                     case TweetTypes.TWEET:
-                        // Handle mentions 
-                        if (!tweet.text) {
-                            throw Error("Malformed tweet")
-                        }
-                        const mentionedUsers = await fetchUserIds(text)
-                        if (mentionedUsers && mentionedUsers.length > 0) {
-                            const mentionedRequests = mentionedUsers.map(async mentionedUserId => {
-                                const variables = {
-                                    id: ulid(),
-                                    userId: mentionedUserId,
-                                    mentionedBy: tweet.author,
-                                    mentionedByTweetId: tweet.id,
-                                }
-                                await appsyncClient.notifyMentioned(variables)
-                            })
-
-                            await Promise.all(mentionedRequests)
-                            break;
-                        }
+                        await notifyMentioned(appsyncClient, tweet);
                         break;
-
+                    case TweetTypes.REPLY:
+                        await notifyMentioned(appsyncClient, tweet);
+                        break;
                 }
 
             }
@@ -82,11 +65,11 @@ export async function handler(event) {
 async function fetchUserIds(text) {
     try {
         const mentions = extractMentions(text);
-        
+
         if (!mentions && mentions.length < 1) {
             return null
         }
-        
+
         const screenNames = mentions.map(mention => mention.replace('@', ''));
 
         const usersModel = new ddb({ region: REGION, tableName: USERS_TABLE })
@@ -120,5 +103,45 @@ async function fetchUserIds(text) {
     } catch (err) {
         console.error("Err [notify/fetchUserIds] ::", err.message)
         console.info(JSON.stringify(err.stack))
+    }
+}
+
+
+/**
+ * Triggers notifications for Tweet/Reply mentions
+ * @param {GraplQLClient} appsync - appsync client, used by notification calls
+ * @param {Tweet | Reply} tweet - the tweet text
+ * @returns {Void} side-effect notifications call via Appsync api
+ * @throws {Error} Either with custom payloads or GraphQL errors
+ */
+
+async function notifyMentioned(appsync, { text, author, id }) {
+    try {
+        if (!text && !author && !id) {
+            throw Error("Malformed tweet")
+        }
+        if(!appsync) {
+            throw Error("Missing required Appsync client")
+        }
+        const mentionedUsers = await fetchUserIds(text)
+        if (mentionedUsers && mentionedUsers.length > 0) {
+            const mentionedRequests = mentionedUsers.map(async mentionedUserId => {
+                const variables = {
+                    id: ulid(),
+                    userId: mentionedUserId,
+                    mentionedBy: author,
+                    mentionedByTweetId: id,
+                }
+                return await appsync.notifyMentioned(variables)
+            })
+
+            await Promise.all(mentionedRequests);
+            return;
+        }
+        return;
+    } catch (err) {
+        console.error("Err [notify/notifyMentioned] ::", err.message)
+        console.info(JSON.stringify(err.stack))
+        return err
     }
 }
