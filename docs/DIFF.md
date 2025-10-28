@@ -679,4 +679,10 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 Diffs:
 - test/lib: continues to use the local appsync client as details in past releases; expanding the onNotify method with new query response types
 
-Release:
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-20-Add_e2e_tests_for_all_notifications
+
+# 06-21-Support_DM_in_GraphQL_schema
+
+No diffs
+
+Release: 

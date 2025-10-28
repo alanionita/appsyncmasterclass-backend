@@ -25,6 +25,10 @@ type Query {
     search(query: String!, mode: SearchMode!, limit: Int!, nextToken: String): SearchResultsPage!
 
     searchHashtags(hashtags: String!, mode: HashtagsMode!, limit: Int!, nextToken: String): HashtagsResultsPage!
+
+    listConversations(limit: Int!, nextToken: String): ConversationsPage!
+
+    getDirectMessages(otherUserId: ID!, limit: Int!, nextToken: String): MessagesPage!
 }
 
 type Mutation {
@@ -37,6 +41,7 @@ type Mutation {
     reply(tweetId: ID!, text: String!): Reply!
     follow(userId: ID!): Boolean!
     unfollow(userId: ID!): Boolean!
+    sendDirectMessage(otherUserId: ID!, message: String!): Conversation!;
 
     notifyRetweeted(id: ID!, userId: ID!, tweetId: ID!, retweetedBy: ID!, retweetId: ID!): Notification 
     @aws_iam
@@ -263,4 +268,28 @@ interface iNotification {
     type: NotificationType!
     userId: ID!
     createdAt: AWSDateTime!
+}
+
+type Conversation {
+    id: ID!
+    otherUser: OtherProfile!
+    lastMessage: String!
+    lastModified: AWSDateTime!
+}
+
+type ConversationsPage {
+    conversations: [Conversation!]
+    nextToken: String
+}
+
+type Message {
+    messageId: ID!
+    from: IProfile!
+    message: String!
+    timestamp: AWSDateTime!
+}
+
+type MessagesPage {
+    messages: [Message!]
+    nextToken: String
 }
