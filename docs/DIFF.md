@@ -672,4 +672,11 @@ Diffs:
 - lib/graphql.mjs: @apollo/client can now use name imports
 - results: from a single 88Mb bundle, to per lambda bundles with no bundles greater that 0.6Mb
 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-19-Use_serverless-layers_to_reduce_package_size
+
+# 06-20-Add_e2e_tests_for_liked,_replied_and_mentioned_notifications
+
+Diffs:
+- test/lib: continues to use the local appsync client as details in past releases; expanding the onNotify method with new query response types
+
 Release:
