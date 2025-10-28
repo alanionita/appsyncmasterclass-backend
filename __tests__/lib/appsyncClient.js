@@ -67,6 +67,12 @@ class GraplQLClient {
                             tweetId
                             likedBy
                         }
+
+                        ... on Replied {
+                            tweetId
+                            replyTweetId
+                            repliedBy
+                        }
                     }
                 }
             `;

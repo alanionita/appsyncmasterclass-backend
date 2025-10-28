@@ -107,6 +107,40 @@ describe("Given 2 authenticated users, ", () => {
                             })
                         ])
                     )
+                }, {
+                    retries: 10,
+                    maxTimeout: 1000
+                })
+
+            }, 15 * 1000)
+        })
+
+        describe("When userB replies to userATweet", () => {
+            let userBReply;
+            const replyText = chance.string({ length: 16 });
+
+            beforeAll(async () => {
+                userBReply = await when.user_calls_reply({
+                    user: userB,
+                    tweetId: userATweet.id,
+                    text: replyText
+                })
+            })
+            it("userA should get a Replied notification", async () => {
+                await retry(async () => {
+                    expect(subscription).toBeDefined();
+                    expect(subscription.closed).toBe(false);
+                    expect(notifications).toEqual(
+                        expect.arrayContaining([
+                            expect.objectContaining({
+                                type: 'Replied',
+                                userId: userA.username,
+                                tweetId: userATweet.id,
+                                replyTweetId: userBReply.id,
+                                repliedBy: userB.username
+                            })
+                        ])
+                    )
 
                     subscription.unsubscribe();
 
