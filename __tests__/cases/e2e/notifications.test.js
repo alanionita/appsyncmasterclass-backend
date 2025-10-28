@@ -13,6 +13,7 @@ describe("Given 2 authenticated users, ", () => {
     let userA;
     let userB;
     let userATweet;
+    let userAProfile;
 
     beforeAll(async () => {
         userA = await given.authenticated_user()
@@ -21,6 +22,8 @@ describe("Given 2 authenticated users, ", () => {
         if (userA && userA.username) {
             const tweetText = chance.string({ length: 16 });
             userATweet = await when.user_calls_tweet(userA, tweetText);
+
+            userAProfile = await when.user_calls_getMyProfile(userA)
         }
     })
     describe('When userA subscribes to notifications', () => {
@@ -138,6 +141,35 @@ describe("Given 2 authenticated users, ", () => {
                                 tweetId: userATweet.id,
                                 replyTweetId: userBReply.id,
                                 repliedBy: userB.username
+                            })
+                        ])
+                    )
+                }, {
+                    retries: 10,
+                    maxTimeout: 1000
+                })
+
+            }, 15 * 1000)
+        })
+
+        describe("When userB mentions userA", () => {
+            let userBTweet;
+            
+            beforeAll(async () => {
+                const tweetMention = chance.string({ length: 16 }) + ` @${userAProfile.screenName}`;
+                userBTweet = await when.user_calls_tweet(userB, tweetMention)
+            })
+            it("userA should get a Mentioned notification", async () => {
+                await retry(async () => {
+                    expect(subscription).toBeDefined();
+                    expect(subscription.closed).toBe(false);
+                    expect(notifications).toEqual(
+                        expect.arrayContaining([
+                            expect.objectContaining({
+                                type: 'Mentioned',
+                                userId: userA.username,
+                                mentionedByTweetId: userBTweet.id,
+                                mentionedBy: userB.username
                             })
                         ])
                     )

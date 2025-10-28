@@ -73,6 +73,11 @@ class GraplQLClient {
                             replyTweetId
                             repliedBy
                         }
+
+                        ... on Mentioned {
+                            mentionedBy
+                            mentionedByTweetId
+                        }
                     }
                 }
             `;
