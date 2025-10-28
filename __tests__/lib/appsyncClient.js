@@ -62,6 +62,11 @@ class GraplQLClient {
                             retweetedBy
                             retweetId
                         }
+
+                        ... on Liked {
+                            tweetId
+                            likedBy
+                        }
                     }
                 }
             `;

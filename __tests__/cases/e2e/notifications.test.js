@@ -78,6 +78,35 @@ describe("Given 2 authenticated users, ", () => {
                             })
                         ])
                     )
+                }, {
+                    retries: 10,
+                    maxTimeout: 1000
+                })
+
+            }, 15 * 1000)
+        })
+
+        describe("When userB likes userATweet", () => {
+            beforeAll(async () => {
+                await when.user_calls_like({
+                    user: userB,
+                    tweetId: userATweet.id
+                })
+            })
+            it("userA should get a Liked notification", async () => {
+                await retry(async () => {
+                    expect(subscription).toBeDefined();
+                    expect(subscription.closed).toBe(false);
+                    expect(notifications).toEqual(
+                        expect.arrayContaining([
+                            expect.objectContaining({
+                                type: 'Liked',
+                                userId: userA.username,
+                                tweetId: userATweet.id,
+                                likedBy: userB.username
+                            })
+                        ])
+                    )
 
                     subscription.unsubscribe();
 
