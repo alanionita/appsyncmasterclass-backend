@@ -651,4 +651,13 @@ Diff:
 - functions/notify: wrapped up the mention notifications into a handlers; created a new handlers for reply notifications
 - serverless/lambda: adds new permissions to allow notify to call the Mutation/notifyReplied field 
 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-17-Add_subscription_for_replies
+
+# 06-18-Add_e2e_tests_for_retweeted_notifications
+
+Diff:
+- sls/packages: did not need the manifest work, since Appsync api url is already inside the stack outputs; generally avoided the use of the manifest in favour of Output exports that are stored in `.env`
+- __tests__/lib: adds a new Appsync client defined in the new pattern with @apollo/client and aws-appsync-*-link packages; did not reuse the existing one because of auth, the test client being configured to use Cognito tokens, instead of IAM; client contains new method for onNotified() subscriptions, following the pattern introduced in past releases
+- e2e/notifications: removed afterAll() hook since subscription.unsubscribe was timing out; included the logic within test blocks and added further tests to check that the connection is indeed closed
+
 Release: 
