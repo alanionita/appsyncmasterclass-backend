@@ -670,5 +670,6 @@ Diffs:
 - webpack.config.js: skips bundling for any @aws-sdk/client-* packages; similar to skipping older aws-sdk package; includes module resolution, bundle analyzer and more 
 - __tests__/bundle-summary.js: add new webpack file analyser to quickly see the size of each function
 - lib/graphql.mjs: @apollo/client can now use name imports
+- results: from a single 88Mb bundle, to per lambda bundles with no bundles greater that 0.6Mb
 
 Release:
