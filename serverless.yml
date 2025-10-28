@@ -4,6 +4,7 @@ frameworkVersion: "3"
 plugins:
   - serverless-appsync-plugin
   - serverless-iam-roles-per-function
+  - serverless-webpack
 
 provider:
   name: aws
@@ -16,12 +17,29 @@ provider:
     REGION: ${self:provider.region}
 
 package:
+  individually: true
+  excludeDevDependencies: true
   exclude: 
-    - package-lock.json
-    - package.json
-
+    - .git/**
+    - .github/**
+    - .vscode/**
+    - node_modules/@aws/**
+    - node_modules/**/test/**
+    - node_modules/**/tests/**
+    - node_modules/**/__tests__/**
+    - node_modules/**/*.md
+    - node_modules/**/*.ts
+    - node_modules/**/README*
+  
 custom:
   stage: ${opt:stage, self:provider.stage}
+  webpack:
+    webpackConfig: ./webpack.config.js
+    mode: production
+    packager: npm
+    generateStatsFiles: true
+    keepOutputDirectory: true
+    stats: true
 
 appSync: ${file(./serverless/appsync.yml)}
 
