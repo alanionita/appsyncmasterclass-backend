@@ -136,6 +136,39 @@ describe("Given 2 authenticated users, ", () => {
                 expect(conversations.conversations[0].otherUser).toMatchObject(userAProfile)
             })
         }, 15 * 1000)
+        describe('When userB gets their messages', () => {
+            let messages;
+            beforeAll(async () => {
+                const vars = {
+                    otherUserId: userA.username,
+                    limit: 10
+                }
+                messages = await appsyncClient.getDirectMessages(vars);
+            })
+            it("userB should see all previous messages", async () => {
+                expect(messages).toBeDefined();
+                expect(messages).toMatchObject({
+                    nextToken: null,
+                    messages: expect.any(Array)
+                })
+                expect(messages.messages.length).toBe(2)
+                expect(messages.messages).toEqual(
+                    expect.arrayContaining([
+                        expect.objectContaining({
+                            messageId: expect.any(String),
+                            message: dmAText,
+                            timestamp: expect.stringMatching(datePattern)
+                        }),
+                        expect.objectContaining({
+                            messageId: expect.any(String),
+                            message: dmBText,
+                            timestamp: expect.stringMatching(datePattern)
+                        })
+
+                    ])
+                )
+            })
+        }, 15 * 1000)
     })
 
 }, 15 * 1000)

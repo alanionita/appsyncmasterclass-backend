@@ -132,6 +132,11 @@ resolvers:
     dataSource: conversationsTable
     request: ./appsync/resolvers/Query.listConversations.request.vtl
     response: ./appsync/resolvers/Query.listConversations.response.vtl
+  Query.getDirectMessages: 
+    kind: UNIT
+    dataSource: directMessagesTable
+    request: ./appsync/resolvers/Query.getDirectMessages.request.vtl
+    response: ./appsync/resolvers/Query.getDirectMessages.response.vtl
   # Nested fields
   Tweet.profile:
     type: Tweet
@@ -418,6 +423,11 @@ dataSources:
     description: "conversationsTable"
     config:
       tableName: !Ref ConversationsTable
+  directMessagesTable:
+    type: AMAZON_DYNAMODB
+    description: "directMessagesTable"
+    config:
+      tableName: !Ref DirectMessagesTable
 
 substitutions:
   TweetsTable: !Ref TweetsTable

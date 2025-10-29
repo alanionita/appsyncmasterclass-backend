@@ -137,7 +137,7 @@ class GraplQLClient {
             `;
 
             const { data, errors } = await this.#client.mutate({
-                mutation: SEND_DIRECT_MESSAGE, 
+                mutation: SEND_DIRECT_MESSAGE,
                 variables,
                 errorPolicy: 'all'
             })
@@ -200,7 +200,7 @@ class GraplQLClient {
             `;
 
             const { data, errors } = await this.#client.query({
-                query: LIST_CONVERSATIONS, 
+                query: LIST_CONVERSATIONS,
                 variables,
                 errorPolicy: 'all'
             })
@@ -214,6 +214,54 @@ class GraplQLClient {
 
         } catch (caught) {
             throwWithLabel(caught, `GraphQL.listConversations`)
+        }
+    }
+
+    /**
+     * Triggers Query.getDirectMessages with payload
+     * @param {Object} variables - The getDirectMessages() query params
+     * @param {String} variables.otherUserId - the correspondent 
+     * @param {String} variables.limit - max 25
+     * @param {String} variables.nextToken - optional string value
+     * @returns {Promise<MessagesPage>} async MessagesPage type structure
+     * @throws {Error} Either with custom payloads or GraphQL errors
+     */
+
+    async getDirectMessages(variables) {
+        try {
+            if (!this.#client) throw Error("Cannot find required Appsync client")
+            const GET_DMS = gql`
+                query getDirectMessages($otherUserId: ID!, $limit: Int!, $nextToken: String) {
+                    getDirectMessages(
+                        otherUserId: $otherUserId
+                        limit: $limit,
+                        nextToken: $nextToken
+                    ) {
+                        nextToken
+                        messages {
+                            messageId
+                            message
+                            timestamp
+                        }
+                    }
+                }
+            `;
+
+            const { data, errors } = await this.#client.query({
+                query: GET_DMS,
+                variables,
+                errorPolicy: 'all'
+            })
+            if (errors) {
+                console.error('GraphQL Errors :', JSON.stringify(errors))
+                throwWithLabel(new Error('GraphQL Errors'), 'GraphQL Errors detected')
+            }
+            if (data) {
+                return data.getDirectMessages
+            };
+
+        } catch (caught) {
+            throwWithLabel(caught, `GraphQL.getDirectMessages`)
         }
     }
 }
