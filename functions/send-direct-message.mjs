@@ -84,7 +84,7 @@ export async function handler(event) {
         }
         return {
             id: conversationId,
-            otherUser: otherUserId,
+            otherUserId: otherUserId,
             lastMessage: message,
             lastModified: timestamp,
         };
