@@ -52,7 +52,8 @@
     "serverless-iam-roles-per-function": "^3.2.0",
     "serverless-webpack": "^5.15.3",
     "webpack-bundle-analyzer": "^4.10.2",
-    "webpack-node-externals": "^3.0.0"
+    "webpack-node-externals": "^3.0.0",
+    "ws": "^8.18.3"
   },
   "dependencies": {
     "@apollo/client": "^3.0.0",
