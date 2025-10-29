@@ -263,6 +263,13 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Mutation.notifyReplied.request.vtl
     response: ./appsync/resolvers/Mutation.notifyReplied.response.vtl
+  Conversation.otherUser:
+    type: Conversation
+    field: otherUser
+    dataSource: usersTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Conversation.otherUser.request.vtl
+    response: ./appsync/resolvers/Conversation.otherUser.response.vtl
 dataSources:
   api:
     type: 'NONE'

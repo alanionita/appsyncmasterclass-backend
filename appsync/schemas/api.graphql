@@ -41,7 +41,7 @@ type Mutation {
     reply(tweetId: ID!, text: String!): Reply!
     follow(userId: ID!): Boolean!
     unfollow(userId: ID!): Boolean!
-    sendDirectMessage(otherUserId: ID!, message: String!): Conversation!;
+    sendDirectMessage(otherUserId: ID!, message: String!): Conversation!
 
     notifyRetweeted(id: ID!, userId: ID!, tweetId: ID!, retweetedBy: ID!, retweetId: ID!): Notification 
     @aws_iam
