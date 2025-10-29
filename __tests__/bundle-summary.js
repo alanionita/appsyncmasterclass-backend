@@ -20,9 +20,9 @@ function findStatsFiles(dir) {
 
 findStatsFiles(webpackDir);
 
-console.log('📦 Bundle Size Summary\n');
-console.log('Function                       | Size (MB)  | Assets');
-console.log('-------------------------------|------------|--------');
+console.info('📦 Bundle Size Summary\n');
+console.info('Function                       | Size (MB)  | Assets');
+console.info('-------------------------------|------------|--------');
 
 statsFiles.forEach(statsFile => {
     const functionName = path.basename(path.dirname(statsFile));
@@ -32,7 +32,7 @@ statsFiles.forEach(statsFile => {
     const sizeMB = (totalSize / 1024 / 1024).toFixed(2);
     const assetCount = stats.assets.length;
 
-    console.log(`${functionName.padEnd(30)} | ${sizeMB.padEnd(10)} | ${assetCount}`);
+    console.info(`${functionName.padEnd(30)} | ${sizeMB.padEnd(10)} | ${assetCount}`);
 });
 
 // Sort by size (largest first)
@@ -45,7 +45,7 @@ const functionSizes = statsFiles.map(statsFile => {
 
 functionSizes.sort((a, b) => b.size - a.size);
 
-console.log('\n🏆 Largest Bundles:');
+console.info('\n🏆 Largest Bundles:');
 functionSizes.slice(0, 5).forEach((func, index) => {
-    console.log(`${index + 1}. ${func.functionName.padEnd(20)}: ${(func.size / 1024 / 1024).toFixed(2)} MB`);
+    console.info(`${index + 1}. ${func.functionName.padEnd(20)}: ${(func.size / 1024 / 1024).toFixed(2)} MB`);
 });
