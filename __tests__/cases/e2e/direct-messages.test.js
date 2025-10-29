@@ -12,6 +12,7 @@ describe("Given 2 authenticated users, ", () => {
     let userA;
     let userB;
     let userAProfile;
+    let userBProfile;
     let dmA;
     let dmAText;
     let dmB;
@@ -23,6 +24,7 @@ describe("Given 2 authenticated users, ", () => {
 
         if (userA && userA.username) {
             userAProfile = await when.user_calls_getMyProfile(userA)
+            userBProfile = await when.user_calls_getMyProfile(userB)
         }
     })
     describe('When userA sends a message to userB', () => {
@@ -137,22 +139,22 @@ describe("Given 2 authenticated users, ", () => {
             })
         }, 15 * 1000)
         describe('When userB gets their messages', () => {
-            let messages;
+            let getDmResp;
             beforeAll(async () => {
                 const vars = {
                     otherUserId: userA.username,
                     limit: 10
                 }
-                messages = await appsyncClient.getDirectMessages(vars);
+                getDmResp = await appsyncClient.getDirectMessages(vars);
             })
             it("userB should see all previous messages", async () => {
-                expect(messages).toBeDefined();
-                expect(messages).toMatchObject({
+                expect(getDmResp).toBeDefined();
+                expect(getDmResp).toMatchObject({
                     nextToken: null,
                     messages: expect.any(Array)
                 })
-                expect(messages.messages.length).toBe(2)
-                expect(messages.messages).toEqual(
+                expect(getDmResp.messages.length).toBe(2)
+                expect(getDmResp.messages).toEqual(
                     expect.arrayContaining([
                         expect.objectContaining({
                             messageId: expect.any(String),
@@ -167,6 +169,11 @@ describe("Given 2 authenticated users, ", () => {
 
                     ])
                 )
+            })
+            it("userB should see all previous messages senders, ordered by latest message", async () => {
+                const { messages } = getDmResp
+                expect(messages[0].from).toMatchObject(userBProfile);
+                expect(messages[1].from).toMatchObject(userAProfile);
             })
         }, 15 * 1000)
     })

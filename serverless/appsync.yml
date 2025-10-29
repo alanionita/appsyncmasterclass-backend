@@ -280,6 +280,13 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Conversation.otherUser.request.vtl
     response: ./appsync/resolvers/Conversation.otherUser.response.vtl
+  Message.from:
+    type: Message
+    field: from
+    dataSource: usersTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Message.from.request.vtl
+    response: ./appsync/resolvers/Message.from.response.vtl
 dataSources:
   api:
     type: 'NONE'

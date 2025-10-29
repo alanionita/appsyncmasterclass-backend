@@ -242,9 +242,26 @@ class GraplQLClient {
                             messageId
                             message
                             timestamp
+                            from {
+                                ... otherProfileFields
+                                ... myProfileFields
+                                tweets {
+                                    nextToken
+                                    tweets {
+                                        ... iTweetFields
+                                    }
+                                }
+                            }
                         }
                     }
                 }
+                ${otherProfileFrag},
+                ${myProfileFrag},
+                ${iProfileFrag},
+                ${tweetFrag},
+                ${retweetFrag},
+                ${replyFrag},
+                ${iTweetFrag},
             `;
 
             const { data, errors } = await this.#client.query({
