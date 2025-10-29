@@ -685,4 +685,15 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No diffs
 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/compare/06-20-Add_e2e_tests_for_all_notifications...06-21-Support_DM_in_GraphQL_schema
+
+# 06-22-Implement_the_sendDirectMessage_mutation
+
+Diffs: 
+- packages: introduces babel and babel-jest and configures Jest to handle esm files; required because of previous decission to write any new lambdas as ESM (.mjs); send-direct-message() is an esm module; 
+- steps: adds whenEsm to signal the divergence in patterns; future release planned to refactor the codebase to ESM; all other steps use aws-sdk v3 command patterns and clients
+- integration/send-dm: expanded expect value checks to verify full structure of objects from both DirectMessages and Conversations tables
+- fn/send-dm: implements aws-sdk v3 clients and command style
+- tests/appsyncClient: implements queries to Appsync via the new @apollo/client wrapper; adds sendDirectMessage method; implements existing graphqlFragments; required the use of all fragment due to circular reference within them
+
 Release: 
