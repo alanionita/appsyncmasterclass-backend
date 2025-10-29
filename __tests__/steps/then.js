@@ -8,7 +8,16 @@ const { makePresignedUrlGet } = require("../lib/s3");
 
 require('dotenv').config()
 
-const { USERS_TABLE, REGION, BUCKET_NAME, TWEETS_TABLE, TIMELINES_TABLE, RETWEETS_TABLE } = process.env;
+const {
+    USERS_TABLE,
+    REGION,
+    BUCKET_NAME,
+    TWEETS_TABLE,
+    TIMELINES_TABLE,
+    RETWEETS_TABLE,
+    DIRECT_MESSAGES_TABLE,
+    CONVERSATIONS_TABLE
+} = process.env;
 
 async function user_exists(userID) {
     try {
@@ -344,6 +353,54 @@ async function UsersTable_contains(id) {
     }
 }
 
+async function DirectMessagesTable_contains(conversationId) {
+    try {
+        if (!conversationId) throw Error('Invalid key for table')
+
+        if (!DIRECT_MESSAGES_TABLE && !REGION) throw Error("Missing env variable");
+
+        const ddb = new DynamoDBClient({ region: REGION });
+        const client = new DynamoDBDocumentClient(ddb)
+
+        const input = {
+            TableName: DIRECT_MESSAGES_TABLE,
+            KeyConditionExpression: "conversationId = :conversationId",
+            ExpressionAttributeValues: {
+                ":conversationId": conversationId
+            },
+            ScanIndexForward: false
+        };
+        const command = new QueryCommand(input);
+
+        const ddbResp = await client.send(command)
+
+        expect(ddbResp.$metadata.httpStatusCode).toBe(200)
+        return ddbResp.Items
+    } catch (caught) {
+        return throwWithLabel(caught, "then.DirectMessagesTable_contains")
+    }
+}
+
+async function ConversationsTable_contains(userId, otherUserId) {
+    try {
+
+        if (!userId && !otherUserId) throw Error('Invalid key for table')
+
+        if (!CONVERSATIONS_TABLE) throw Error("Missing env variable");
+
+        const ddbResp = await table_get(CONVERSATIONS_TABLE, {
+            userId,
+            otherUserId
+        });
+
+        expect(ddbResp.Item).toBeTruthy()
+        expect(ddbResp.$metadata.httpStatusCode).toBe(200)
+        return ddbResp.Item
+    } catch (caught) {
+        return throwWithLabel(caught, "then.ConversationsTable_contains")
+    }
+}
+
 module.exports = {
     user_exists,
     user_upload,
@@ -356,5 +413,7 @@ module.exports = {
     get_user_timeline,
     TweetsTable_retweets_notcontains,
     RetweetsTable_notcontains,
-    TweetsTable_replies_contains
+    TweetsTable_replies_contains,
+    DirectMessagesTable_contains,
+    ConversationsTable_contains
 }

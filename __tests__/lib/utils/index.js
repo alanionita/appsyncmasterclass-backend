@@ -33,10 +33,13 @@ async function waitSec(amount = 1) {
     return new Promise(resolve => setTimeout(resolve, sec * amount));
 }
 
+const datePattern = /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d(?:\.\d+)?Z?/g;
+
 module.exports = {
     fetchDatePattern,
     makeSignedUrlPattern,
     makeExtContentType,
     throwWithLabel,
-    waitSec
+    waitSec,
+    datePattern
 }
