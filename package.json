@@ -10,7 +10,7 @@
     "deploy": "npm run sls -- deploy",
     "deploy:fn": "npm run sls -- deploy -f",
     "deploy:loud": "npm run sls -- deploy --verbose",
-    "test:unit": "jest --verbose ./__tests__/cases/unit",
+    "test:unit": "NODE_OPTIONS=--experimental-vm-modules jest --verbose ./__tests__/cases/unit",
     "test:integration": "jest --verbose ./__tests__/cases/integration",
     "test:e2e": "jest --verbose ./__tests__/cases/e2e",
     "test:bundle": "node ./__tests__/bundle-summary.js"
