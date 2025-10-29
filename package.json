@@ -14,7 +14,7 @@
     "test:integration": "jest --verbose ./__tests__/cases/integration",
     "test:e2e": "jest --verbose ./__tests__/cases/e2e",
     "test:bundle": "node ./__tests__/bundle-summary.js",
-    "release": "gh release create --target main"
+    "release": "gh release create -n '' --target main "
   },
   "repository": {
     "type": "git",
