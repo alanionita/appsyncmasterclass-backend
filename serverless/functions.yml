@@ -254,3 +254,18 @@ notifyLiked:
       Action: 
         - appsync:GraphQL
       Resource: !Sub ${GraphQlApi.Arn}/types/Mutation/fields/notifyLiked
+
+sendDirectMessage:
+  handler: functions/send-direct-message.handler
+  environment:
+    CONVERSATIONS_TABLE: !Ref ConversationsTable
+    DIRECT_MESSAGES_TABLE: !Ref DirectMessagesTable
+  iamRoleStatements:
+    - Effect: Allow
+      Action: dynamodb:UpdateItem
+      Resource: 
+        - !GetAtt ConversationsTable.Arn
+    - Effect: Allow
+      Action: dynamodb:PutItem
+      Resource:
+        - !GetAtt DirectMessagesTable.Arn
