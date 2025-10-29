@@ -2,6 +2,7 @@ const { createAuthLink } = require("aws-appsync-auth-link");
 const { createSubscriptionHandshakeLink } = require("aws-appsync-subscription-link");
 const apollo = require("@apollo/client");
 const { throwWithLabel } = require("./utils");
+const { otherProfileFrag, tweetFrag, iProfileFrag, iTweetFrag, replyFrag, retweetFrag, myProfileFrag } = require('./utils/graphqlFragments')
 
 const { ApolloClient, ApolloLink, gql, HttpLink, InMemoryCache } = apollo
 
@@ -115,8 +116,24 @@ class GraplQLClient {
                         id
                         lastMessage
                         lastModified
+                        otherUser {
+                            ... otherProfileFields
+                            tweets {
+                                nextToken
+                                tweets {
+                                    ... iTweetFields
+                                }
+                            }
+                        }
                     }
                 }
+                ${otherProfileFrag},
+                ${tweetFrag},
+                ${iTweetFrag},
+                ${iProfileFrag},
+                ${retweetFrag},
+                ${replyFrag},
+                ${myProfileFrag}
             `;
 
             const { data, errors } = await this.#client.mutate({

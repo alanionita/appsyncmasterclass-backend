@@ -147,5 +147,12 @@ function registerAllFragments () {
 }
 
 module.exports = {
-    registerAllFragments
+    registerAllFragments, 
+    otherProfileFrag,
+    iTweetFrag,
+    tweetFrag,
+    iProfileFrag,
+    retweetFrag,
+    replyFrag,
+    myProfileFrag
 }
