@@ -1,7 +1,7 @@
 const given = require("../../steps/given");
 const when = require("../../steps/when");
 const chance = require('chance').Chance();
-const { datePattern } = require('../../lib/utils/index');
+const { datePattern, waitSec } = require('../../lib/utils/index');
 const { GraplQLClient } = require('../../lib/appsyncClient');
 
 require("dotenv").config()
@@ -12,6 +12,10 @@ describe("Given 2 authenticated users, ", () => {
     let userA;
     let userB;
     let userAProfile;
+    let dmA;
+    let dmAText;
+    let dmB;
+    let dmBText;
 
     beforeAll(async () => {
         userA = await given.authenticated_user()
@@ -23,8 +27,7 @@ describe("Given 2 authenticated users, ", () => {
     })
     describe('When userA sends a message to userB', () => {
         let appsyncClient;
-        let dm;
-        const dmText = chance.string({ length: 16 })
+        dmAText = chance.string({ length: 16 })
         beforeAll(async () => {
             appsyncClient = new GraplQLClient({
                 region: REGION,
@@ -34,27 +37,50 @@ describe("Given 2 authenticated users, ", () => {
 
             const vars = {
                 otherUserId: userB.username,
-                message: dmText
+                message: dmAText
             }
 
-            dm = await appsyncClient.sendDirectMessage(vars);
+            dmA = await appsyncClient.sendDirectMessage(vars);
         })
 
-        it("userA should get a valid Conversation", async () => {
-            expect(dm).toBeDefined();
-            expect(dm).toMatchObject({
+        it("userA should get a valid Conversation with last message", async () => {
+            expect(dmA).toBeDefined();
+            expect(dmA).toMatchObject({
                 id: expect.any(String),
-                lastMessage: dmText,
+                lastMessage: dmAText,
                 lastModified: expect.stringMatching(datePattern)
             })
-            expect(dm.id).toContain(userA.username)
-            expect(dm.id).toContain(userB.username)
+            expect(dmA.id).toContain(userA.username)
+            expect(dmA.id).toContain(userB.username)
         })
+        describe('When userA lists their conversations', () => {
+            let conversations;
+            beforeAll(async () => {
+                const vars = {
+                    limit: 10,
+                }
+                conversations = await appsyncClient.listConversations(vars);
+            })
+            it("userA should see the last message dmA", async () => {
+                expect(conversations).toBeDefined();
+                expect(conversations).toMatchObject({
+                    nextToken: null,
+                    conversations: expect.arrayContaining([
+                        expect.objectContaining({
+                            id: expect.any(String),
+                            lastMessage: dmAText,
+                            lastModified: dmA.lastModified
+                        })
+
+                    ])
+                })
+                expect(conversations.conversations.length).toBe(1)
+            })
+        }, 15 * 1000)
     })
     describe('When userB sends a message to userA', () => {
         let appsyncClient;
-        let dm;
-        const dmText = chance.string({ length: 16 })
+        dmBText = chance.string({ length: 16 })
         beforeAll(async () => {
             appsyncClient = new GraplQLClient({
                 region: REGION,
@@ -64,25 +90,52 @@ describe("Given 2 authenticated users, ", () => {
 
             const vars = {
                 otherUserId: userA.username,
-                message: dmText
+                message: dmBText
             }
-            dm = await appsyncClient.sendDirectMessage(vars);
+            dmB = await appsyncClient.sendDirectMessage(vars);
         })
 
-        it("userB should get a valid Conversation", async () => {
-            expect(dm).toBeDefined();
-            expect(dm).toMatchObject({
+        it("userB should get a valid Conversation with new message", async () => {
+            expect(dmB).toBeDefined();
+            expect(dmB).toMatchObject({
                 id: expect.any(String),
-                lastMessage: dmText,
+                lastMessage: dmBText,
                 lastModified: expect.stringMatching(datePattern)
             })
-            expect(dm.id).toContain(userB.username)
-            expect(dm.id).toContain(userA.username)
+            expect(dmB.id).toContain(userB.username)
+            expect(dmB.id).toContain(userA.username)
         })
         it("userB should get the other user profile from Conversation", async () => {
-            expect(dm).toBeDefined();
-            
-            expect(dm.otherUser).toMatchObject(userAProfile)
+            expect(dmB).toBeDefined();
+
+            expect(dmB.otherUser).toMatchObject(userAProfile)
         })
+        describe('When userB lists their conversations', () => {
+            let conversations;
+            beforeAll(async () => {
+                const vars = {
+                    limit: 10,
+                }
+                conversations = await appsyncClient.listConversations(vars);
+            })
+            it("userB should see their last posted message", async () => {
+                expect(conversations).toBeDefined();
+                expect(conversations).toMatchObject({
+                    nextToken: null,
+                    conversations: expect.arrayContaining([
+                        expect.objectContaining({
+                            id: expect.any(String),
+                            lastMessage: dmBText,
+                            lastModified: expect.stringMatching(datePattern)
+                        })
+
+                    ])
+                })
+                expect(conversations.conversations.length).toBe(1)
+                expect(conversations.conversations[0].otherUser).toBeDefined()
+                expect(conversations.conversations[0].otherUser).toMatchObject(userAProfile)
+            })
+        }, 15 * 1000)
     })
+
 }, 15 * 1000)

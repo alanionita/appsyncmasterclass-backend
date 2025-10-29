@@ -154,6 +154,68 @@ class GraplQLClient {
             throwWithLabel(caught, `GraphQL.sendDirectMessage`)
         }
     }
+
+    /**
+     * Triggers Query.listConversations with payload
+     * @param {Object} variables - The listConversations() query params
+     * @param {String} variables.limit - max 25
+     * @param {String} variables.nextToken - optional string value
+     * @returns {Promise<ConversationPage>} async ConversationPage type structure
+     * @throws {Error} Either with custom payloads or GraphQL errors
+     */
+
+    async listConversations(variables) {
+        try {
+            if (!this.#client) throw Error("Cannot find required Appsync client")
+            const LIST_CONVERSATIONS = gql`
+                query listConversations($limit: Int!, $nextToken: String) {
+                    listConversations(
+                        limit: $limit,
+                        nextToken: $nextToken
+                    ) {
+                        nextToken
+                        conversations {
+                            id
+                            lastMessage
+                            lastModified
+                            otherUser {
+                                ... otherProfileFields
+                                tweets {
+                                    nextToken
+                                    tweets {
+                                        ... iTweetFields
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                ${otherProfileFrag},
+                ${tweetFrag},
+                ${iTweetFrag},
+                ${iProfileFrag},
+                ${retweetFrag},
+                ${replyFrag},
+                ${myProfileFrag}
+            `;
+
+            const { data, errors } = await this.#client.query({
+                query: LIST_CONVERSATIONS, 
+                variables,
+                errorPolicy: 'all'
+            })
+            if (errors) {
+                console.error('GraphQL Errors :', JSON.stringify(errors))
+                throwWithLabel(new Error('GraphQL Errors'), 'GraphQL Errors detected')
+            }
+            if (data) {
+                return data.listConversations
+            };
+
+        } catch (caught) {
+            throwWithLabel(caught, `GraphQL.listConversations`)
+        }
+    }
 }
 
 module.exports = {

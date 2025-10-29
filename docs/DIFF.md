@@ -696,4 +696,11 @@ Diffs:
 - fn/send-dm: implements aws-sdk v3 clients and command style
 - tests/appsyncClient: implements queries to Appsync via the new @apollo/client wrapper; adds sendDirectMessage method; implements existing graphqlFragments; required the use of all fragment due to circular reference within them
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-22-Implement_the_sendDirectMessage_mutation
+
+# 06-23-Implement_the_listConversations_query
+
+Diffs:
+- tests/appsync: adds new method for .listConversations()
+
+Release:

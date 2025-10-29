@@ -127,6 +127,11 @@ resolvers:
     kind: UNIT # required
     field: sendDirectMessage
     dataSource: sendDirectMessageFn
+  Query.listConversations: 
+    kind: UNIT
+    dataSource: conversationsTable
+    request: ./appsync/resolvers/Query.listConversations.request.vtl
+    response: ./appsync/resolvers/Query.listConversations.response.vtl
   # Nested fields
   Tweet.profile:
     type: Tweet
@@ -408,6 +413,11 @@ dataSources:
     type: 'AWS_LAMBDA'
     config:
       functionName: sendDirectMessage
+  conversationsTable:
+    type: AMAZON_DYNAMODB
+    description: "conversationsTable"
+    config:
+      tableName: !Ref ConversationsTable
 
 substitutions:
   TweetsTable: !Ref TweetsTable
