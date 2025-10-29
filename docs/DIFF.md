@@ -710,4 +710,10 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 Diffs:
 - tests/appsync: adds new method for .getDirectMessages(); implements fragments again, but could not use iProfileFields generic containing both MyProfile and OtherProfile fields; had to specify each field variation; 
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-24-Implement_the_getDirectMessages_query
+
+# 06-25-Support_notifyDMed_in_the_GraphQL_schema
+
+No Diffs 
+
+Release:
