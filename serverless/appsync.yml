@@ -119,11 +119,14 @@ resolvers:
     kind: UNIT # required
     field: search
     dataSource: searchFn
-
   Query.searchHashtags:
     kind: UNIT # required
     field: searchHashtags
     dataSource: searchHashtagsFn
+  Mutation.sendDirectMessage:
+    kind: UNIT # required
+    field: sendDirectMessage
+    dataSource: sendDirectMessageFn
   # Nested fields
   Tweet.profile:
     type: Tweet
@@ -383,7 +386,6 @@ dataSources:
     type: 'AWS_LAMBDA'
     config:
       functionName: search
-
   searchHashtagsFn:
     type: 'AWS_LAMBDA'
     config:
@@ -395,6 +397,10 @@ dataSources:
     description: 'NotificationsTable'
     config:
       tableName: !Ref NotificationsTable
+  sendDirectMessageFn:
+    type: 'AWS_LAMBDA'
+    config:
+      functionName: sendDirectMessage
 
 substitutions:
   TweetsTable: !Ref TweetsTable
