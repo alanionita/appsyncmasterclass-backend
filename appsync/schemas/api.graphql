@@ -55,7 +55,7 @@ type Mutation {
     notifyReplied(id: ID!, userId: ID!, tweetId: ID!, replyTweetId: ID!, repliedBy: ID!): Notification 
     @aws_iam
 
-    notifyDMed(id: ID!, userId: ID!, otherUserId: ID!, message: String!, repliedBy: ID!): Notification 
+    notifyDMed(id: ID!, userId: ID!, otherUserId: ID!, message: String!): Notification 
     @aws_iam
 }
 

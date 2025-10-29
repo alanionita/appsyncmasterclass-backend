@@ -269,3 +269,17 @@ sendDirectMessage:
       Action: dynamodb:PutItem
       Resource:
         - !GetAtt DirectMessagesTable.Arn
+
+notifyDMed:
+  handler: functions/notifyDMed.handler
+  events:
+    - stream:
+       type: dynamodb
+       arn: !GetAtt DirectMessagesTable.StreamArn
+  environment:
+    APPSYNC_URL: ${appsync:url}
+  iamRoleStatements:
+    - Effect: Allow
+      Action: 
+        - appsync:GraphQL
+      Resource: !Sub ${GraphQlApi.Arn}/types/Mutation/fields/notifyDMed

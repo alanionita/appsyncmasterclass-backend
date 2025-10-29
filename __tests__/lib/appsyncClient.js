@@ -79,6 +79,11 @@ class GraplQLClient {
                             mentionedBy
                             mentionedByTweetId
                         }
+
+                        ... on DMed {
+                            otherUserId
+                            message
+                        }
                     }
                 }
             `;

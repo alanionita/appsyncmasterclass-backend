@@ -716,4 +716,12 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No Diffs 
 
-Release:
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-25-
+
+# 06-26-Implement_nofityDMed_notification
+
+Diffs:
+- appsync: queries to Appsync implemented via @apollo/client as seen in past release; applies to Lambda and test
+- jest: adds `ws` package and polyfill config
+
+Release: 

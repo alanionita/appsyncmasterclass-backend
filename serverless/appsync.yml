@@ -287,6 +287,11 @@ resolvers:
     kind: UNIT # required
     request: ./appsync/resolvers/Message.from.request.vtl
     response: ./appsync/resolvers/Message.from.response.vtl
+  Mutation.notifyDMed:
+    dataSource: notificationsTable
+    kind: UNIT # required
+    request: ./appsync/resolvers/Mutation.notifyDMed.request.vtl
+    response: ./appsync/resolvers/Mutation.notifyDMed.response.vtl
 dataSources:
   api:
     type: 'NONE'

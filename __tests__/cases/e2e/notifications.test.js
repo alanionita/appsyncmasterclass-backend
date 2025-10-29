@@ -3,7 +3,7 @@ const when = require("../../steps/when");
 const chance = require('chance').Chance()
 const retry = require('async-retry');
 const { GraplQLClient } = require('../../lib/appsyncClient');
-const { waitSec } = require("../../lib/utils");
+const { waitSec, datePattern } = require("../../lib/utils");
 
 require("dotenv").config()
 
@@ -154,7 +154,7 @@ describe("Given 2 authenticated users, ", () => {
 
         describe("When userB mentions userA", () => {
             let userBTweet;
-            
+
             beforeAll(async () => {
                 const tweetMention = chance.string({ length: 16 }) + ` @${userAProfile.screenName}`;
                 userBTweet = await when.user_calls_tweet(userB, tweetMention)
@@ -173,6 +173,49 @@ describe("Given 2 authenticated users, ", () => {
                             })
                         ])
                     )
+                }, {
+                    retries: 10,
+                    maxTimeout: 1000
+                })
+
+            }, 15 * 1000)
+        })
+
+        describe("When userB sends a direct message to userA", () => {
+            let conversation;
+            const dmText = chance.string({ length: 16 })
+
+            beforeAll(async () => {
+                let appsyncClientB = new GraplQLClient({
+                    region: REGION,
+                    appSyncUrl: APPSYNC_HTTP_URL,
+                    accessToken: userB.accessToken
+                })
+
+                const vars = {
+                    otherUserId: userA.username,
+                    message: dmText
+                }
+
+                conversation = await appsyncClientB.sendDirectMessage(vars);
+
+            })
+            it("userA should get a DMed notification", async () => {
+                await retry(async () => {
+                    expect(subscription).toBeDefined();
+                    expect(subscription.closed).toBe(false);
+                    expect(notifications).toEqual(
+                        expect.arrayContaining([
+                            expect.objectContaining({
+                                id: expect.any(String),
+                                type: 'DMed',
+                                userId: userA.username,
+                                otherUserId: userB.username,
+                                message: conversation.lastMessage,
+                                createdAt: expect.stringMatching(datePattern)
+                            })
+                        ])
+                    )
 
                     subscription.unsubscribe();
 
@@ -182,7 +225,7 @@ describe("Given 2 authenticated users, ", () => {
                     maxTimeout: 1000
                 })
 
-            }, 15 * 1000)
+            }, 20 * 1000)
         })
 
     })
