@@ -245,3 +245,66 @@ Resources:
           Value: 'Alan Ionita'
         - Key: CreatedOn
           Value: 2025-10-23
+  ConversationsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+        - AttributeName: otherUserId
+          KeyType: RANGE
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: otherUserId
+          AttributeType: S
+        - AttributeName: lastModified
+          AttributeType: S
+      GlobalSecondaryIndexes:
+        - IndexName: byUserId
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+            - AttributeName: lastModified
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      Tags:
+        - Key: Environment
+          Value: ${self:custom.stage}
+        - Key: Name
+          Value: conversations-table
+        - Key: CanIDelete
+          Value: 'No'
+        - Key: Author
+          Value: 'Alan Ionita'
+        - Key: CreatedOn
+          Value: 2025-10-28
+  DirectMessagesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: conversationId
+          KeyType: HASH
+        - AttributeName: messageId
+          KeyType: RANGE
+      AttributeDefinitions:
+        - AttributeName: conversationId
+          AttributeType: S
+        - AttributeName: messageId
+          AttributeType: S
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+      Tags:
+        - Key: Environment
+          Value: ${self:custom.stage}
+        - Key: Name
+          Value: direct-messages-table
+        - Key: CanIDelete
+          Value: 'No'
+        - Key: Author
+          Value: 'Alan Ionita'
+        - Key: CreatedOn
+          Value: 2025-10-28
