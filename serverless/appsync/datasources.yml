@@ -145,3 +145,7 @@ directMessagesTable:
   description: "directMessagesTable"
   config:
     tableName: !Ref DirectMessagesTable
+getTweetAuthorFn:
+    type: 'AWS_LAMBDA'
+    config:
+      functionName: getTweetAuthor

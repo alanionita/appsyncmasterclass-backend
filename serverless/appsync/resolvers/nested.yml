@@ -1,10 +1,11 @@
 Tweet.profile:
   type: Tweet
   field: profile
-  dataSource: usersTable
+  dataSource: getTweetAuthorFn
   kind: UNIT # required
-  request: ./appsync/resolvers/Tweet.profile.request.vtl
-  response: ./appsync/resolvers/Tweet.profile.response.vtl
+  request: ./appsync/resolvers/Tweet.profile.batchInvoke.request.vtl
+  response: ./appsync/resolvers/Tweet.profile.batchInvoke.response.vtl
+  maxBatchSize: 25
   caching:
     keys:
       - $context.identity.username
@@ -41,10 +42,11 @@ MyProfile.tweets:
 Retweet.profile:
   type: Retweet
   field: profile
-  dataSource: usersTable
+  dataSource: getTweetAuthorFn
   kind: UNIT # required
-  request: ./appsync/resolvers/Tweet.profile.request.vtl
-  response: ./appsync/resolvers/Tweet.profile.response.vtl
+  request: ./appsync/resolvers/Tweet.profile.batchInvoke.request.vtl
+  response: ./appsync/resolvers/Tweet.profile.batchInvoke.response.vtl
+  maxBatchSize: 25
   caching:
     keys:
       - $context.identity.username
@@ -60,10 +62,11 @@ Retweet.retweetOf:
 Reply.profile:
   type: Reply
   field: profile
-  dataSource: usersTable
+  dataSource: getTweetAuthorFn
   kind: UNIT # required
-  request: ./appsync/resolvers/Tweet.profile.request.vtl
-  response: ./appsync/resolvers/Tweet.profile.response.vtl
+  request: ./appsync/resolvers/Tweet.profile.batchInvoke.request.vtl
+  response: ./appsync/resolvers/Tweet.profile.batchInvoke.response.vtl
+  maxBatchSize: 25
   caching:
     keys:
       - $context.identity.username

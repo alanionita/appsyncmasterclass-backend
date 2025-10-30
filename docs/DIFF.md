@@ -732,4 +732,15 @@ Diffs:
 - serverless.yml: configured 2 files for appsync-dev, appsync-prod and included the caching config there; main spec file switches between them based on self:custom.stage
 - serverless/appsync.yml: took the opportunity to break some of the resolver definitions into files; did the same for pipelineFunctions, dataSources
 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/compare/06-26-Implement_nofityDMed_notification...06-29-Configure_per-resolver_caching
+
+# 06-30-Use_BatchInvoke_to_reduce_the_number_of_Lambda_invocations 
+
+Diffs:
+- appsync/resolvers: the response vtl is required, and has been defined as a simple JSON return of the $ctx.result
+- appsync/resolvers: configure `maxBatchSize` on the resolvers; seems to now be supported by `serverless-appsync-plugin` - https://github.com/sid88in/serverless-appsync-plugin/blob/master/doc/pipeline-functions.md#configuration
+- fn/get-tweet-author: previous logic used the first item from payloads to parse the profile type and selection; but the behaviour of batchInvoke is that each payload can be unique, meaning that we can be in a situation where we set all the payloads `.__typename` and `selection` based of the first payload received; the diff code here handles this issue by handling `.__typename` and `selection` per payload 
+- fn/get-tweet-author: uses @aws-sdk/client-* and v3 command style
+- fn/get-tweet-author: does not use `lodash`, prefering vanilla JS
+
 Release:

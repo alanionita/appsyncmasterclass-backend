@@ -283,3 +283,13 @@ notifyDMed:
       Action: 
         - appsync:GraphQL
       Resource: !Sub ${GraphQlApi.Arn}/types/Mutation/fields/notifyDMed
+
+getTweetAuthor:
+  handler: functions/get-tweet-author.handler
+  environment:
+    USERS_TABLE: !Ref UsersTable
+  iamRoleStatements:
+    - Effect: Allow
+      Action: dynamodb:BatchGetItem
+      Resource: 
+        - !GetAtt UsersTable.Arn
