@@ -1,0 +1,31 @@
+name: appsyncmasterclass
+
+schema: './appsync/schemas/*.graphql'
+
+authentication:
+  type: 'AMAZON_COGNITO_USER_POOLS'
+  config:
+    awsRegion: ${self:provider.region}
+    defaultAction: ALLOW
+    userPoolId: !Ref CgUserPool
+
+additionalAuthentications:
+  - type: AWS_IAM
+
+pipelineFunctions:
+- ${file(./serverless/appsync/pipelineFunctions.yml)}
+
+resolvers:
+- ${file(./serverless/appsync/resolvers/query.yml)}
+- ${file(./serverless/appsync/resolvers/mutation.yml)}
+- ${file(./serverless/appsync/resolvers/nested.yml)}
+- ${file(./serverless/appsync/resolvers/subscription.yml)}
+  
+dataSources:
+- ${file(./serverless/appsync/datasources.yml)}
+
+substitutions:
+  TweetsTable: !Ref TweetsTable
+  TweetLikesTable: !Ref TweetLikesTable
+  UsersTable: !Ref UsersTable
+  RelationshipsTable: !Ref RelationshipsTable

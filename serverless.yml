@@ -41,7 +41,7 @@ custom:
     keepOutputDirectory: true
     stats: true
 
-appSync: ${file(./serverless/appsync.yml)}
+appSync: ${file(./serverless/appsync-${self:custom.stage}.yml)}
 
 
 functions: ${file(./serverless/functions.yml)}
