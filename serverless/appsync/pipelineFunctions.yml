@@ -1,0 +1,16 @@
+getFollowers:
+  dataSource: relationshipsTable
+  request: ./appsync/resolvers/getFollowers.request.vtl
+  response: ./appsync/resolvers/getFollowers.response.vtl
+hydrateFollowers:
+  dataSource: usersTable
+  request: ./appsync/resolvers/hydrateFollowers.request.vtl
+  response: ./appsync/resolvers/hydrateFollowers.response.vtl
+getFollowing:
+  dataSource: relationshipsTable
+  request: ./appsync/resolvers/getFollowing.request.vtl
+  response: ./appsync/resolvers/getFollowing.response.vtl
+hydrateFollowing:
+  dataSource: usersTable
+  request: ./appsync/resolvers/hydrateFollowing.request.vtl
+  response: ./appsync/resolvers/hydrateFollowing.response.vtl

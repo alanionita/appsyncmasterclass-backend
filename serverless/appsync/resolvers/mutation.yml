@@ -1,0 +1,70 @@
+Mutation.editMyProfile:
+  dataSource: usersTable
+  kind: UNIT # required
+  request: ./appsync/resolvers/Mutation.editMyProfile.request.vtl
+  response: ./appsync/resolvers/Mutation.editMyProfile.response.vtl
+Mutation.tweet:
+  kind: UNIT # required
+  field: tweet
+  dataSource: tweetFn
+Mutation.like:
+  dataSource: tweetLikeMutation
+  kind: UNIT # required
+  request: ./appsync/resolvers/Mutation.like.request.vtl
+  response: ./appsync/resolvers/Mutation.like.response.vtl
+Mutation.unlike:
+  dataSource: tweetUnlikeMutation
+  kind: UNIT # required
+  request: ./appsync/resolvers/Mutation.unlike.request.vtl
+  response: ./appsync/resolvers/Mutation.unlike.response.vtl
+Mutation.retweet:
+  kind: UNIT # required
+  field: retweet
+  dataSource: retweetFn
+Mutation.unretweet:
+  kind: UNIT # required
+  field: unretweet
+  dataSource: unretweetFn
+Mutation.reply:
+  kind: UNIT # required
+  field: reply
+  dataSource: replyFn
+Mutation.follow:
+  dataSource: followMutation
+  kind: UNIT # required
+  request: ./appsync/resolvers/Mutation.follow.request.vtl
+  response: ./appsync/resolvers/Mutation.follow.response.vtl
+Mutation.unfollow:
+  dataSource: unfollowMutation
+  kind: UNIT # required
+  request: ./appsync/resolvers/Mutation.unfollow.request.vtl
+  response: ./appsync/resolvers/Mutation.unfollow.response.vtl
+Mutation.sendDirectMessage:
+  kind: UNIT # required
+  field: sendDirectMessage
+  dataSource: sendDirectMessageFn
+Mutation.notifyRetweeted:
+  dataSource: notificationsTable
+  kind: UNIT # required
+  request: ./appsync/resolvers/Mutation.notifyRetweeted.request.vtl
+  response: ./appsync/resolvers/Mutation.notifyRetweeted.response.vtl
+Mutation.notifyLiked:
+  dataSource: notificationsTable
+  kind: UNIT # required
+  request: ./appsync/resolvers/Mutation.notifyLiked.request.vtl
+  response: ./appsync/resolvers/Mutation.notifyLiked.response.vtl
+Mutation.notifyMentioned:
+  dataSource: notificationsTable
+  kind: UNIT # required
+  request: ./appsync/resolvers/Mutation.notifyMentioned.request.vtl
+  response: ./appsync/resolvers/Mutation.notifyMentioned.response.vtl
+Mutation.notifyReplied:
+  dataSource: notificationsTable
+  kind: UNIT # required
+  request: ./appsync/resolvers/Mutation.notifyReplied.request.vtl
+  response: ./appsync/resolvers/Mutation.notifyReplied.response.vtl
+Mutation.notifyDMed:
+  dataSource: notificationsTable
+  kind: UNIT # required
+  request: ./appsync/resolvers/Mutation.notifyDMed.request.vtl
+  response: ./appsync/resolvers/Mutation.notifyDMed.response.vtl

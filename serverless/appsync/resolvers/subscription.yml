@@ -1,0 +1,5 @@
+Subscription.onNotified:
+  kind: UNIT # required
+  dataSource: onNotified
+  request: ./appsync/resolvers/Subscription.onNotified.request.vtl
+  response: ./appsync/resolvers/Subscription.onNotified.response.vtl

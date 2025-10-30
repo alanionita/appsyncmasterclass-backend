@@ -1,0 +1,147 @@
+api:
+  type: 'NONE'
+usersTable:
+  type: AMAZON_DYNAMODB
+  description: 'UsersTable'
+  config:
+    tableName: !Ref UsersTable
+tweetsTable:
+  type: AMAZON_DYNAMODB
+  description: 'TweetsTable'
+  config:
+    tableName: !Ref TweetsTable
+timelinesTable:
+  type: AMAZON_DYNAMODB
+  description: 'TimelinesTable'
+  config:
+    tableName: !Ref TimelinesTable
+tweetLikesTable:
+  type: AMAZON_DYNAMODB
+  description: "tweetLikesTable"
+  config:
+    tableName: !Ref TweetLikesTable
+retweetsTable:
+  type: AMAZON_DYNAMODB
+  description: "retweetsTable"
+  config:
+    tableName: !Ref RetweetsTable
+tweetLikeMutation:
+  type: AMAZON_DYNAMODB
+  description: "tweetLikeMutation"
+  config:
+    tableName: !Ref TweetLikesTable
+    iamRoleStatements:
+    - Effect: Allow
+      Action: 
+        - dynamodb:UpdateItem
+      Resource: 
+        - !GetAtt UsersTable.Arn
+        - !GetAtt TweetsTable.Arn
+    - Effect: Allow
+      Action: 
+        - dynamodb:PutItem
+      Resource: !GetAtt TweetLikesTable.Arn
+tweetUnlikeMutation: 
+  type: AMAZON_DYNAMODB
+  description: "tweetUnlikeMutation"
+  config:
+    tableName: !Ref TweetLikesTable
+    iamRoleStatements:
+    - Effect: Allow
+      Action: 
+        - dynamodb:UpdateItem
+      Resource: 
+        - !GetAtt UsersTable.Arn
+        - !GetAtt TweetsTable.Arn
+    - Effect: Allow
+      Action: 
+        - dynamodb:DeleteItem
+      Resource: !GetAtt TweetLikesTable.Arn
+getImageUploadUrlFn:
+    type: 'AWS_LAMBDA'
+    config:
+      functionName: getImageUploadUrl
+tweetFn:
+    type: 'AWS_LAMBDA'
+    config:
+      functionName: tweet
+retweetFn:
+    type: 'AWS_LAMBDA'
+    config:
+      functionName: retweet
+unretweetFn:
+    type: 'AWS_LAMBDA'
+    config:
+      functionName: unretweet
+replyFn:
+    type: 'AWS_LAMBDA'
+    config:
+      functionName: reply
+relationshipsTable:
+  type: AMAZON_DYNAMODB
+  description: "relationshipsTable"
+  config:
+    tableName: !Ref RelationshipsTable
+followMutation:
+  type: AMAZON_DYNAMODB
+  description: "followMutation"
+  config:
+    tableName: !Ref RelationshipsTable
+    iamRoleStatements:
+    - Effect: Allow
+      Action: 
+        - dynamodb:UpdateItem
+      Resource: 
+        - !GetAtt UsersTable.Arn
+    - Effect: Allow
+      Action: 
+        - dynamodb:PutItem
+      Resource: !GetAtt RelationshipsTable.Arn
+unfollowMutation:
+  type: AMAZON_DYNAMODB
+  description: "unfollowMutation"
+  config:
+    tableName: !Ref RelationshipsTable
+    iamRoleStatements:
+    - Effect: Allow
+      Action: 
+        - dynamodb:UpdateItem
+      Resource: 
+        - !GetAtt UsersTable.Arn
+    - Effect: Allow
+      Action: 
+        - dynamodb:DeleteItem
+      Resource: !GetAtt RelationshipsTable.Arn
+getImagePresignedUrlFn:
+  type: 'AWS_LAMBDA'
+  config:
+    functionName: getImagePresignedUrl
+searchFn:
+  type: 'AWS_LAMBDA'
+  config:
+    functionName: search
+searchHashtagsFn:
+  type: 'AWS_LAMBDA'
+  config:
+    functionName: searchHashtags
+onNotified:
+  type: 'NONE'
+notificationsTable:
+  type: AMAZON_DYNAMODB
+  description: 'NotificationsTable'
+  config:
+    tableName: !Ref NotificationsTable
+sendDirectMessageFn:
+  type: 'AWS_LAMBDA'
+  config:
+    functionName: sendDirectMessage
+conversationsTable:
+  type: AMAZON_DYNAMODB
+  description: "conversationsTable"
+  config:
+    tableName: !Ref ConversationsTable
+directMessagesTable:
+  type: AMAZON_DYNAMODB
+  description: "directMessagesTable"
+  config:
+    tableName: !Ref DirectMessagesTable
