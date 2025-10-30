@@ -724,4 +724,12 @@ Diffs:
 - appsync: queries to Appsync implemented via @apollo/client as seen in past release; applies to Lambda and test
 - jest: adds `ws` package and polyfill config
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/06-26-Implement_nofityDMed_notification
+
+# 06-29-Configure_per-resolver_caching 
+
+Diffs:
+- serverless.yml: configured 2 files for appsync-dev, appsync-prod and included the caching config there; main spec file switches between them based on self:custom.stage
+- serverless/appsync.yml: took the opportunity to break some of the resolver definitions into files; did the same for pipelineFunctions, dataSources
+
+Release:
