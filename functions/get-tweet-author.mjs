@@ -58,16 +58,22 @@ export async function handler(payloads) {
         const users = batchGetResp.Responses[USERS_TABLE]
         const output = parsedProfiles.map((profile) => {
             const foundUser = users.filter(({ id }) => profile.id === id)[0];
-
-            if (!foundUser) return null
+            if (!foundUser) return { 
+                errorType: 'UserNotFound', 
+                errorMessage: 'User is not found.' 
+            }
 
             const { id, __typename, selection } = profile
 
             if (selection.length === 1 && selection[0] === 'id') {
-                return { id, __typename }
+                return {
+                    data: { id, __typename }
+                }
             }
 
-            return Object.assign({}, { id, __typename }, foundUser)
+            return { 
+                data: Object.assign({}, { id, __typename }, foundUser)
+            }
         })
 
         return output;

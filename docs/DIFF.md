@@ -734,7 +734,7 @@ Diffs:
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/compare/06-26-Implement_nofityDMed_notification...06-29-Configure_per-resolver_caching
 
-# 06-30-Use_BatchInvoke_to_reduce_the_number_of_Lambda_invocations 
+# 06-30-Use_BatchInvoke_to_reduce_the_number_of_Lambda_invocations
 
 Diffs:
 - appsync/resolvers: the response vtl is required, and has been defined as a simple JSON return of the $ctx.result
@@ -742,5 +742,11 @@ Diffs:
 - fn/get-tweet-author: previous logic used the first item from payloads to parse the profile type and selection; but the behaviour of batchInvoke is that each payload can be unique, meaning that we can be in a situation where we set all the payloads `.__typename` and `selection` based of the first payload received; the diff code here handles this issue by handling `.__typename` and `selection` per payload 
 - fn/get-tweet-author: uses @aws-sdk/client-* and v3 command style
 - fn/get-tweet-author: does not use `lodash`, prefering vanilla JS
+
+Release: https://github.com/alanionita/appsyncmasterclass-backend/compare/06-29-Configure_per-resolver_caching...06-30-Use_BatchInvoke_to_reduce_the_number_of_Lambda_invocations
+
+# 06-31-Report_individual_errors_in_a_BatchInvoke_request
+
+No diffs
 
 Release:

@@ -1,5 +1,5 @@
-#if($ctx.error)
-  $utils.error($ctx.error.message, $ctx.error.type)
+#if (!$util.isNull($ctx.result) && !$util.isNull($ctx.result.errorMessage))
+  $util.error($ctx.result.errorMessage, $context.result.errorType)
 #else
-  $utils.toJson($ctx.result)
+  $utils.toJson($ctx.result.data)
 #end
