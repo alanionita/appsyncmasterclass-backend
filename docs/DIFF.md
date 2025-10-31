@@ -749,4 +749,4 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/compare/06-29-
 
 No diffs
 
-Release:
+Release: https://github.com/alanionita/appsyncmasterclass-backend/compare/06-30-Use_BatchInvoke_to_reduce_the_number_of_Lambda_invocations...06-31-Report_individual_errors_in_a_BatchInvoke_request
