@@ -753,9 +753,13 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/compare/06-30-
 
 # 07-01-Adds-search-total-count
 
+Usage:
+- consider with fronend/07-01
+- compare against 06-31
+
 Diffs:
 - gql/SearchResultsPage : adds totalCount to help with escape case for infinite loading of research results, and result pagination
 
-Release:
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/07-01-Adds-search-total-count
 
-Release (frontend): 
+Release (frontend): https://github.com/alanionita/appsyncmasterclass-frontend/releases/tag/07-01-Search_page
