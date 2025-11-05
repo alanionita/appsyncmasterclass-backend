@@ -209,7 +209,8 @@ union SearchResult = MyProfile | OtherProfile | Tweet | Reply
 
 type SearchResultsPage {
     results: [SearchResult!]
-    nextToken: String
+    nextToken: String,
+    totalCount: Int!
 }
 
 union HashtagResult = MyProfile | OtherProfile | Tweet | Reply

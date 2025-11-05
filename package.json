@@ -13,8 +13,7 @@
     "test:unit": "NODE_OPTIONS=--experimental-vm-modules jest --verbose ./__tests__/cases/unit",
     "test:integration": "jest --verbose ./__tests__/cases/integration",
     "test:e2e": "jest --verbose ./__tests__/cases/e2e",
-    "test:bundle": "node ./__tests__/bundle-summary.js",
-    "release": "gh release create -n '' --target main "
+    "test:bundle": "node ./__tests__/bundle-summary.js"
   },
   "repository": {
     "type": "git",

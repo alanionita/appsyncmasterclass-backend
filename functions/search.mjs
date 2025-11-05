@@ -40,7 +40,7 @@ async function searchUsers({ context, userId, query, limit = 10, nextToken }) {
 
         const results = await usersIndex.search(searchParams)
 
-        const { hits, page, nbPages } = results
+        const { hits, page, nbPages, nbHits } = results
 
 
         hits.forEach(x => {
@@ -56,7 +56,8 @@ async function searchUsers({ context, userId, query, limit = 10, nextToken }) {
 
         return {
             results: hits,
-            nextToken: genNextToken(nextSearchParams)
+            nextToken: genNextToken(nextSearchParams),
+            totalCount: nbHits
         }
     } catch (err) {
         console.error('Err (searchLambda/searchUsers) :', err.message)
@@ -87,7 +88,7 @@ async function searchTweets({ context, query, limit = 10, nextToken }) {
 
         const results = await tweetsIndex.search(searchParams)
 
-        const { hits, page, nbPages } = results
+        const { hits, page, nbPages, nbHits } = results
 
         let nextSearchParams
         if (page + 1 >= nbPages) {
@@ -98,7 +99,8 @@ async function searchTweets({ context, query, limit = 10, nextToken }) {
 
         return {
             results: hits,
-            nextToken: genNextToken(nextSearchParams)
+            nextToken: genNextToken(nextSearchParams),
+            totalCount: nbHits
         }
     } catch (err) {
         console.error('Err (searchLambda/searchTweets) :', err.message)
