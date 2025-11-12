@@ -763,3 +763,16 @@ Diffs:
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/07-01-Adds-search-total-count
 
 Release (frontend): https://github.com/alanionita/appsyncmasterclass-frontend/releases/tag/07-01-Search_page
+
+# 07-02-Hashtag_page
+
+Usage:
+- consider with fronend/07-02
+- compare against 07-01
+
+Diffs:
+- gql/HastagsResultsPage : adds totalCount to help with escape case for infinite loading of research results, and result pagination
+
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/07-02-Hashtag_page
+
+Release (frontend): https://github.com/alanionita/appsyncmasterclass-frontend/releases/tag/07-02-Hashtag_page
