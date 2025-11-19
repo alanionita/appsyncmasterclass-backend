@@ -147,7 +147,7 @@ interface IProfile {
     likesCount: Int!,
 }
 
-type MyProfile implements IProfile {
+type MyProfile implements IProfile @aws_iam @aws_cognito_user_pools {
     id: ID!
     name: String!
     screenName: String!
@@ -165,7 +165,7 @@ type MyProfile implements IProfile {
     likesCount: Int!,
 }
 
-type OtherProfile implements IProfile {
+type OtherProfile implements IProfile @aws_iam @aws_cognito_user_pools {
     id: ID!
     name: String!
     screenName: String!
@@ -236,7 +236,8 @@ type Retweeted implements iNotification @aws_iam @aws_cognito_user_pools {
     tweetId: ID!
     retweetedBy: ID!
     retweetId: ID!
-    createdAt: AWSDateTime! 
+    createdAt: AWSDateTime!
+    profile: IProfile 
 }
 
 type Liked implements iNotification @aws_iam @aws_cognito_user_pools {

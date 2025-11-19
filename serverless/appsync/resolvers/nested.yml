@@ -145,3 +145,12 @@ Message.from:
   kind: UNIT # required
   request: ./appsync/resolvers/Message.from.request.vtl
   response: ./appsync/resolvers/Message.from.response.vtl
+Retweeted.profile:
+  type: Retweeted
+  field: profile
+  dataSource: usersTable
+  kind: UNIT # required
+  request: ./appsync/resolvers/Retweeted.profile.request.vtl
+  response: ./appsync/resolvers/Retweeted.profile.response.vtl
+  authentication:
+    type: 'AWS_IAM'
