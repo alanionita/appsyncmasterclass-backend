@@ -288,6 +288,7 @@ interface iNotification {
     type: NotificationType!
     userId: ID!
     createdAt: AWSDateTime!
+    profile: IProfile
 }
 
 type Conversation {

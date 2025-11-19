@@ -56,103 +56,47 @@ class GraplQLClient {
                             type
                             userId
                             createdAt
+                            profile {
+                                ... on MyProfile {
+                                    id
+                                    name
+                                    screenName
+                                    imgUrl
+                                }
+                                ... on OtherProfile {
+                                    id
+                                    name
+                                    screenName
+                                    imgUrl
+                                } 
+                            }
                         }
                     
                         ... on Retweeted {
                             tweetId
                             retweetedBy
                             retweetId
-                            profile {
-                                ... on MyProfile {
-                                    id
-                                    name
-                                    screenName
-                                    imgUrl
-                                }
-                                ... on OtherProfile {
-                                    id
-                                    name
-                                    screenName
-                                    imgUrl
-                                } 
-                            }
                         }
 
                         ... on Liked {
                             tweetId
                             likedBy
-                            profile {
-                                ... on MyProfile {
-                                    id
-                                    name
-                                    screenName
-                                    imgUrl
-                                }
-                                ... on OtherProfile {
-                                    id
-                                    name
-                                    screenName
-                                    imgUrl
-                                } 
-                            }
                         }
 
                         ... on Replied {
                             tweetId
                             replyTweetId
                             repliedBy
-                            profile {
-                                ... on MyProfile {
-                                    id
-                                    name
-                                    screenName
-                                    imgUrl
-                                }
-                                ... on OtherProfile {
-                                    id
-                                    name
-                                    screenName
-                                    imgUrl
-                                } 
-                            }
                         }
 
                         ... on Mentioned {
                             mentionedBy
                             mentionedByTweetId
-                            profile {
-                                ... on MyProfile {
-                                    id
-                                    name
-                                    screenName
-                                    imgUrl
-                                }
-                                ... on OtherProfile {
-                                    id
-                                    name
-                                    screenName
-                                    imgUrl
-                                } 
-                            }
                         }
 
                         ... on DMed {
                             otherUserId
                             message
-                            profile {
-                                ... on MyProfile {
-                                    id
-                                    name
-                                    screenName
-                                    imgUrl
-                                }
-                                ... on OtherProfile {
-                                    id
-                                    name
-                                    screenName
-                                    imgUrl
-                                } 
-                            }
                         }
                     }
                 }
