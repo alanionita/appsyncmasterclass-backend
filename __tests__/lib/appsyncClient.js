@@ -62,6 +62,13 @@ class GraplQLClient {
                             tweetId
                             retweetedBy
                             retweetId
+                            profile {
+                                __typename
+                                id
+                                screenName
+                                name
+                                imgUrl
+                            }
                         }
 
                         ... on Liked {

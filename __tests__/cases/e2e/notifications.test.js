@@ -14,6 +14,7 @@ describe("Given 2 authenticated users, ", () => {
     let userB;
     let userATweet;
     let userAProfile;
+    let userBProfile;
 
     beforeAll(async () => {
         userA = await given.authenticated_user()
@@ -24,6 +25,7 @@ describe("Given 2 authenticated users, ", () => {
             userATweet = await when.user_calls_tweet(userA, tweetText);
 
             userAProfile = await when.user_calls_getMyProfile(userA)
+            userBProfile = await when.user_calls_getMyProfile(userB)
         }
     })
     describe('When userA subscribes to notifications', () => {
@@ -77,7 +79,14 @@ describe("Given 2 authenticated users, ", () => {
                                 userId: userA.username,
                                 tweetId: userATweet.id,
                                 retweetId: userBRetweet.id,
-                                retweetedBy: userB.username
+                                retweetedBy: userB.username,
+                                profile: expect.objectContaining({
+                                    __typename: 'OtherProfile',
+                                    id: userBProfile.id,
+                                    screenName: userBProfile.screenName,
+                                    name: userBProfile.name,
+                                    imgUrl: userBProfile.imgUrl
+                                })
                             })
                         ])
                     )
