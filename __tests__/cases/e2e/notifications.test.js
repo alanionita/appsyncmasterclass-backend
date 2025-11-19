@@ -149,7 +149,14 @@ describe("Given 2 authenticated users, ", () => {
                                 userId: userA.username,
                                 tweetId: userATweet.id,
                                 replyTweetId: userBReply.id,
-                                repliedBy: userB.username
+                                repliedBy: userB.username,
+                                profile: expect.objectContaining({
+                                    __typename: 'OtherProfile',
+                                    id: userBProfile.id,
+                                    screenName: userBProfile.screenName,
+                                    name: userBProfile.name,
+                                    imgUrl: userBProfile.imgUrl
+                                })
                             })
                         ])
                     )

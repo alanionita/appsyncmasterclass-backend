@@ -163,3 +163,10 @@ Mentioned.profile:
   response: ./appsync/resolvers/Mentioned.profile.response.vtl
   authentication:
     type: 'AWS_IAM'
+Replied.profile:
+  type: Replied
+  field: profile
+  dataSource: usersTable
+  kind: UNIT # required
+  request: ./appsync/resolvers/Replied.profile.request.vtl
+  response: ./appsync/resolvers/Replied.profile.response.vtl

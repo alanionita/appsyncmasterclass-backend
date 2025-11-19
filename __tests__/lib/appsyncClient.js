@@ -87,6 +87,20 @@ class GraplQLClient {
                             tweetId
                             replyTweetId
                             repliedBy
+                            profile {
+                                ... on MyProfile {
+                                    id
+                                    name
+                                    screenName
+                                    imgUrl
+                                }
+                                ... on OtherProfile {
+                                    id
+                                    name
+                                    screenName
+                                    imgUrl
+                                } 
+                            }
                         }
 
                         ... on Mentioned {
