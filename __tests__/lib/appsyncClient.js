@@ -139,6 +139,20 @@ class GraplQLClient {
                         ... on DMed {
                             otherUserId
                             message
+                            profile {
+                                ... on MyProfile {
+                                    id
+                                    name
+                                    screenName
+                                    imgUrl
+                                }
+                                ... on OtherProfile {
+                                    id
+                                    name
+                                    screenName
+                                    imgUrl
+                                } 
+                            }
                         }
                     }
                 }

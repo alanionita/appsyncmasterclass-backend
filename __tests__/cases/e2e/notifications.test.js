@@ -242,7 +242,14 @@ describe("Given 2 authenticated users, ", () => {
                                 userId: userA.username,
                                 otherUserId: userB.username,
                                 message: conversation.lastMessage,
-                                createdAt: expect.stringMatching(datePattern)
+                                createdAt: expect.stringMatching(datePattern),
+                                profile: expect.objectContaining({
+                                    __typename: 'OtherProfile',
+                                    id: userBProfile.id,
+                                    screenName: userBProfile.screenName,
+                                    name: userBProfile.name,
+                                    imgUrl: userBProfile.imgUrl
+                                })
                             })
                         ])
                     )

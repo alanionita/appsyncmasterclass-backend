@@ -278,6 +278,7 @@ type DMed implements iNotification @aws_iam @aws_cognito_user_pools {
     createdAt: AWSDateTime!
     otherUserId: ID!
     message: String!
+    profile: IProfile
 }
 
 union Notification = Retweeted | Liked | Mentioned | Replied | DMed

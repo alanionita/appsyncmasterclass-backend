@@ -177,3 +177,10 @@ Liked.profile:
   kind: UNIT # required
   request: ./appsync/resolvers/Liked.profile.request.vtl
   response: ./appsync/resolvers/Liked.profile.response.vtl
+DMed.profile:
+  type: DMed
+  field: profile
+  dataSource: usersTable
+  kind: UNIT # required
+  request: ./appsync/resolvers/DMed.profile.request.vtl
+  response: ./appsync/resolvers/DMed.profile.response.vtl
