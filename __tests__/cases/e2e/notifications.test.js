@@ -178,7 +178,14 @@ describe("Given 2 authenticated users, ", () => {
                                 type: 'Mentioned',
                                 userId: userA.username,
                                 mentionedByTweetId: userBTweet.id,
-                                mentionedBy: userB.username
+                                mentionedBy: userB.username,
+                                profile: expect.objectContaining({
+                                    __typename: 'OtherProfile',
+                                    id: userBProfile.id,
+                                    screenName: userBProfile.screenName,
+                                    name: userBProfile.name,
+                                    imgUrl: userBProfile.imgUrl
+                                })
                             })
                         ])
                     )

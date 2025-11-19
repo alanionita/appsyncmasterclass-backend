@@ -63,11 +63,18 @@ class GraplQLClient {
                             retweetedBy
                             retweetId
                             profile {
-                                __typename
-                                id
-                                screenName
-                                name
-                                imgUrl
+                                ... on MyProfile {
+                                    id
+                                    name
+                                    screenName
+                                    imgUrl
+                                }
+                                ... on OtherProfile {
+                                    id
+                                    name
+                                    screenName
+                                    imgUrl
+                                } 
                             }
                         }
 
@@ -85,6 +92,20 @@ class GraplQLClient {
                         ... on Mentioned {
                             mentionedBy
                             mentionedByTweetId
+                            profile {
+                                ... on MyProfile {
+                                    id
+                                    name
+                                    screenName
+                                    imgUrl
+                                }
+                                ... on OtherProfile {
+                                    id
+                                    name
+                                    screenName
+                                    imgUrl
+                                } 
+                            }
                         }
 
                         ... on DMed {

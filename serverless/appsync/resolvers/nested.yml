@@ -154,3 +154,12 @@ Retweeted.profile:
   response: ./appsync/resolvers/Retweeted.profile.response.vtl
   authentication:
     type: 'AWS_IAM'
+Mentioned.profile:
+  type: Mentioned
+  field: profile
+  dataSource: usersTable
+  kind: UNIT # required
+  request: ./appsync/resolvers/Mentioned.profile.request.vtl
+  response: ./appsync/resolvers/Mentioned.profile.response.vtl
+  authentication:
+    type: 'AWS_IAM'
