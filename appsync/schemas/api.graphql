@@ -247,6 +247,7 @@ type Liked implements iNotification @aws_iam @aws_cognito_user_pools {
     tweetId: ID!
     likedBy: ID!
     createdAt: AWSDateTime!
+    profile: IProfile 
 }
 
 type Mentioned implements iNotification @aws_iam @aws_cognito_user_pools {

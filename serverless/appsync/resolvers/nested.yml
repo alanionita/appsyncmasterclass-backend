@@ -170,3 +170,10 @@ Replied.profile:
   kind: UNIT # required
   request: ./appsync/resolvers/Replied.profile.request.vtl
   response: ./appsync/resolvers/Replied.profile.response.vtl
+Liked.profile:
+  type: Liked
+  field: profile
+  dataSource: usersTable
+  kind: UNIT # required
+  request: ./appsync/resolvers/Liked.profile.request.vtl
+  response: ./appsync/resolvers/Liked.profile.response.vtl
