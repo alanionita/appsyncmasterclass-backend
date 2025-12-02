@@ -3,7 +3,7 @@ const when = require("../../steps/when");
 const chance = require('chance').Chance()
 const retry = require('async-retry');
 const { GraplQLClient } = require('../../lib/appsyncClient');
-const { waitSec, datePattern } = require("../../lib/utils");
+const { datePattern } = require("../../lib/utils");
 
 require("dotenv").config()
 
@@ -21,7 +21,7 @@ describe("Given 2 authenticated users, ", () => {
         userB = await given.authenticated_user()
 
         if (userA && userA.username) {
-            const tweetText = chance.string({ length: 16 });
+            const tweetText = chance.string({ length: 16, alpha: true, symbols: false });
             userATweet = await when.user_calls_tweet(userA, tweetText);
 
             userAProfile = await when.user_calls_getMyProfile(userA)

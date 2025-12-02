@@ -67,7 +67,7 @@ async function fetchUserIds(text) {
     try {
         const mentions = extractMentions(text);
 
-        if (!mentions && mentions.length < 1) {
+        if (mentions === null || mentions.length < 1) {
             return null
         }
 
