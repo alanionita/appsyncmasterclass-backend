@@ -1,10 +1,10 @@
+import { handler } from '../../functions/send-direct-message.mjs'
+
 export async function invoke_sendDirectMessage({
     user,
     message,
     otherUserId }) {
     try {
-        const {handler} = await import ('../../functions/send-direct-message.mjs')
-
         const context = {}
         const event = {
             identity: {

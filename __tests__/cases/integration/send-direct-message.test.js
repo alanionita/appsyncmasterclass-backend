@@ -1,5 +1,4 @@
 const given = require("../../steps/given");
-const when = require("../../steps/whenEsm.mjs");
 const then = require("../../steps/then");
 const { datePattern } = require("../../lib/utils");
 const chance = require('chance').Chance()
@@ -18,6 +17,7 @@ describe("Given two authenticated user, ", () => {
         const message = chance.string({ length: 16 })
         beforeAll(async () => {
             if (userA && userA.username && userB && userB.username) {
+                const when = await import("../../steps/whenEsm.mjs")
                 dm = await when.invoke_sendDirectMessage({
                     user: userA.username,
                     message,
