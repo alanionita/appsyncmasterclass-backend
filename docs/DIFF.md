@@ -776,3 +776,21 @@ Diffs:
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/07-02-Hashtag_page
 
 Release (frontend): https://github.com/alanionita/appsyncmasterclass-frontend/releases/tag/07-02-Hashtag_page
+
+# 07-03-Notifications_page
+
+Usage:
+- consider with fronend/07-03
+- compare against 07-02
+
+Diffs:
+- UI requirement: Notification list in the frontend requires the display of notification author details (.name, .screenName, .imgUrl); requires the addion of a nested prop .profile on all Notification types
+- appsync/permissions: expanded the permissions of iProfile since the Mutation.notify* methods are @aws_iam authed and iProfile was originally @aws_cognit_*
+- appsync/resolvers: adds new template resolvers for all Notification types; updates e2e tests (and utils), updates unit tests for each set of templates; resolvers fetch data from UsersTable, using individually unique 'author' properties per type; this is why, although the templates are similar, I opted for split sets instead of a more complex dynamic pair of templates, reused across all Notification types; Response resolvers must resolve the __typename since Appsync resolution cannot discern between MyProfile / OtherProfile
+- lambda/utils: updates all the appsync.notify* methods, mostly updating the return of each query; query is currently only returning the details required by the Notification list ui
++ appsync/resolvers: resolvers should really be a batchInvoke, since all Notification type queries to UsersTable share a skeleton 
+- packages: `aws-appsync-*-link` packages got a v4 update which support ApolloClient v4; means that external react, ws, uuid dependencies are no longer need - removing them will impact bundle size; however this refactor has been blocked because of difficult debugging of the subscriptions connection within the lambda: similar issue in the `*-frontend` repo was resolved via Networking debugging of Websocket messages, leading to misconfigured headers by `aws-appsync-subscription-link`; debugging in the same way is difficult within the Lambda, complicated by the fact that the `*-backend` repo uses `AWS_IAM` as the authentication type; using the AppSync logs we can see an ApolloClient.UnexpectedError, but from `*-client` repo experience that usually conceals authentication errors that are normally sent on the Websocket connection; Owing to this development the module updates have been reverted
+
+Release (frontend): https://github.com/alanionita/appsyncmasterclass-frontend/releases/tag/07-03-Notifications_page
+
+Release: 
