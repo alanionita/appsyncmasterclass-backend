@@ -780,7 +780,7 @@ Release (frontend): https://github.com/alanionita/appsyncmasterclass-frontend/re
 # 07-03-Notifications_page
 
 Usage:
-- consider with fronend/07-03
+- consider with frontend/07-03
 - compare against 07-02
 
 Diffs:
@@ -792,5 +792,14 @@ Diffs:
 - packages: `aws-appsync-*-link` packages got a v4 update which support ApolloClient v4; means that external react, ws, uuid dependencies are no longer need - removing them will impact bundle size; however this refactor has been blocked because of difficult debugging of the subscriptions connection within the lambda: similar issue in the `*-frontend` repo was resolved via Networking debugging of Websocket messages, leading to misconfigured headers by `aws-appsync-subscription-link`; debugging in the same way is difficult within the Lambda, complicated by the fact that the `*-backend` repo uses `AWS_IAM` as the authentication type; using the AppSync logs we can see an ApolloClient.UnexpectedError, but from `*-client` repo experience that usually conceals authentication errors that are normally sent on the Websocket connection; Owing to this development the module updates have been reverted
 
 Release (frontend): https://github.com/alanionita/appsyncmasterclass-frontend/releases/tag/07-03-Notifications_page
+
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/07-03-Notifications_page
+
+# 08-03-Configure_Kinesis_Firehose
+
+- serverless/*: adds the new resources under a "service" file of serverless/analytics.yml; existing patterns follow a "resource type" (Dynamo, Lambda etc) based file pattern, and this change introduces the "service" (as in a backend slice or micro-service) based pattern; change was made in order to contain and abstract resources that go together away from polluting the rest of the app
+- serverless/analytics: adds new Processor config for adding the `\n` delimiter without the need of a Lambda
+- Lambda: Won't implement since it's now redundant
+- IAM role: Impacted by above, no longer needs Lambda invoke permissions
 
 Release: 

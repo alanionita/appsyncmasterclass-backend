@@ -49,6 +49,7 @@ functions: ${file(./serverless/functions.yml)}
 resources:
   - ${file(./serverless/cognito.yml)}
   - ${file(./serverless/dynamodb.yml)}
+  - ${file(./serverless/analytics.yml)}
   - Resources:
       AssetsBucket:
         Type: AWS::S3::Bucket
@@ -72,6 +73,7 @@ resources:
                 AllowedHeaders:
                   - "*"
                 MaxAge: 300 # cache preflight response in secs, 5m
+      
   - Outputs:
       CgUserPoolId:
         Description: "Cognito User Pool ::"
