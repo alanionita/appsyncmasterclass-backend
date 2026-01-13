@@ -802,4 +802,4 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 - Lambda: Won't implement since it's now redundant
 - IAM role: Impacted by above, no longer needs Lambda invoke permissions
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/08-03-Configure_Kinesis_Firehose
