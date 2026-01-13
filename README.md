@@ -70,7 +70,7 @@ Create a test Cognito user, once deployed. Replace the REGION in the script with
 
 More docs are available to follow the updates per video. 
 
-- [DIFF](./docs/DIFF.md)
+- [CHANGELOG](./__docs/CHANGELOG.md)
 
 
 External docs:
