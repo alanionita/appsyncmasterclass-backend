@@ -94,6 +94,11 @@ Resources:
               - "firehose:PutRecordBatch"
             Resource: 
               - !GetAtt FirehoseStream.Arn
+          - Effect: Allow
+            Action: appsync:GraphQL
+            Resource: 
+              - !Sub ${GraphQlApi.Arn}/types/Query/fields/getAnalyticsConfig
+              - !Sub ${GraphQlApi.Arn}/types/AnalyticsConfig
 
   CgIDPoolAuthRole:
     Type: AWS::IAM::Role
@@ -126,6 +131,11 @@ Resources:
               - "firehose:PutRecordBatch"
             Resource: 
               - !GetAtt FirehoseStream.Arn
+          - Effect: Allow
+            Action: appsync:GraphQL
+            Resource: 
+              - !Sub ${GraphQlApi.Arn}/types/Query/fields/getAnalyticsConfig
+              - !Sub ${GraphQlApi.Arn}/types/AnalyticsConfig
 
   CgIDPoolUnauthRole:
     Type: AWS::IAM::Role

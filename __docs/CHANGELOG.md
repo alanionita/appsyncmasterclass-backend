@@ -844,3 +844,9 @@ Same logic, differrent locations for some:
 - serverless/appsync/resolvers/query.yml, for resolver mapping to query
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/08-05_Update_schema_to_return_Kinesis_Firehose_stream_name
+
+# 08-06-How_to_create_unauthenticated_GraphQL_operations_in_AppSync
+
+No changes
+
+Release: 
