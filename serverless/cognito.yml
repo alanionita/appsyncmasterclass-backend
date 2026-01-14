@@ -38,10 +38,12 @@ Resources:
   CgIdentityPool:
     Type: AWS::Cognito::IdentityPool
     Properties:
-      AllowUnauthenticatedIdentities: false
+      AllowUnauthenticatedIdentities: true
+      AllowClassicFlow: false
       CognitoIdentityProviders:
         - ClientId: !Ref CgClientWeb
           ProviderName: !GetAtt CgUserPool.ProviderName
+          ServerSideTokenCheck: true
   
   # Permissions
   CgSignupPerm:
@@ -80,6 +82,19 @@ Resources:
             Resource:
               - !Sub "arn:aws:s3:::${AssetsBucket}"
 
+  CgAuthPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: 
+              - "firehose:PutRecord"
+              - "firehose:PutRecordBatch"
+            Resource: 
+              - !GetAtt FirehoseStream.Arn
+
   CgIDPoolAuthRole:
     Type: AWS::IAM::Role
     Properties:
@@ -98,6 +113,7 @@ Resources:
                 "cognito-identity.amazonaws.com:amr": "authenticated"
       ManagedPolicyArns:
         - !Ref CgAuthS3AccessPolicy
+        - !Ref CgAuthPolicy
   CgUnauthPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
@@ -105,10 +121,11 @@ Resources:
         Version: '2012-10-17'
         Statement:
           - Effect: Allow
-            Action:
-              - "mobileanalytics:PutEvents"
-              - "cognito-sync:*"
-            Resource: "*"
+            Action: 
+              - "firehose:PutRecord"
+              - "firehose:PutRecordBatch"
+            Resource: 
+              - !GetAtt FirehoseStream.Arn
 
   CgIDPoolUnauthRole:
     Type: AWS::IAM::Role

@@ -101,4 +101,10 @@ resources:
         Value: !Ref RetweetsTable
       TweetLikesTable:
         Description: "DynamoDB (TweetLikesTable) ::"
-        Value: !Ref TweetLikesTable 
+        Value: !Ref TweetLikesTable
+      CgUserPoolProviderName:
+        Value: !GetAtt CgUserPool.ProviderName
+      CgIdentityPoolId:
+        Value: !Ref CgIdentityPool
+      FirehoseStreamName:
+        Value: !Ref FirehoseStream
