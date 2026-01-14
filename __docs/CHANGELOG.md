@@ -835,4 +835,4 @@ Process:
   - Go to 'Outputs' tab
   - Copy the relevant values from here
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/08-04-Configure_Cognito_Identity_Pool_and_IAM_role
