@@ -849,4 +849,4 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 No changes
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/08-06-How_to_create_unauthenticated_GraphQL_operations_in_AppSync
