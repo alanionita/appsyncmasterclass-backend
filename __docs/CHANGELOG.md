@@ -837,10 +837,10 @@ Process:
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/08-04-Configure_Cognito_Identity_Pool_and_IAM_role
 
-# 08-05_Update_schema_to_return_Kinesis_Firehose_stream_name 
+# 08-05_Update_schema_to_return_Kinesis_Firehose_stream_name
 
 Same logic, differrent locations for some:
 - appsync-dev.yml, for substitutions
 - serverless/appsync/resolvers/query.yml, for resolver mapping to query
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/08-05_Update_schema_to_return_Kinesis_Firehose_stream_name
