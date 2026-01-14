@@ -29,3 +29,5 @@ substitutions:
   TweetLikesTable: !Ref TweetLikesTable
   UsersTable: !Ref UsersTable
   RelationshipsTable: !Ref RelationshipsTable
+  IdentityPoolId: !Ref CgIdentityPool
+  FirehoseStreamName: !Ref FirehoseStream
