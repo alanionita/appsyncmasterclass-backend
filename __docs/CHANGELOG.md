@@ -801,5 +801,27 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 - serverless/analytics: adds new Processor config for adding the `\n` delimiter without the need of a Lambda
 - Lambda: Won't implement since it's now redundant
 - IAM role: Impacted by above, no longer needs Lambda invoke permissions
+- Video suggest that in order to read the downloaded Firehose S3 files, you must rename them, and that they are decompressed by default; this is no longer the case; in order to access the data you must extract the downloaded files with a local archive program - decompressing the files in the process; Firehose also now supports config for automatic decompression as a Processor, but it's not on by default
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/08-03-Configure_Kinesis_Firehose
+
+# 08-04-Configure_Cognito_Identity_Pool_and_IAM_role
+
+serverless/cognito: 
+- Existing logic already implemented the Cognito Identity Pools in order to refresh S3 imgUrls; enables the unauthenticated identities, adds serverside token check;
+- Adds new policy `CgAuthPolicy` which contains the Firehose rules, and attached it to `CgIDPoolAuthRole`
+- Adds new Firehose rules to `CgUnauthPolicy`
+
+serverless.yml:
+- Adds new outputs with the existing stack names
+
+test-cognito-identity.mjs:
+- Defined as ESM
+- Installed the `@aws-sdk` v3 packages for credential-provideos and client-firehose
+- Generally structured the script as a Lamda with self-invoking handler()
+- credentials: fetched using fromCognitoIdentityPool() v3 api; added error handling and async/await;
+- putFirehoseEvents: use v3 command based api for Firehose; added error handling; depends on credentials object
+- .env: added the idToken to env.variables in order to protect the repo from data leaks
+- erors: discerns between regular errors and aws-sdk errors, making for richer context
+
+Release: 
