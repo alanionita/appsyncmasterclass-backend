@@ -824,4 +824,15 @@ test-cognito-identity.mjs:
 - .env: added the idToken to env.variables in order to protect the repo from data leaks
 - erors: discerns between regular errors and aws-sdk errors, making for richer context
 
+Process:
+- Video encouradges the use of `serverless-env` in order to receive sls.Outputs as .env
+- This variation does not use `serverless-env` for security considerations, adding a manual requirement instead
+- Outputs are still defined sls.Outputs
+- Environment variables must be updated manually by:
+  - `npm run deploy`
+  - Navigate to AWS Console / CloudFormation
+  - Access the appsyncmasterclass-* stack
+  - Go to 'Outputs' tab
+  - Copy the relevant values from here
+
 Release: 
