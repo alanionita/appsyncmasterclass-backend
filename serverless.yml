@@ -33,6 +33,9 @@ package:
   
 custom:
   stage: ${opt:stage, self:provider.stage}
+  analytics:
+    glueDb: ${self:service}_${self:custom.stage}_analytics
+    glueCrawler: ${self:service}_${self:custom.stage}_analytics
   webpack:
     webpackConfig: ./webpack.config.js
     mode: production

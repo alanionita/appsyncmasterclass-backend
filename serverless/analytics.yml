@@ -74,3 +74,64 @@ Resources:
               - Effect: Allow
                 Action: logs:PutLogEvents
                 Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${FirehoseLogGroup}:log-stream:*
+
+  AnalyticsGlueDb:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput: 
+        Name: ${self:custom.analytics.glueDb}
+        Description: "Analytics database for ${self:service} (${self:provider.stage})"
+      DatabaseName: ${self:custom.analytics.glueDb}
+
+  AnalyticsCrawlerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ${self:service}-${self:provider.stage}-GlueCrawler
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - glue.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+      Policies:
+        - PolicyName: S3AccessForCrawler
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:ListBucket
+                Resource:
+                  - !Sub ${AnalyticsBucket.Arn}
+                  - !Sub ${AnalyticsBucket.Arn}/*
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource:
+                  - !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws-glue/crawlers:*
+
+  AnalyticsGlueCrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name: ${self:custom.analytics.glueCrawler}
+      DatabaseName: ${self:custom.analytics.glueDb}
+      Role: !GetAtt AnalyticsCrawlerRole.Arn
+      # Schedule:                                // Note: commented out to signify, ON_DEMAND
+      #   ScheduleExpression: cron(15 12 * * ? * // eg. run daily at 15 past noon UTC [12:15Z]
+      SchemaChangePolicy: 
+        UpdateBehavior: "UPDATE_IN_DATABASE"
+        DeleteBehavior: "LOG"
+      Targets:
+        S3Targets:
+          # Note: */analytics sub-folder, within bucket
+          - Path: !Sub s3://${AnalyticsBucket}/analytics
