@@ -75,6 +75,8 @@ Resources:
                 Action: logs:PutLogEvents
                 Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${FirehoseLogGroup}:log-stream:*
 
+  # Glue config
+
   AnalyticsGlueDb:
     Type: AWS::Glue::Database
     Properties:
@@ -135,3 +137,58 @@ Resources:
         S3Targets:
           # Note: */analytics sub-folder, within bucket
           - Path: !Sub s3://${AnalyticsBucket}/analytics
+
+  # Athena config
+
+  AnalyticsResults:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      # NOTE: very useful for prod deployments, encryption at rest
+      # BucketEncryption:
+      #     ServerSideEncryptionConfiguration:
+      #       - ServerSideEncryptionByDefault:
+      #           SSEAlgorithm: AES256
+
+  AthenaResultsBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref AnalyticsResults
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: athena.amazonaws.com
+            Action:
+              - s3:GetBucketLocation
+              - s3:GetObject
+              - s3:ListBucket
+              - s3:ListBucketMultipartUploads
+              - s3:ListMultipartUploadParts
+              - s3:AbortMultipartUpload
+              - s3:PutObject
+            Resource:
+              - !Sub ${AnalyticsResults.Arn}
+              - !Sub ${AnalyticsResults.Arn}/*
+            Condition:
+              StringEquals:
+                "aws:SourceAccount": !Ref AWS::AccountId
+              StringLike:
+                "aws:SourceArn": !Sub arn:aws:athena:${AWS::Region}:${AWS::AccountId}:workgroup/*
+
+  AnalyticsWorkGroup:
+    Type: AWS::Athena::WorkGroup
+    Properties:
+      Name: ${self:custom.analytics.athena}
+      Description: "${self:service}/analytics queries"
+      RecursiveDeleteOption: true
+      State: ENABLED
+      WorkGroupConfiguration:
+        EnforceWorkGroupConfiguration: true
+        ResultConfiguration:
+          OutputLocation: !Sub s3://${AnalyticsResults}/results/

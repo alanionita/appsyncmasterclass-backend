@@ -36,6 +36,7 @@ custom:
   analytics:
     glueDb: ${self:service}_${self:custom.stage}_analytics
     glueCrawler: ${self:service}_${self:custom.stage}_analytics
+    athena: appsyncmasterclass-analytics
   webpack:
     webpackConfig: ./webpack.config.js
     mode: production
