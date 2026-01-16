@@ -853,10 +853,13 @@ Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/0
 
 # 08-08-How-to-configure-Glue-with-CloudFormation
 
+Usage:
+- compare against 08-06 (08-07 had no release)
+
 - On the course 08-07 showcased how to create the analytics Glue and Athena resources manually
 - In 08-08, we find a writen guide with samples of how we should create the resources as IaC definitions
 - This release implements those change in a refreshed format
 - Main caveat is that the crawler is on demand
 - Athena has a max of 1mb query size, for cost cutting
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/08-08-How-to-configure-Glue-with-CloudFormation
