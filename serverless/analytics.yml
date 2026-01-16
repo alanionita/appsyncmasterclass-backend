@@ -132,7 +132,7 @@ Resources:
       #   ScheduleExpression: cron(15 12 * * ? * // eg. run daily at 15 past noon UTC [12:15Z]
       SchemaChangePolicy: 
         UpdateBehavior: "UPDATE_IN_DATABASE"
-        DeleteBehavior: "LOG"
+        DeleteBehavior: "DELETE_FROM_DATABASE"
       Targets:
         S3Targets:
           # Note: */analytics sub-folder, within bucket
