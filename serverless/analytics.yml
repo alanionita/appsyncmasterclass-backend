@@ -189,6 +189,7 @@ Resources:
       RecursiveDeleteOption: true
       State: ENABLED
       WorkGroupConfiguration:
+        BytesScannedCutoffPerQuery: 10000000 # 1MB query limit
         EnforceWorkGroupConfiguration: true
         ResultConfiguration:
           OutputLocation: !Sub s3://${AnalyticsResults}/results/
