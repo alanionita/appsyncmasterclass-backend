@@ -36,3 +36,12 @@ substitutions:
   TweetLikesTable: !Ref TweetLikesTable
   UsersTable: !Ref UsersTable
   RelationshipsTable: !Ref RelationshipsTable
+  IdentityPoolId: !Ref CgIdentityPool
+  FirehoseStreamName: !Ref FirehoseStream
+
+logging:
+  enabled: true # Default to true if logging: is present
+  level: ${self:custom.appSyncLogLevel.${self:custom.stage}, self:custom.appSyncLogLevel.default}
+  retentionInDays: 7
+  excludeVerboseContent: false # Default false
+  roleArn: !GetAtt AppSyncLoggingServiceRole.Arn

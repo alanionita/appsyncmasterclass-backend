@@ -863,3 +863,11 @@ Usage:
 - Athena has a max of 1mb query size, for cost cutting
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/08-08-How-to-configure-Glue-with-CloudFormation
+
+# 10-02-Configure_AppSync_Logging
+
+- serverless-appsync-plugin: minor api change, adds retentionPolicy 7days
+- sls/appsync-*.yml: left in defaults because I probably will toggle them off
+- IAM: further restricted AppSyncLoggingServiceRole to access just AppSync api log groups; attempted to limit it to our specific GraphQLApi.ApiId but hit a circular dependency
+
+Release: 
