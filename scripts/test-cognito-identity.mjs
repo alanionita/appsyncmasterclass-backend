@@ -67,7 +67,7 @@ async function handler() {
 
 
         let loginData = {
-            [providerName]: process.env.COGNITO_ID_TOKEN,
+            [providerName]: idToken,
         };
 
         const getCreds = fromCognitoIdentityPool({
