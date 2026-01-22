@@ -882,3 +882,5 @@ serverless-plugin-ifelse:
 - Previously used a file-based approach for deploying stage-scope `appsync-{stage}.yml`, but with a key limitation: new additions had to be present in all stages; thus a requirement for a `base.yml` came to be;
 - For `functions:` aimed to use yaml string concat with multiple file() imports, but hit limitations with the `sls` package v3.39; v3.39 is the last open-source version so any solution designed around would also be tech debt;
 - Opted instead for a bash script that concatenates the `base.yml` and any corresponding `stage-*.yml` files into `index-{stage}.yml`; the script is registered on a pre-hook to deploy, and the main `serverless.yml` references the `index-{stage}.yml`; a local solution with less security implications, more execution trust, and more autonomy; `functions/_dist` is ignored by git, same as all `index-{stage}.yml` by proxy.
+
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/10-03-Implement_sampling_for_resolver_logs
