@@ -20,7 +20,7 @@ module.exports = {
     externals: [
         nodeExternals({
             allowlist: [
-                /^(?!@aws-sdk|aws-sdk|@smithy)/
+                /^(?!@aws-sdk|aws-sdk)/
             ]
         })
     ],

@@ -884,3 +884,22 @@ serverless-plugin-ifelse:
 - Opted instead for a bash script that concatenates the `base.yml` and any corresponding `stage-*.yml` files into `index-{stage}.yml`; the script is registered on a pre-hook to deploy, and the main `serverless.yml` references the `index-{stage}.yml`; a local solution with less security implications, more execution trust, and more autonomy; `functions/_dist` is ignored by git, same as all `index-{stage}.yml` by proxy.
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/10-03-Implement_sampling_for_resolver_logs
+
+# 10-05-Configure_tracing_with_X-Ray
+
+Compare against:
+- 10-03; 10-04 did not have a release
+
+- serverless-iam-roles-per-function: won't implement global inheritance of provider role; implemented the inheritence per function, ie. getTweetAuthor()
+- serverless.yml: change in role definition syntax, under `iam:`
+- packages: uses `aws-xray-sdk` v3.12; implemented in ESM style since getTweetAuthor is an ESM lambda;
+
+functions/get-tweet-author
+- Adds simple unit and event payload
+- Uses `aws-xray-sdk` meta package (includes *core); 
+- Implements the sdk v3 methods; 
+- NOTE: 
+  - .captureAWS() incompatible with aws-sdk v3
+  - @smithy/* require for this; package needs excaping from `webpack.config.js / externals / *` definitions
+
+Release: 

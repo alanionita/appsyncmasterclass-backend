@@ -1,5 +1,6 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, BatchGetCommand } from "@aws-sdk/lib-dynamodb";
+import Xray from 'aws-xray-sdk'
 
 export async function handler(payloads) {
     try {
@@ -8,7 +9,8 @@ export async function handler(payloads) {
             throw Error("Missing environment variables")
         }
 
-        const ddb = new DynamoDBClient({ region: REGION });
+        const _dynamoClient = new DynamoDBClient({ region: REGION });
+        const ddb = Xray.captureAWSv3Client(_dynamoClient);
         const client = DynamoDBDocumentClient.from(ddb);
         const userIds = payloads.map(x => x.userId)
         const callers = payloads.map(x => x.caller)

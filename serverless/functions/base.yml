@@ -288,6 +288,7 @@ getTweetAuthor:
   handler: functions/get-tweet-author.handler
   environment:
     USERS_TABLE: !Ref UsersTable
+  iamRoleStatementsInherit: true # Inherits from provider.iam
   iamRoleStatements:
     - Effect: Allow
       Action: dynamodb:BatchGetItem
