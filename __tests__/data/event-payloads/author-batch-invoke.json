@@ -1,0 +1,18 @@
+[
+  {
+    "userId": "MY_PROFILE_EXAMPLE_CHANGEME_TO_REAL_UUID",
+    "caller": "MY_PROFILE_EXAMPLE_CHANGEME_TO_REAL_UUID",
+    "selection": [
+      "name",
+      "screenName"
+    ]
+  },
+  {
+    "userId": "OTHER_PROFILE_EXAMPLE_CHANGEME_TO_REAL_UUID",
+    "caller": "MY_PROFILE_EXAMPLE_CHANGEME_TO_REAL_UUID",
+    "selection": [
+      "name",
+      "screenName"
+    ]
+  }
+]
