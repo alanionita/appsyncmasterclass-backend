@@ -39,3 +39,5 @@ logging:
   retentionInDays: 7
   excludeVerboseContent: false # Default false
   roleArn: !GetAtt AppSyncLoggingServiceRole.Arn
+
+xrayEnabled: true
