@@ -902,4 +902,4 @@ functions/get-tweet-author
   - .captureAWS() incompatible with aws-sdk v3
   - @smithy/* require for this; package needs excaping from `webpack.config.js / externals / *` definitions
 
-Release: 
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/10-05-Configure_tracing_with_X-Ray
