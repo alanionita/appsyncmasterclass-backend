@@ -7,6 +7,8 @@
   },
   "scripts": {
     "sls": "sls",
+    "combine-sls-fns": "sh scripts/combine-sls-fns.sh",
+    "predeploy": "npm run combine-sls-fns",
     "deploy": "npm run sls -- deploy",
     "deploy:fn": "npm run sls -- deploy -f",
     "deploy:loud": "npm run sls -- deploy --verbose",

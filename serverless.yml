@@ -51,7 +51,7 @@ custom:
 appSync: ${file(./serverless/appsync-${self:custom.stage}.yml)}
 
 
-functions: ${file(./serverless/functions.yml)}
+functions: ${file(./serverless/functions/_dist/index-${self:custom.stage}.yml)}
   
 resources:
   - ${file(./serverless/cognito.yml)}

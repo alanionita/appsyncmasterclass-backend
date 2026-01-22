@@ -9,3 +9,4 @@ jspm_packages
 .env.*
 .webpack
 .webpack/*
+serverless/functions/_dist
