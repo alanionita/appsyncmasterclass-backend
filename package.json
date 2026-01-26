@@ -53,12 +53,14 @@
     "serverless": "3.39.0",
     "serverless-appsync-plugin": "^2.9.1",
     "serverless-iam-roles-per-function": "^3.2.0",
+    "serverless-lumigo": "^1.14.6",
     "serverless-webpack": "^5.15.3",
     "webpack-bundle-analyzer": "^4.10.2",
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
     "@apollo/client": "^3.0.0",
+    "@lumigo/tracer": "^1.109.0",
     "@middy/core": "^6.4.5",
     "@middy/ssm": "^6.4.5",
     "algoliasearch": "^5.39.0",

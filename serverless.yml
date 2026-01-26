@@ -58,6 +58,9 @@ custom:
   appSyncLogLevel:
     default: ALL
     prod: ERROR
+  lumigo:
+    token: ${ssm:/${self:custom.stage}/lumigo-token}
+    skipInstallNodeTracer: true
 
 appSync: ${file(./serverless/appsync-${self:custom.stage}.yml)}
 
