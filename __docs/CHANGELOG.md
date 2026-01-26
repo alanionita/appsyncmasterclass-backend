@@ -913,4 +913,4 @@ Diffs:
 - serverless.yml: lumigo-token didn't require decryption; in this version of sls the `~true` (for Parameter Store / Secure String decryption) was causing a package validation error; works without decryption 
 - lumigo-tracer: thought the ESM lambdas might require special config as mentioned in the docs for Typescript ESM config; not required
 
-Release:
+Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/10-10-Configure_lumigo
