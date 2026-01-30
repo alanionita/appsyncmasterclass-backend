@@ -937,5 +937,10 @@ Artillery
     - From a load testing perspective this seems to muddle the test results
     - Ideally we'd want to model how many times someone can tweet / second and how many times they can load their timeline / second, and that can be achieved as is 
     - Without the loop we can see clearly how many getProfile, tweet, getTimeline ops can happen / sec
-    
+artillery-generate-users.js
+  - Won't use `yargs`, preferring native process.argv[2+]
+  - Minor change in syntax to follow async/away patterns with error handling; also uses local name for given step `authenticated_user` 
+  + Could be an IIFE
+  - Adds a new script to call this file
+  
 Release: 
