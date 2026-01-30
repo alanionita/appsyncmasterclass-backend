@@ -16,7 +16,8 @@
     "test:integration": "NODE_OPTIONS=--experimental-vm-modules jest --verbose ./__tests__/cases/integration",
     "test:e2e": "NODE_OPTIONS=--experimental-vm-modules jest --verbose ./__tests__/cases/e2e",
     "test:bundle": "node ./__tests__/bundle-summary.js",
-    "test:load": "artillery run --env-file=.env --config ./.artillery/appsync/config.yml ./.artillery/appsync/scenarios/*"
+    "test:load": "artillery run --env-file=.env --config ./.artillery/appsync/config.yml ./.artillery/appsync/scenarios/*",
+    "data:artillery-generate-users": "node ./scripts/artillery-generate-users.js"
   },
   "repository": {
     "type": "git",
