@@ -914,3 +914,28 @@ Diffs:
 - lumigo-tracer: thought the ESM lambdas might require special config as mentioned in the docs for Typescript ESM config; not required
 
 Release: https://github.com/alanionita/appsyncmasterclass-backend/releases/tag/10-10-Configure_lumigo
+
+# 11-03-Load_testing_the_AppSync_API_
+
+Artillery 
+- Follows a different file structure recommended by Artillery: 
+  - Structure
+    - .artillery / SERVICE / config 
+    - .artillery / SERVICE / scenarios / SCENARIO 
+  - Allows for service-based organisation with centralised config;
+  - Decouples scenario logic from config, and removes the need for duplication ie. in previous pattern we'd have to copy to config to each scenario
+  - Requires npm script change to `artillery run ... --config ./.artillery/appsync/config.yml ./.artillery/appsync/scenarios/post-tweet-to-timeline.yml"
+- Uses updates spec for accessing local Environment variables scope $env. ; uses the `--env-file=.env` CLI param to pass in .env file; no longer requires `dotenv-cli` package; `--env-file` matches native Node v20+ patterns for loading environment variable files
+- Slight changes to the scenario logs to make it easier to follow
+- Config:
+  - Using `arrivalCount` is a better bound for developing the load test itself, because it always produces X users in X duration
+    - eg. 10 users in 5min duration
+    - In contrast `arrivalRate: 1` and `maxVusers: 1` will create 300 users in the same 5m duration - a far more aggresive load
+    + Prefer `arrivalCount` here because it's produces more of an expected load; I defined 10 users and I get 10 users vs. defining a rate and not seeing a total count; Equally load targets are more often banded eg 1000requests / sec, so arrivalCount reads a lot better 
+- `loop: `
+  - Won't implement; unclear of utility here since the loop is set to wait for 1s between iterations and then process tweet posting and timeline loading
+    - From a load testing perspective this seems to muddle the test results
+    - Ideally we'd want to model how many times someone can tweet / second and how many times they can load their timeline / second, and that can be achieved as is 
+    - Without the loop we can see clearly how many getProfile, tweet, getTimeline ops can happen / sec
+    
+Release: 
