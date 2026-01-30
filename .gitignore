@@ -10,3 +10,6 @@ jspm_packages
 .webpack
 .webpack/*
 serverless/functions/_dist
+
+# Testing
+.artillery/users.csv

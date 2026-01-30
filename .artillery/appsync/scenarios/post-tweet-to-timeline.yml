@@ -1,0 +1,22 @@
+scenarios:
+  - flow:
+      - log: "Scenario: post tweet to timeline"
+      - log: "START..."
+      - log: "Step: get profile"
+      - post:
+          url: /
+          headers:
+            Authorization: "Bearer {{ idToken }}"
+          json:
+            query: "query getMyProfile {
+              getMyProfile {
+                id
+                name
+                screenName
+                bio
+                createdAt
+                birthdate
+              }  
+            }"
+          expect:
+            - statusCode: 200

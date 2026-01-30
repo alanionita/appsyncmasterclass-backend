@@ -1,0 +1,19 @@
+config:
+  target: "{{ $env.APPSYNC_HTTP_URL }}"
+  phases:
+    # Generate fixed 10 vusers in 5min slot, 1 user every 30s
+    - duration: '5m'
+      arrivalCount: 10
+  http:
+    timeout: 30 # 30sec, 10sec by default
+    # Set a max of five TCP connections per virtual user, closer mimick of modern browsers, 1 by default
+    maxSockets: 5
+    defaults:
+      headers:
+        X-Traffic-Type: test
+        X-Environment: local
+  payload:
+    # Dummy user data
+    path: ../../users.csv
+    fields:
+      - idToken
